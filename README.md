@@ -5,6 +5,7 @@
 - 渲染方法为光线追踪
 ### 编译
 - 请确保g++版本在6.3以上
+- mkdir build lib logs render
 - make .
 ### 运行
 - 请确保已安装Pillow
