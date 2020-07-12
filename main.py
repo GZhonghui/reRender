@@ -1,4 +1,4 @@
-import fluid
+from script import fluid
 
 def main():
     engine=fluid.Fluid()
