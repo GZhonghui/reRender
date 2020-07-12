@@ -1,4 +1,4 @@
-all:
+cpu:
 	g++ ./src/bvh.cpp -c -o ./build/bvh.o --std=c++11 -fPIC
 	g++ ./src/fluid.cpp -c -o ./build/fluid.o -l pthread --std=c++11 -fPIC
 	g++ ./src/global.cpp -c -o ./build/global.o --std=c++11 -fPIC
@@ -10,3 +10,13 @@ all:
 	g++ ./src/render.cpp -c -o ./build/render.o -l pthread --std=c++11 -fPIC
 	g++ ./src/surface.cpp -c -o ./build/surface.o --std=c++11 -fPIC
 	g++ ./build/*.o -fPIC -shared -o ./lib/fluid.so
+
+gpu:
+	nvcc ./cuda/gpu_global.cu -o ./lib/fluid-gpu.so
+
+folder:
+	-mkdir build
+	-mkdir lib
+	-mkdir logs
+	-mkdir render
+	-mkdir video
