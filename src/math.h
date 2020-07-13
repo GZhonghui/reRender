@@ -24,7 +24,7 @@ protected:
 public:
     Vector()
     {
-        x=y=z=0.;
+        x=y=z=(T)0;
     }
     Vector(T k)
     {
@@ -56,6 +56,7 @@ template class Vector<double>;
 
 typedef Vector<int> Vectori;
 typedef Vector<int> Box;
+typedef Vector<int> Triface;
 typedef Vector<double> Vectorf;
 typedef Vector<double> Color;
 typedef Vector<double> Point;

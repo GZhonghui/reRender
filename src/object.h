@@ -5,6 +5,7 @@
 #include"ray.h"
 #include"math.h"
 
+class Scene;
 class Object
 {
 protected:
@@ -16,6 +17,7 @@ public:
     Object(const Material &material):material(material){}
     virtual Intersection intersect(const Ray &ray)=0;
     virtual void sample(Intersection &pos,double &pdf)=0;
+    friend class Scene;
 };
 
 class Triangle:public Object
@@ -49,7 +51,10 @@ public:
     Sphare()=default;
     ~Sphare()=default;
     Sphare(const Point &center,const double &radius):
-        center(center),radius(radius){}
+        center(center),radius(radius)
+    {
+        area=4*pi*radius*radius;
+    }
 public:
     virtual Intersection intersect(const Ray &ray);
     virtual void sample(Intersection &pos,double &pdf);

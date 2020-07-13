@@ -1,6 +1,7 @@
 #include"fluid.h"
 
 #include"surface.h"
+#include"message.h"
 
 void work_generate(unsigned int thread_id,int l_index,int r_index,bool *done);
 
@@ -12,8 +13,7 @@ void Solver::init_particles()
         {
             for(int k=1;k<=particle_range[3];k+=1)
             {
-                Point now(i+start_pos[1]-1,j+start_pos[2]-1,k+start_pos[3]-1);
-                particles.push_back(now);
+                
             }
         }
     }
@@ -21,15 +21,17 @@ void Solver::init_particles()
 void Solver::fill_surface(std::vector<Object *> &objects)
 {
     generate_next();
-
+    
     Surface surface;
     surface.fill_surface(particles,objects);
 }
 void Solver::generate_next()
 {
+    frame+=1;
 
+    Message::print(MessageType::MESSAGE,"Calc fluid movements done.");
 }
-void Solver::load_assets()
+void Solver::build_wall()
 {
     while(false);
 }

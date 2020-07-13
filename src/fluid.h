@@ -17,20 +17,38 @@ protected:
 public:
     Particle()=default;
     ~Particle()=default;
+    Particle(double mass,double lambda,double density):
+        mass(mass),lambda(lambda),density(density){}
 };
 
 class Solver
 {
 protected:
+    int frame;
     double time_step;
-    Box start_pos;
+    Box box_range;
     Box particle_range;
+    Point box_start;
+    Point particle_start;
     std::vector<Point> particles;
 public:
     Solver()=default;
     ~Solver()=default;
-    Solver(const Box &start_pos,const Box &particle_range):
-        start_pos(start_pos),particle_range(particle_range){}
+    Solver
+    (
+        double time_step,
+        const Box &box_range,
+        const Box &particle_range,
+        const Point &box_start,
+        const Point &particle_start
+    ):
+        frame(0),
+        time_step(time_step),
+        box_range(box_range),
+        particle_range(particle_range),
+        box_start(box_start),
+        particle_start(particle_start)
+    {}
 protected:
     double poly6_wkernel(const Vectorf &r);
     double spiky_wkernel_grad(const Vectorf &r);
@@ -42,7 +60,7 @@ protected:
     void constraint_projection();
     void compute_xsph_viscosity();
 public:
-    void load_assets();
+    void build_wall();
     void init_particles();
     void fill_surface(std::vector<Object *> &objects);
     void generate_next();

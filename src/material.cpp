@@ -11,7 +11,7 @@ Color Material::cal_eval(const Direction &wi,const Direction &wo,const Direction
         case MaterialType::DIFFUSE:
         {
             double cosalpha=normal.dot_product(wo);
-            if(cosalpha>0.)
+            if(cosalpha>0.0)
             {
                 return base_color*(1/pi);
             }else
@@ -36,7 +36,7 @@ double Material::cal_pdf(const Direction &wi,const Direction &wo,const Direction
     {
         case MaterialType::DIFFUSE:
         {
-            if(wo.dot_product(normal)>0.)
+            if(wo.dot_product(normal)>0.0)
             {
                 return 0.5/pi;
             }else
