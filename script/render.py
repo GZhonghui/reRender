@@ -10,7 +10,7 @@ except:
     message.py_print('You should install opencv and numpy.')
     exit()
 
-use_gpu=False
+use_gpu=config.use_gpu
 
 if use_gpu:
     try:
@@ -27,7 +27,7 @@ if not use_gpu:
         message.py_print('Please build the lib first.')
         exit()
 else:
-    message.py_print('Load gpu library done.')
+    message.py_print('Load cpu library done.')
 
 class Render:
     def __init__(self):
@@ -57,23 +57,26 @@ class Render:
     def apply_config(self):
         int_args= \
         [
-            config.screen_width, \
-            config.screen_height, \
-            config.screen_fov, \
-            config.backgroung_color[0], \
-            config.backgroung_color[1], \
-            config.backgroung_color[2], \
-            config.core_number, \
-            config.sample_time, \
-            config.encode_image
+            config.render_types[config.render_type],
+            config.screen_width,
+            config.screen_height,
+            config.screen_fov,
+            config.backgroung_color[0],
+            config.backgroung_color[1],
+            config.backgroung_color[2],
+            config.enable_skybox,
+            config.encode_image,
+            config.random_light,
+            config.core_number,
+            config.sample_time
         ]
         double_args= \
         [
-            config.camera_pos[0], \
-            config.camera_pos[1], \
-            config.camera_pos[2], \
-            config.target_pos[0], \
-            config.target_pos[1], \
+            config.camera_pos[0],
+            config.camera_pos[1],
+            config.camera_pos[2],
+            config.target_pos[0],
+            config.target_pos[1],
             config.target_pos[2]
         ]
 
@@ -92,7 +95,7 @@ class Render:
 
         if config.encode_video:
             encode=cv.VideoWriter_fourcc(*'mp4v')
-            video_encoder=cv.VideoWriter('./video/Encode.mp4',encode,30, \
+            video_encoder=cv.VideoWriter('./video/Py_Encode.mp4',encode,30, \
                 (config.screen_width,config.screen_height),True)
 
         for frame_index in range(1,config.render_frame+1):
@@ -111,8 +114,5 @@ class Render:
 
         self.clear_lib()
 
-def main():
-    message.py_print('Please dont run this script.')
-
 if __name__=='__main__':
-    main()
+    message.main()

@@ -1,94 +1,120 @@
 #include"global.h"
 
-#include<algorithm>
-#include<cstdio>
-#include<ctime>
+//Not a global variable
+Render *global_state;
 
-#include"render.h"
-#include"message.h"
+bool global_c_write_image;
+bool global_random_light;
+bool global_enable_skybox;
 
-Scene *global_state;
+int global_core_number;
+int global_sample_time;
+
+RenderType global_render_type;
 
 void py_init_lib()
 {
-    Message::print(MessageType::MESSAGE,"Start load the fluid lib.");
+    Message::print(MessageType::MESSAGE,"Start load the render lib.");
 
     srand((unsigned int)time(nullptr));
     global_state=nullptr;
 
     Message::print(MessageType::MESSAGE,"Init lib successfully.");
 }
+
 void py_set_args(int *int_args,double *double_args)
 {
-    int screen_width=*int_args;
+    int render_typei=*(int_args);
+
+    int screen_width=*(++int_args);
     int screen_height=*(++int_args);
     int screen_fov=*(++int_args);
 
-    int particle_size_x=*(++int_args);
-    int particle_size_y=*(++int_args);
-    int particle_size_z=*(++int_args);
+    int background_color_r=*(++int_args);
+    int background_color_g=*(++int_args);
+    int background_color_b=*(++int_args);
 
-    int box_size_x=*(++int_args);
-    int box_size_y=*(++int_args);
-    int box_size_z=*(++int_args);
-
-    int ground_size=*(++int_args);
-
-    int backgroung_color_r=*(++int_args);
-    int backgroung_color_g=*(++int_args);
-    int backgroung_color_b=*(++int_args);
+    int enable_skyboxi=*(++int_args);
+    int encode_imagei=*(++int_args);
+    int random_lighti=*(++int_args);
 
     int core_number=*(++int_args);
     int sample_time=*(++int_args);
 
-    int time_step=*(++int_args);
-
-    double particle_radius=*double_args;
-
-    double particle_start_x=*(++double_args);
-    double particle_start_y=*(++double_args);
-    double particle_start_z=*(++double_args);
-
-    double box_start_x=*(++double_args);
-    double box_start_y=*(++double_args);
-    double box_start_z=*(++double_args);
-
-    double camera_pos_x=*(++double_args);
+    double camera_pos_x=*(double_args);
     double camera_pos_y=*(++double_args);
     double camera_pos_z=*(++double_args);
 
-    double camera_dir_x=*(++double_args);
-    double camera_dir_y=*(++double_args);
-    double camera_dir_z=*(++double_args);
+    double target_pos_x=*(++double_args);
+    double target_pos_y=*(++double_args);
+    double target_pos_z=*(++double_args);
 
-    double camera_up_x=*(++double_args);
-    double camera_up_y=*(++double_args);
-    double camera_up_z=*(++double_args);
+    if(global_state)
+    {
+        Message::print(MessageType::ERROR,"You had set the args.");
+        global_state->destroy_render();
+        delete global_state;
+    }
 
-    const int buffer_size=128;
-    char message_buffer[buffer_size];
+    char message_buffer[message_size];
     Message::print(MessageType::MESSAGE,"Receive the args.");
 
-    sprintf(message_buffer,"Screen size:(%04d,%04d).",screen_width,screen_height);
-    message_buffer[buffer_size-1]=0;
+    switch(render_typei)
+    {
+        case 1:
+            global_render_type=RenderType::DIRECT_LIGHT;
+            sprintf(message_buffer,"Render type: direct light.");
+        break;
+        case 2:
+            global_render_type=RenderType::PATH_TRACING;
+            sprintf(message_buffer,"Render type: path tracing.");
+        break;
+        case 3:
+            global_render_type=RenderType::PHOTON_MAPPING;
+            sprintf(message_buffer,"Render type: photon mapping.");
+        break;
+        case 4:
+            global_render_type=RenderType::B_PATH_TRACING;
+            sprintf(message_buffer,"Render type: bidirectional path tracing.");
+        break;
+        case 5:
+            global_render_type=RenderType::M_LIGHT_TRANSPORT;
+            sprintf(message_buffer,"Render type: metropolis light transport.");
+        break;
+    }
     Message::print(MessageType::MESSAGE,message_buffer);
 
-    int particle_number=particle_size_x*particle_size_y*particle_size_z;
-    sprintf(message_buffer,"Particle number:%010d.",particle_number);
-    message_buffer[buffer_size-1]=0;
+    global_enable_skybox=enable_skyboxi?true:false;
+    global_c_write_image=encode_imagei?true:false;
+    global_random_light=random_lighti?true:false;
+
+    global_core_number=core_number;
+    global_sample_time=sample_time;
+
+    sprintf(message_buffer,"Screen size:(%d,%d).",screen_width,screen_height);
     Message::print(MessageType::MESSAGE,message_buffer);
 
-    sprintf(message_buffer,"Thread number:%03d.",core_number);
-    message_buffer[buffer_size-1]=0;
+//    sprintf(message_buffer,"Thread number:%d.",core_number);
+//    Message::print(MessageType::MESSAGE,message_buffer);
+
+//    sprintf(message_buffer,"Sample time:%d.",sample_time);
+//    Message::print(MessageType::MESSAGE,message_buffer);
+
+    sprintf(message_buffer,"Camera at position (%.2lf,%.2lf,%.2lf).",
+        camera_pos_x,camera_pos_y,camera_pos_z);
     Message::print(MessageType::MESSAGE,message_buffer);
 
-    sprintf(message_buffer,"Sample time:%03d.",sample_time);
-    message_buffer[buffer_size-1]=0;
+    sprintf(message_buffer,"Camera look at (%.2lf,%.2lf,%.2lf).",
+        target_pos_x,target_pos_y,target_pos_z);
     Message::print(MessageType::MESSAGE,message_buffer);
 
-    backgroung_color_r=std::min(backgroung_color_r,255);
-    backgroung_color_g=std::min(backgroung_color_g,255);
-    backgroung_color_b=std::min(backgroung_color_b,255);
+    background_color_r=std::min(background_color_r,255);
+    background_color_g=std::min(background_color_g,255);
+    background_color_b=std::min(background_color_b,255);
+
+//    sprintf(message_buffer,"Background color (%d,%d,%d).",
+//        background_color_r,background_color_g,background_color_b);
+//    Message::print(MessageType::MESSAGE,message_buffer);
 
     if(screen_fov>160)
     {
@@ -98,35 +124,27 @@ void py_set_args(int *int_args,double *double_args)
         Message::print(MessageType::WARNING,"The value of fov is too small.");
     }
 
-    if(global_state)
-    {
-        Message::print(MessageType::ERROR,"You had set the args.");
-        global_state->destroy();
-        delete global_state;
-    }
+    Point target_pos(target_pos_x,target_pos_y,target_pos_z);
+    Point camera_pos(camera_pos_x,camera_pos_y,camera_pos_z);
 
-    global_state=new Scene
+    global_state=new Render
     (
         screen_width,
         screen_height,
         screen_fov,
-        Box(particle_size_x,particle_size_y,particle_size_z),
-        Box(box_size_x,box_size_y,box_size_z),
-        ground_size,
-        Color(backgroung_color_r/255.0,backgroung_color_g/255.0,backgroung_color_b/255.0),
-        core_number,
-        sample_time,
-        time_step/1000.0,
-        particle_radius,
-        Point(particle_start_x,particle_start_y,particle_start_z),
-        Point(box_start_x,box_start_y,box_start_z),
-        Point(camera_pos_x,camera_pos_y,camera_pos_z),
-        Direction(camera_dir_x,camera_dir_y,camera_dir_z).normalized(),
-        Direction(camera_up_x,camera_up_y,camera_up_z).normalized()
+        Color
+        (
+            background_color_r/255.0,
+            background_color_g/255.0,
+            background_color_b/255.0
+        ),
+        camera_pos,
+        target_pos
     );
-    
-    Message::print(MessageType::MESSAGE,"Set the args done.");
+
+    Message::print(MessageType::MESSAGE,"Set the args & build render done.");
 }
+
 void py_generate(double *pixels)
 {
     if(!global_state)
@@ -136,11 +154,12 @@ void py_generate(double *pixels)
     }
     global_state->render(pixels);
 }
+
 void py_clear_lib()
 {
     if(global_state)
     {
-        global_state->destroy();
+        global_state->destroy_render();
         delete global_state;
     }
     Message::print(MessageType::MESSAGE,"Clear lib memory successfully.");

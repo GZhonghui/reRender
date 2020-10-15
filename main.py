@@ -1,7 +1,7 @@
-from script import fluid
+from script import render
 
 def main():
-    engine=fluid.Fluid()
+    engine=render.Render()
     engine.run()
 
 if __name__=='__main__':
