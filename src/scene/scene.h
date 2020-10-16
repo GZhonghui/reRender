@@ -26,11 +26,13 @@ protected:
     int screen_height;
     int screen_fov;
     Color background_color;
+protected:
     Point camera_pos;
     Direction camera_up;
     Direction camera_dir;
     Skybox skybox;
     BVH bvh_tree;
+protected:
     std::vector<Object *> lights;
     std::vector<Object *> objects;
     std::vector<Model *> models;

@@ -2,6 +2,12 @@
 
 void DirectLight::render(RenderConfig *render_config,double *pixels)
 {
+    if(!main_scene)
+    {
+        Message::print(MessageType::ERROR,"Empty scene pointer.");
+        return;
+    }
+
     const int &screen_width=main_scene->screen_width;
     const int &screen_height=main_scene->screen_height;
 

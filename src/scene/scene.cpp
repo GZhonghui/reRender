@@ -33,6 +33,8 @@ void Scene::build_bvh()
 
 void Scene::load_scene()
 {
+    //For all render type do the same thing
+
     load_models();
 
     load_skybox();
@@ -40,6 +42,8 @@ void Scene::load_scene()
 
 void Scene::build_scene()
 {
+    //Do different things relevated to the type of render algorithm
+
     clear_scene();
 
     for(int i=0,_size=models.size();i<_size;i+=1)
@@ -49,8 +53,7 @@ void Scene::build_scene()
 
     find_lights();
     
-    if(global_render_type!=RenderType::DIRECT_LIGHT)
-        build_bvh();
+    build_bvh();
 }
 
 void Scene::clear_scene()

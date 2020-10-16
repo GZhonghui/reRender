@@ -45,6 +45,8 @@ void Render::destroy_render()
     }
 
     if(animation) delete animation;
+
+    if(render_algorithm) delete render_algorithm;
 }
 
 void Render::render(double *pixels)
