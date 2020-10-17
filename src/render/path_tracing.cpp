@@ -197,38 +197,49 @@ void PathTracing::render(RenderConfig *render_config,double *pixels)
 
 void path_tracing_work_render(PathTracing *render,RenderConfig *config,double *result,int *proc)
 {
+    *proc=0;
+
     Scene *scene=render->main_scene;
 
-    *proc=0;
-    unsigned int buffer_size=scene->screen_width*scene->screen_height*3;
-    unsigned int pixel_index=0;
-    Direction camera_right=scene->camera_dir.cross_product(scene->camera_up).normalized();
-    double x_offset=(scene->screen_width-1)/2.0;
-    double y_offset=(scene->screen_height-1)/2.0;
+    const int screen_width=scene->screen_width;
+    const int screen_height=scene->screen_height;
 
-    for(int height_index=1;height_index<=scene->screen_height;height_index+=1)
+    const int screen_fov=scene->screen_fov;
+
+    const Direction camera_up=scene->camera_up;
+    const Direction camera_dir=scene->camera_dir;
+    
+    unsigned int buffer_size=screen_width*screen_height*3;
+    unsigned int pixel_index=0;
+
+    Direction camera_right=camera_dir.cross_product(camera_up).normalized();
+    double x_offset=(screen_width-1)/2.0;
+    double y_offset=(screen_height-1)/2.0;
+
+    for(int height_index=1;height_index<=screen_height;height_index+=1)
     {
-        for(int width_index=1;width_index<=scene->screen_width;width_index+=1)
+        for(int width_index=1;width_index<=screen_width;width_index+=1)
         {
             for(int pixel_offset=0;pixel_offset<=2;pixel_offset+=1)
                 result[pixel_index+pixel_offset]=0;
             
             Direction lookat_x=camera_right*(width_index-x_offset);
-            Direction lookat_z=scene->camera_up*(height_index-y_offset);
-            Direction lookat_y=scene->camera_dir*(scene->screen_width/2.0
-                /std::tan(Utils::deg2rad(scene->screen_fov/2.0)));
+            Direction lookat_z=camera_up*(height_index-y_offset);
+            Direction lookat_y=camera_dir*(screen_width/2.0/std::tan(Utils::deg2rad(screen_fov/2.0)));
 
             Direction lookat_dir=lookat_x+lookat_y-lookat_z;
             lookat_dir.normalize();
+            
             for(int ssp_index=1;ssp_index<=config->ssp;ssp_index+=1)
             {
-                Color cast_result=render->cast_ray(Ray(scene->camera_pos,lookat_dir));
+                Color cast_result=render->cast_ray(Ray(camera_pos,lookat_dir));
                 cast_result.limit(0,1);
                 for(int pixel_offset=0;pixel_offset<=2;pixel_offset+=1)
                 {
                     result[pixel_index+pixel_offset]+=cast_result[pixel_offset+1]/config->ssp;
                 }
             }
+            
             pixel_index+=3;
             *proc=(int)(100*pixel_index/buffer_size);
         }

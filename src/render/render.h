@@ -48,8 +48,11 @@ public:
     {
         main_scene=new Scene(screen_width,screen_height,screen_fov,background_color);
         main_scene->look_at(camera_position,camera_target);
+        main_scene->load_scene();
 
         animation=new Animation(main_scene);
+        animation->init_animation();
+
         render_algorithm=nullptr;
 
         init_render();

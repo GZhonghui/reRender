@@ -12,9 +12,15 @@ protected:
 public:
     Animation():main_scene(nullptr){}
     Animation(Scene *main_scene):main_scene(main_scene){}
-    ~Animation()=default;
+    ~Animation()
+    {
+        destroy_animation();
+    }
 public:
     void update_scene(unsigned int frame);
+public:
+    void init_animation();
+    void destroy_animation();
 };
 
 #endif

@@ -9,7 +9,6 @@
 #include"../math/vector.h"
 
 #include"../basic/material.h"
-#include"../basic/material.h"
 #include"../basic/message.h"
 #include"../basic/object.h"
 

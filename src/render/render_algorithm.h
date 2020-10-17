@@ -3,7 +3,7 @@
 
 #include"../math/vector.h"
 
-#include"../scene/scene.h"
+class Scene;
 
 enum RenderType
 {
@@ -54,5 +54,7 @@ public:
 public:
     virtual void render(RenderConfig *render_config,double *pixels)=0;
 };
+
+#include"../scene/scene.h"
 
 #endif

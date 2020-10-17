@@ -14,8 +14,6 @@ extern RenderType global_render_type;
 
 void Render::init_render()
 {
-    main_scene->load_scene();
-
     switch(global_render_type)
     {
         case RenderType::DIRECT_LIGHT:
@@ -42,11 +40,21 @@ void Render::destroy_render()
     {
         main_scene->destroy_scene();
         delete main_scene;
+        main_scene=nullptr;
     }
 
-    if(animation) delete animation;
+    if(animation)
+    {
+        animation->destroy_animation();
+        delete animation;
+        animation=nullptr;
+    }
 
-    if(render_algorithm) delete render_algorithm;
+    if(render_algorithm)
+    {
+        delete render_algorithm;
+        render_algorithm=nullptr;
+    }
 }
 
 void Render::render(double *pixels)
@@ -58,8 +66,24 @@ void Render::render(double *pixels)
     config.enable_skybox=global_enable_skybox;
 
     frame+=1;
-    animation->update_scene(frame);
-    render_algorithm->render(&config,pixels);
+
+    if(animation)
+    {
+        animation->update_scene(frame);
+    }else
+    {
+        Message::print(MessageType::ERROR,"Empty animation pointer.");
+        return;
+    }
+
+    if(render_algorithm)
+    {
+        render_algorithm->render(&config,pixels);
+    }else
+    {
+        Message::print(MessageType::ERROR,"Empty render algorithm pointer.");
+        return;
+    }
 
     const int frame_limit=9999;
     if(global_c_write_image)

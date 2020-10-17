@@ -4,9 +4,22 @@ extern RenderType global_render_type;
 
 void Scene::load_models()
 {
-    const char *models_path="./scene/house";
-
     Model *model;
+
+    model=new Model(Point(0),"./scene/house/glass_ball.obj");
+    models.push_back(model);
+
+    model=new Model(Point(0),"./scene/house/lights.obj");
+    models.push_back(model);
+
+    model=new Model(Point(0),"./scene/house/metal_ball.obj");
+    models.push_back(model);
+
+    model=new Model(Point(0),"./scene/house/texture_box.obj");
+    models.push_back(model);
+
+    model=new Model(Point(0),"./scene/house/wall.obj");
+    models.push_back(model);
 }
 
 void Scene::load_skybox()

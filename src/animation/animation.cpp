@@ -30,3 +30,13 @@ void Animation::update_scene(unsigned int frame)
 
     main_scene->build_scene();
 }
+
+void Animation::init_animation()
+{
+    Message::print(MessageType::MESSAGE,"Init animation.");
+}
+
+void Animation::destroy_animation()
+{
+//    Message::print(MessageType::MESSAGE,"Release animation memory.");
+}
