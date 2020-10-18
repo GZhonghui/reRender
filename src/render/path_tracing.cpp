@@ -24,7 +24,8 @@ Color PathTracing::cast_ray(const Ray &ray) const
 
     if(now_material->type()==MaterialType::LIGHT)
     {
-        return ((Light *)(now_material))->brdf(Direction(),Direction(),Direction());
+        Direction no_meaning(0,0,1);
+        return now_material->brdf(no_meaning,no_meaning,no_meaning);
     }
 
     Color result(0);
@@ -57,9 +58,11 @@ Color PathTracing::cast_ray(const Ray &ray) const
 
             bool blocked=false;
             Intersection hit_light;
+            //No intersection
             if(!main_scene->intersect(Ray(now_point,to_light),hit_light))
             {
                 blocked=true;
+            //Hit different object
             }else if(std::abs(to_light.normal()-hit_light.distance)>eps)
             {
                 blocked=true;
@@ -70,19 +73,22 @@ Color PathTracing::cast_ray(const Ray &ray) const
                 Color fr;
                 if(now_material->type()==MaterialType::TEXTURED)
                 {
+                    //Must be a triangle
                     fr=((Textured *)now_material)->brdf_uv(to_light.opposite(),now_normal,
-                        ray.forward*-1,hit_result.u,hit_result.v);
+                        ray.forward.opposite(),hit_result.u,hit_result.v);
                 }else
                 {
-                    fr=now_material->brdf(to_light*-1,now_normal,ray.forward.opposite());
+                    fr=now_material->brdf(to_light.opposite(),now_normal,ray.forward.opposite());
                 }
+
                 double light_distance=hit_light.distance*hit_light.distance;
-                Color light_part=((Light *)hit_light.material)->brdf(Direction(),
-                    Direction(),Direction());
-                double cos_1=std::max(0.0,
-                    now_normal.dot_product(to_light.normalized()));
-                double cos_2=std::max(0.0,
-                    hit_light.normal.dot_product(to_light.opposite().normalized()));
+
+                Direction no_meaning(0,0,1);
+                Color light_part=((Light *)hit_light.material)->brdf(no_meaning,no_meaning,no_meaning);
+
+                double cos_1=std::max(0.0,now_normal.dot_product(to_light.normalized()));
+                double cos_2=std::max(0.0,hit_light.normal.dot_product(to_light.opposite().normalized()));
+
                 light_part=light_part.hadamard_product(fr);
                 light_part=light_part*cos_1/cos_2/light_distance/light_p;
                 result=result+light_part;
@@ -91,10 +97,10 @@ Color PathTracing::cast_ray(const Ray &ray) const
             if(Utils::uniform()>russian_roulette)
             {
                 double sample_p;
-                Direction wi=now_material->sample(now_normal,ray.forward*-1,sample_p);
+                Direction wi=now_material->sample(now_normal,ray.forward.opposite(),sample_p);
 
                 Intersection hit_next;
-                bool happened=main_scene->intersect(Ray(now_point,wi*-1),hit_next);
+                bool happened=main_scene->intersect(Ray(now_point,wi.opposite()),hit_next);
 
                 if(happened&&hit_next.material&&hit_next.material->type()!=MaterialType::LIGHT)
                 {
@@ -102,13 +108,15 @@ Color PathTracing::cast_ray(const Ray &ray) const
                     if(now_material->type()==MaterialType::TEXTURED)
                     {
                         fr=((Textured *)now_material)->brdf_uv(wi,now_normal,
-                            ray.forward*-1,hit_result.u,hit_result.v);
+                            ray.forward.opposite(),hit_result.u,hit_result.v);
                     }else
                     {
-                        fr=now_material->brdf(wi,now_normal,ray.forward*-1);
+                        fr=now_material->brdf(wi,now_normal,ray.forward.opposite());
                     }
-                    Color next_part=cast_ray(Ray(now_point,wi*-1));
-                    double _cos=std::max(0.0,now_normal.dot_product(wi*-1));
+
+                    Color next_part=cast_ray(Ray(now_point,wi.opposite()));
+                    double _cos=std::max(0.0,now_normal.dot_product(wi.opposite()));
+                    
                     next_part=next_part.hadamard_product(fr);
                     next_part=next_part*_cos/russian_roulette/sample_p;
                     result=result+next_part;
@@ -145,6 +153,7 @@ void PathTracing::render(RenderConfig *render_config,double *pixels)
         double *result_buffer=new double[buffer_size];
         procs.push_back(thread_proc);
         results.push_back(result_buffer);
+
         threads.push_back(new std::thread(path_tracing_work_render,this,
             render_config,result_buffer,thread_proc));
     }
@@ -160,6 +169,7 @@ void PathTracing::render(RenderConfig *render_config,double *pixels)
             now_proc+=*(procs[i-1]);
         }
         if(now_proc==total_work) break;
+
         now_proc=100*now_proc/total_work;
         Message::print_bar(now_proc);
     }
@@ -180,8 +190,7 @@ void PathTracing::render(RenderConfig *render_config,double *pixels)
         pixels[buffer_index-1]=0;
         for(int core_index=1;core_index<=core_number;core_index+=1)
         {
-            pixels[buffer_index-1]+=
-                results[core_index-1][buffer_index-1]/core_number;
+            pixels[buffer_index-1]+=results[core_index-1][buffer_index-1]/core_number;
         }
     }
 
@@ -201,13 +210,15 @@ void path_tracing_work_render(PathTracing *render,RenderConfig *config,double *r
 
     Scene *scene=render->main_scene;
 
-    const int screen_width=scene->screen_width;
-    const int screen_height=scene->screen_height;
+    const int &screen_width=scene->screen_width;
+    const int &screen_height=scene->screen_height;
 
-    const int screen_fov=scene->screen_fov;
+    const int &screen_fov=scene->screen_fov;
 
-    const Direction camera_up=scene->camera_up;
-    const Direction camera_dir=scene->camera_dir;
+    const Direction &camera_up=scene->camera_up;
+    const Direction &camera_dir=scene->camera_dir;
+
+    const Point &camera_pos=scene->camera_pos;
     
     unsigned int buffer_size=screen_width*screen_height*3;
     unsigned int pixel_index=0;
@@ -221,7 +232,9 @@ void path_tracing_work_render(PathTracing *render,RenderConfig *config,double *r
         for(int width_index=1;width_index<=screen_width;width_index+=1)
         {
             for(int pixel_offset=0;pixel_offset<=2;pixel_offset+=1)
+            {
                 result[pixel_index+pixel_offset]=0;
+            }
             
             Direction lookat_x=camera_right*(width_index-x_offset);
             Direction lookat_z=camera_up*(height_index-y_offset);
@@ -234,6 +247,7 @@ void path_tracing_work_render(PathTracing *render,RenderConfig *config,double *r
             {
                 Color cast_result=render->cast_ray(Ray(camera_pos,lookat_dir));
                 cast_result.limit(0,1);
+
                 for(int pixel_offset=0;pixel_offset<=2;pixel_offset+=1)
                 {
                     result[pixel_index+pixel_offset]+=cast_result[pixel_offset+1]/config->ssp;

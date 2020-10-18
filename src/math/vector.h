@@ -56,6 +56,7 @@ public:
     {
         return x*rhx.x+y*rhx.y+z*rhx.z;
     }
+public:
     Vector3f opposite() const
     {
         return Vector3f(-x,-y,-z);
@@ -68,19 +69,6 @@ public:
     {
         return operator/(normal());
     }
-    void normalize()
-    {
-        (*this)=normalized();
-    }
-    void limit(double l,double r)
-    {
-        if(l>r) return;
-        using std::min;
-        using std::max;
-        x=max(l,min(r,x));
-        y=max(l,min(r,y));
-        z=max(l,min(r,z));
-    }
     double distance(const Vector3f &rhx) const
     {
         return operator-(rhx).normal();
@@ -88,6 +76,21 @@ public:
     Vector3f middle(const Vector3f &rhx) const
     {
         return operator+(rhx).normalized();
+    }
+public:
+    void normalize()
+    {
+        (*this)=normalized();
+    }
+    void limit(double l,double r)
+    {
+        if(l>r) return;
+        
+        using std::min;
+        using std::max;
+        x=max(l,min(r,x));
+        y=max(l,min(r,y));
+        z=max(l,min(r,z));
     }
 };
 

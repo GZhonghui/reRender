@@ -38,7 +38,7 @@ Color DirectLight::cast_ray(const Ray &ray)
         case MaterialType::DIFFUSE:
         {
             Direction forward_dir(1,0,0);
-            Direction back_dir=forward_dir*(-1);
+            Direction back_dir=forward_dir.opposite();
             result=now_material->brdf(forward_dir,back_dir,back_dir);
         }
         break;
