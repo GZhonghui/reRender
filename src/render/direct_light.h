@@ -17,7 +17,8 @@ public:
     DirectLight(Scene *main_scene):RenderAlgorithm(main_scene){}
     virtual ~DirectLight()=default;
 protected:
-    Color cast_ray(const Ray &ray);
+    Color cast_ray(const Ray &ray) const;
+    Color cast_ray_material_layer(const Ray &ray) const;
 public:
     virtual void render(RenderConfig *render_config,double *pixels);
 };

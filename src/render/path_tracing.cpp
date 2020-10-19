@@ -13,9 +13,9 @@ Color PathTracing::cast_ray(const Ray &ray) const
         else
             return main_scene->background_color;
     }
-    if(!hit_result.material)
+    if((!hit_result.material)||(!hit_result.forward_hit))
     {
-        return Color(1,0,0);
+        return missing_material;
     }
 
     Point now_point=hit_result.hit_point;
@@ -24,8 +24,7 @@ Color PathTracing::cast_ray(const Ray &ray) const
 
     if(now_material->type()==MaterialType::LIGHT)
     {
-        Direction no_meaning(0,0,1);
-        return now_material->brdf(no_meaning,no_meaning,no_meaning);
+        return now_material->brdf(x_dir,z_dir,z_dir);
     }
 
     Color result(0);
@@ -83,8 +82,7 @@ Color PathTracing::cast_ray(const Ray &ray) const
 
                 double light_distance=hit_light.distance*hit_light.distance;
 
-                Direction no_meaning(0,0,1);
-                Color light_part=((Light *)hit_light.material)->brdf(no_meaning,no_meaning,no_meaning);
+                Color light_part=((Light *)hit_light.material)->brdf(x_dir,z_dir,z_dir);
 
                 double cos_1=std::max(0.0,now_normal.dot_product(to_light.normalized()));
                 double cos_2=std::max(0.0,hit_light.normal.dot_product(to_light.opposite().normalized()));

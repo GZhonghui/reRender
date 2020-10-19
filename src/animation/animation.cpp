@@ -15,10 +15,11 @@ void Animation::update_scene(unsigned int frame)
     //Set the init state
     if(frame==1)
     {
-
     }else
     {
         //Update scene models here
+
+        main_scene->models[1]->move_global(Direction(0,0,1));
 
 //        main_scene->models[0]->move_global(Direction(0,0,2/300.0));
 

@@ -15,6 +15,7 @@ cpu:
 	$(info Building basic.)
 	@g++ ./src/basic/bbox.cpp -c -o ./build/bbox.o --std=c++17 -fPIC
 	@g++ ./src/basic/bvh.cpp -c -o ./build/bvh.o --std=c++17 -fPIC
+	@g++ ./src/basic/global.cpp -c -o ./build/global.o --std=c++17 -fPIC
 	@g++ ./src/basic/intersection.cpp -c -o ./build/intersection.o --std=c++17 -fPIC
 	@g++ ./src/basic/kdtree.cpp -c -o ./build/kdtree.o --std=c++17 -fPIC
 	@g++ ./src/basic/material.cpp -c -o ./build/material.o --std=c++17 -fPIC
@@ -24,7 +25,7 @@ cpu:
 	@g++ ./src/basic/skybox.cpp -c -o ./build/skybox.o --std=c++17 -fPIC
 
 	$(info Building math.)
-	@g++ ./src/math/basic.cpp -c -o ./build/basic.o --std=c++17 -fPIC
+	@g++ ./src/math/basic_math.cpp -c -o ./build/basic_math.o --std=c++17 -fPIC
 	@g++ ./src/math/matrix.cpp -c -o ./build/matrix.o --std=c++17 -fPIC
 	@g++ ./src/math/noise.cpp -c -o ./build/noise.o --std=c++17 -fPIC
 	@g++ ./src/math/tensor.cpp -c -o ./build/tensor.o --std=c++17 -fPIC
@@ -43,7 +44,7 @@ cpu:
 	@g++ ./src/scene/scene.cpp -c -o ./build/scene.o --std=c++17 -fPIC
 
 	$(info Building cpu api.)
-	@g++ ./src/global.cpp -c -o ./build/global.o --std=c++17 -fPIC
+	@g++ ./src/py_api.cpp -c -o ./build/py_api.o --std=c++17 -fPIC
 
 	$(info Linking.)
 	@g++ \
@@ -56,6 +57,7 @@ cpu:
 		./build/texture.o \
 		./build/bbox.o \
 		./build/bvh.o \
+		./build/global.o \
 		./build/intersection.o \
 		./build/kdtree.o \
 		./build/material.o \
@@ -63,7 +65,7 @@ cpu:
 		./build/object.o \
 		./build/ray.o \
 		./build/skybox.o \
-		./build/basic.o \
+		./build/basic_math.o \
 		./build/matrix.o \
 		./build/noise.o \
 		./build/tensor.o \
@@ -76,7 +78,7 @@ cpu:
 		./build/render.o \
 		./build/render_algorithm.o \
 		./build/scene.o \
-		./build/global.o \
+		./build/py_api.o \
 		-l pthread \
 		-shared \
 		-o ./lib/render.so

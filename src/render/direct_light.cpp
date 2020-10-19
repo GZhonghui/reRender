@@ -1,6 +1,6 @@
 #include"direct_light.h"
 
-Color DirectLight::cast_ray(const Ray &ray)
+Color DirectLight::cast_ray(const Ray &ray) const
 {
     Intersection hit_result;
 
@@ -14,15 +14,14 @@ Color DirectLight::cast_ray(const Ray &ray)
     
     if((!hit_result.material)||(!hit_result.forward_hit))
     {
-        return Color(1,0,0);
+        return missing_material;
     }
 
     Material *now_material=hit_result.material;
 
     if(now_material->type()==MaterialType::LIGHT)
     {
-        Direction no_meaing;
-        return now_material->brdf(no_meaing,no_meaing,no_meaing);
+        return now_material->brdf(x_dir,z_dir,z_dir);
     }
 
     Color result(0);
@@ -53,6 +52,42 @@ Color DirectLight::cast_ray(const Ray &ray)
     return result;
 }
 
+Color DirectLight::cast_ray_material_layer(const Ray &ray) const
+{
+    Intersection hit_result;
+
+    if(!main_scene->intersect(ray,hit_result))
+    {
+        if(enable_skybox)
+            return main_scene->skybox.intersect(ray.forward);
+        else
+            return main_scene->background_color;
+    }
+    
+    if((!hit_result.material)||(!hit_result.forward_hit))
+    {
+        return missing_material;
+    }
+
+    Color result;
+
+    switch(hit_result.material->type())
+    {
+        case MaterialType::DIFFUSE:
+        {
+            result=Color(0.8,0.7,0.6);
+        }
+        break;
+
+        default:
+        {
+            result=missing_material;
+        }
+    }
+
+    return result;
+}
+
 void DirectLight::render(RenderConfig *render_config,double *pixels)
 {
     if(!main_scene)
@@ -60,6 +95,9 @@ void DirectLight::render(RenderConfig *render_config,double *pixels)
         Message::print(MessageType::ERROR,"Empty scene pointer.");
         return;
     }
+
+    //Cast ray by which function
+    int cast_way=1;
 
     enable_skybox=render_config->enable_skybox;
 
@@ -82,6 +120,9 @@ void DirectLight::render(RenderConfig *render_config,double *pixels)
     double x_offset=(screen_width-1)/2.0;
     double y_offset=(screen_height-1)/2.0;
 
+    int total_work=pixel_size;
+    int now_work=0;
+
     for(int height_index=1;height_index<=screen_height;height_index+=1)
     {
         for(int width_index=1;width_index<=screen_width;width_index+=1)
@@ -93,7 +134,20 @@ void DirectLight::render(RenderConfig *render_config,double *pixels)
             Direction lookat_dir=lookat_x+lookat_y-lookat_z;
             lookat_dir.normalize();
 
-            Color cast_result=cast_ray(Ray(camera_pos,lookat_dir));
+            Color cast_result=missing_material;
+            switch(cast_way)
+            {
+                case 1:
+                {
+                    cast_result=cast_ray(Ray(camera_pos,lookat_dir));
+                }
+                break;
+                case 2:
+                {
+                    cast_result=cast_ray_material_layer(Ray(camera_pos,lookat_dir));
+                }
+                break;
+            }
             cast_result.limit(0,1);
 
             for(int offset=0;offset<=2;offset+=1)
@@ -101,6 +155,11 @@ void DirectLight::render(RenderConfig *render_config,double *pixels)
                 pixels[pixel_index+offset]=cast_result[offset+1];
             }
             pixel_index+=3;
+
+            now_work+=1;
+            int now_proc=100*now_work/total_work;
+            Message::print_bar(now_proc);
         }
     }
+    Message::print_bar(100,true);
 }

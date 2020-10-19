@@ -72,8 +72,11 @@ public:
     bool intersect(const Ray &ray,Intersection &hit_result) const;
     void look_at(const Point &camera,const Point &target);
 public:
+    friend class Animation;
+public:
     friend class Render;
     friend class RenderAlgorithm;
+public:
     friend class DirectLight;
     friend class PathTracing;
     friend class BPathTracing;

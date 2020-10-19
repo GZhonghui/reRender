@@ -26,7 +26,7 @@ public:
     //Output without logs, dont print in subthreads
     static void print_once(unsigned int id,const char *message);
     //Remember to print end
-    static void print_bar(int now,bool last=false,int width=72);
+    static void print_bar(int now,bool last=false,int width=52);
 };
 
 #endif

@@ -15,6 +15,7 @@ render_types= \
 
     #光子映射
     #此算法所依赖的参数表如下
+    #发射光子数
     'photon_mapping':3,
 
     #双向路径追踪
@@ -51,7 +52,7 @@ screen_height=1080
 screen_fov=90
 
 #摄像机位置 浮点数
-camera_pos=[0,-5,0]
+camera_pos=[0,-12,0]
 
 #摄像机的目标点 浮点数
 target_pos=[0,0,0]
@@ -65,15 +66,25 @@ enable_skybox=True
 #是否用C语言编码图像 整数
 encode_image=True
 
-#发射光线是否进行扰动 整数
-random_light=False
-
-#-----算法相关参数-----
+#-----渲染引擎相关参数-----
 #核心数 整数
 core_number=18
 
 #采样次数 整数
 sample_time=2
+
+#发射光线是否进行扰动 整数
+random_light=False
+
+#发射光子数 整数
+photon_count=200000
+
+#-----物理解算器相关参数-----
+#流体粒子半径 浮点数
+particle_radius=0.5
+
+#时间步长 浮点数
+time_step=0.002
 
 if __name__=='__main__':
     message.main()

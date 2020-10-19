@@ -5,7 +5,13 @@
 #include<cstdlib>
 #include<cmath>
 
-#include"basic.h"
+#include"basic_math.h"
+
+#ifndef DOUBLE_FLOAT
+
+//Use float instead of double
+
+#endif
 
 class Vector3f
 {
@@ -92,6 +98,11 @@ public:
         y=max(l,min(r,y));
         z=max(l,min(r,z));
     }
+public:
+    static Vector3f random()
+    {
+        return Vector3f(Utils::uniform(),Utils::uniform(),Utils::uniform());
+    }
 };
 
 class Vector3d
@@ -174,5 +185,9 @@ typedef Vector3f Point;
 typedef Vector3f Direction;
 
 typedef Vector2f Coord;
+
+const Direction x_dir(1,0,0);
+const Direction y_dir(0,1,0);
+const Direction z_dir(0,0,1);
 
 #endif

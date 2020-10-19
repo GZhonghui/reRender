@@ -3,7 +3,7 @@
 
 #include<cmath>
 
-#include"basic.h"
+#include"basic_math.h"
 
 class Tensor
 {

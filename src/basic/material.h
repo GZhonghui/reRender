@@ -5,6 +5,8 @@
 
 #include"../assets/texture.h"
 
+const Color missing_material(0.92,0.08,0.12);
+
 enum MaterialType
 {
     DIFFUSE,

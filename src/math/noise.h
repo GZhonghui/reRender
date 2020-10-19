@@ -5,7 +5,7 @@
 
 #include"../assets/texture.h"
 
-#include"basic.h"
+#include"basic_math.h"
 
 enum NoiseType
 {
