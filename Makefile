@@ -26,6 +26,7 @@ cpu:
 
 	$(info Building math.)
 	@g++ ./src/math/basic_math.cpp -c -o ./build/basic_math.o --std=c++17 -fPIC
+	@g++ ./src/math/low_discrepancy.cpp -c -o ./build/low_discrepancy.o --std=c++17 -fPIC
 	@g++ ./src/math/matrix.cpp -c -o ./build/matrix.o --std=c++17 -fPIC
 	@g++ ./src/math/noise.cpp -c -o ./build/noise.o --std=c++17 -fPIC
 	@g++ ./src/math/tensor.cpp -c -o ./build/tensor.o --std=c++17 -fPIC
@@ -66,6 +67,7 @@ cpu:
 		./build/ray.o \
 		./build/skybox.o \
 		./build/basic_math.o \
+		./build/low_discrepancy.o \
 		./build/matrix.o \
 		./build/noise.o \
 		./build/tensor.o \
@@ -87,17 +89,18 @@ gpu:
 	$(info Building gpu lib.)
 
 	$(info Building basic.)
-	@g++ ./src/basic/message.cpp -c -o ./build/message.o --std=c++17 -fPIC
+	@g++ ./src/basic/message.cpp -c -o ./build/message.o --std=c++14 -fPIC
 
 	$(info Building cuda math.)
-	@nvcc ./cuda/cuda_math/cuda_basic.cu -c -o ./build/cuda_basic.o --std=c++17 -Xcompiler -fPIC
+	@nvcc ./cuda/cuda_math/cuda_basic.cu -c -o ./build/cuda_basic.o --std=c++14 -Xcompiler -fPIC
 
 	$(info Building gpu api.)
-	@nvcc ./cuda/cuda_global.cu -c -o ./build/cuda_global.o --std=c++17 -Xcompiler -fPIC
+	@nvcc ./cuda/cuda_global.cu -c -o ./build/cuda_global.o --std=c++14 -Xcompiler -fPIC
 
 	$(info Linking.)
 	@nvcc \
 		./build/message.o \
 		./build/cuda_basic.o \
 		./build/cuda_global.o \
-		-shared -o ./lib/render-gpu.so
+		-shared \
+		-o ./lib/render-gpu.so
