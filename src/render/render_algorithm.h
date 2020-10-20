@@ -19,12 +19,14 @@ class RenderConfig
 public:
     int ssp;
     int core_number;
+    int photon_count;
     bool enable_skybox;
     double russian_roulette;
 public:
     RenderConfig():
         ssp(1),
         core_number(1),
+        photon_count(1000),
         enable_skybox(false),
         russian_roulette(0.5)
     {}
@@ -37,6 +39,7 @@ public:
     ):
         ssp(ssp),
         core_number(core_number),
+        photon_count(photon_count),
         enable_skybox(enable_skybox),
         russian_roulette(russian_roulette)
     {}

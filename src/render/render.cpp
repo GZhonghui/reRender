@@ -10,6 +10,8 @@ extern bool global_enable_skybox;
 extern int global_core_number;
 extern int global_sample_time;
 
+extern int global_photon_count;
+
 extern RenderType global_render_type;
 
 void Render::init_render()
@@ -64,6 +66,7 @@ void Render::render(double *pixels)
     config.ssp=global_sample_time;
     config.core_number=global_core_number;
     config.enable_skybox=global_enable_skybox;
+    config.photon_count=global_photon_count;
 
     frame+=1;
 

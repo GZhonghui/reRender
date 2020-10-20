@@ -10,6 +10,8 @@ bool global_enable_skybox;
 int global_core_number;
 int global_sample_time;
 
+int global_photon_count;
+
 RenderType global_render_type;
 
 void py_init_lib()
@@ -40,6 +42,8 @@ void py_set_args(int *int_args,double *double_args)
 
     int core_number=*(++int_args);
     int sample_time=*(++int_args);
+
+    int photon_count;
 
     double camera_pos_x=*(double_args);
     double camera_pos_y=*(++double_args);
@@ -90,6 +94,8 @@ void py_set_args(int *int_args,double *double_args)
 
     global_core_number=core_number;
     global_sample_time=sample_time;
+
+    global_photon_count=photon_count;
 
     sprintf(message_buffer,"Screen size:(%d,%d).",screen_width,screen_height);
     Message::print(MessageType::MESSAGE,message_buffer);
