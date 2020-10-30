@@ -20,6 +20,7 @@ cpu:
 	@g++ ./src/basic/kdtree.cpp -c -o ./build/kdtree.o --std=c++17 -fPIC
 	@g++ ./src/basic/material.cpp -c -o ./build/material.o --std=c++17 -fPIC
 	@g++ ./src/basic/message.cpp -c -o ./build/message.o --std=c++17 -fPIC
+	@g++ ./src/basic/n_search.cpp -c -o ./build/n_search.o --std=c++17 -fPIC
 	@g++ ./src/basic/object.cpp -c -o ./build/object.o --std=c++17 -fPIC
 	@g++ ./src/basic/ray.cpp -c -o ./build/ray.o --std=c++17 -fPIC
 	@g++ ./src/basic/skybox.cpp -c -o ./build/skybox.o --std=c++17 -fPIC
@@ -38,6 +39,7 @@ cpu:
 	@g++ ./src/render/mlight_transport.cpp -c -o ./build/mlight_transport.o --std=c++17 -fPIC
 	@g++ ./src/render/path_tracing.cpp -c -o ./build/path_tracing.o --std=c++17 -fPIC
 	@g++ ./src/render/photon_mapping.cpp -c -o ./build/photon_mapping.o --std=c++17 -fPIC
+	@g++ ./src/render/pt_noise.cpp -c -o ./build/pt_noise.o --std=c++17 -fPIC
 	@g++ ./src/render/render.cpp -c -o ./build/render.o --std=c++17 -fPIC
 	@g++ ./src/render/render_algorithm.cpp -c -o ./build/render_algorithm.o --std=c++17 -fPIC
 
@@ -63,6 +65,7 @@ cpu:
 		./build/kdtree.o \
 		./build/material.o \
 		./build/message.o \
+		./build/n_search.o \
 		./build/object.o \
 		./build/ray.o \
 		./build/skybox.o \
@@ -77,6 +80,7 @@ cpu:
 		./build/mlight_transport.o \
 		./build/path_tracing.o \
 		./build/photon_mapping.o \
+		./build/pt_noise.o \
 		./build/render.o \
 		./build/render_algorithm.o \
 		./build/scene.o \

@@ -25,9 +25,6 @@ protected:
     void init_photons(RenderConfig *render_config);
     void destroy();
 public:
-    Color cast_ray(const Ray &ray);
-    void cast_photon();
-public:
     virtual void render(RenderConfig *render_config,double *pixels);
 };
 

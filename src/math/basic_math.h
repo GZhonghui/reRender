@@ -3,6 +3,8 @@
 
 #include<cmath>
 
+#include"../../support/Eigen/Dense"
+
 #include"../basic/global.h"
 
 const double eps=1e-8;

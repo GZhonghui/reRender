@@ -57,6 +57,40 @@ void KDTree::build_range(std::vector<Point> &points,int l,int r,
     build_range(points,mid+1,r,now_dimension,&(*place_node)->right_node);
 }
 
+void KDTree::search(const Point &min_limit,const Point &max_limit,
+    int now_dimension,std::vector<Point> &search_result,
+    KDTreeNode *now_node)
+{
+    if(!now_node) return;
+
+    double left=min_limit[now_dimension];
+    double right=max_limit[now_dimension];
+
+    double split=now_node->position[now_dimension];
+
+    now_dimension+=1;
+    if(now_dimension>dimension) now_dimension=1;
+
+    if(left>split)
+    {
+        search(min_limit,max_limit,now_dimension,search_result,now_node->right_node);
+    }else if(right<split)
+    {
+        search(min_limit,max_limit,now_dimension,search_result,now_node->left_node);
+    }else
+    {
+        search(min_limit,max_limit,now_dimension,search_result,now_node->right_node);
+        
+        const Point &now_position=now_node->position;
+        if(min_limit<now_position&&now_position<max_limit)
+        {
+            search_result.push_back(now_position);
+        }
+
+        search(min_limit,max_limit,now_dimension,search_result,now_node->left_node);
+    }
+}
+
 void KDTree::build_from(std::vector<Point> &points)
 {
     int node_count=points.size();

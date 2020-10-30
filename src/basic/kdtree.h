@@ -38,8 +38,12 @@ public:
     }
 protected:
     void clear_node(KDTreeNode *now);
-    void build_range(std::vector<Point> &points,int l,int r,int now_dimension,KDTreeNode **place_node);
+    void build_range(std::vector<Point> &points,int l,int r,
+        int now_dimension,KDTreeNode **place_node);
 public:
+    void search(const Point &min_limit,const Point &max_limit,
+        int now_dimension,std::vector<Point> &search_result,
+        KDTreeNode *now_node);
     void build_from(std::vector<Point> &points);
     void destroy();
 };

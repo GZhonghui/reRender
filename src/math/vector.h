@@ -49,6 +49,17 @@ public:
         }
         return 0;
     }
+    bool operator<(const Vector3f &rhx) const
+    {
+        for(unsigned int i=1;i<=3;i+=1)
+        {
+            if(operator[](i)>rhx[i])
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 public:
     Vector3f hadamard_product(const Vector3f &rhx) const
     {
@@ -155,6 +166,13 @@ public:
         }
         return 0;
     }
+public:
+    double distance(const Vector2f &rhx) const
+    {
+        double dx=x-rhx.x;
+        double dy=y-rhx.y;
+        return sqrt(dx*dx+dy*dy);
+    }
 };
 
 class Vector2d
@@ -185,6 +203,8 @@ typedef Vector3f Point;
 typedef Vector3f Direction;
 
 typedef Vector2f Coord;
+
+typedef Vector2d Index2D;
 
 const Direction x_dir(1,0,0);
 const Direction y_dir(0,1,0);

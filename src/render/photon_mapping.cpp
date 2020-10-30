@@ -26,6 +26,7 @@ void PhotonMapping::render(RenderConfig *render_config,double *pixels)
 
     init_photons(render_config);
 
+
     
 }
 
@@ -33,6 +34,8 @@ void PhotonMapping::init_photons(RenderConfig *render_config)
 {
     //Cast photons only once
     if(kd_tree) return;
+
+    Message::print(MessageType::MESSAGE,"Casting photons.");
 
     const int &photon_count=render_config->photon_count;
 
