@@ -15,8 +15,9 @@
 ### ✔Import 3D Model
 ### ✔Render with Texture
 ### ✔Customize Skybox and Ambient Light
+![3D Model](readMe/Res_Model.png)
 ### ✔AI Denoise
-![AI Denoise](readMe/Res_deNoise.png)
+![Denoise](readMe/Res_deNoise.png)
 ### ✔Signed Distance Field
 ### ✔2D Scene Support
 ### ✔Real-Time Result Preview
