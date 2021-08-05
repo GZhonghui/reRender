@@ -1,0 +1,2 @@
+#define RENDERLIB_API __declspec(dllexport)
+#define RENDERLIB_API __declspec(dllimport)
