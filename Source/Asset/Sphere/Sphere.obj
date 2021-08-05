@@ -1,0 +1,8 @@
+Material Glass 1 1 1 0 1.8
+Sphere 0 0 3 3
+
+Material Glossy 0.8 0.7 0.6 0
+Sphere 5 5 3 3
+
+Material Diffuse 0.8 0.7 0.6
+Sphere -5 -5 3 3
