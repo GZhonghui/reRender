@@ -16,12 +16,12 @@
 ### ✔Render with Texture
 ### ✔Customize Skybox and Ambient Light
 ![3D Model](readMe/Res_Model.png)
-### ✔Render Animation
-### ✔Encode to Image or Video
 ### ✔AI Denoise
 ![Denoise](readMe/Res_deNoise.png)
 ### ✔Fluid Surface Reconstruction
 ### ✔Render Water
+### ✔Render Animation
+### ✔Encode to Image or Video
 ### ✔Signed Distance Field
 ### ✔2D Scene Support
 ### ✔Real-Time Result Preview
