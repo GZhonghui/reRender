@@ -32,4 +32,6 @@
 * Eigen
 * Intel OIDN
 * Intel TBB
+* NumPy
+* OpenCV
 * STB
