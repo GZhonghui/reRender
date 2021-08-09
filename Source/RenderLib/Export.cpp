@@ -86,7 +86,7 @@ RENDERLIB_API int applyConfig(int ID,const char* config)
 
     int32_t ssp = 0;
     memcpy(&ssp, config, 4);
-    Scenes[ID]->m_Config->ssp = ssp;
+    Scenes[ID]->m_Config->spp = ssp;
 
     int32_t core = 0;
     memcpy(&core, config + 4, 4);

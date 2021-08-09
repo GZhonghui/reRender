@@ -11,7 +11,7 @@
     <OutputPath>.</OutputPath>
     <Name>Launch</Name>
     <RootNamespace>Launch</RootNamespace>
-    <InterpreterId>MSBuild|Scripts|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>Global|VisualStudio|reRender</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,18 +34,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Interpreter Include="..\..\RenderEnv\Scripts\">
-      <Id>Scripts</Id>
-      <Version>3.8</Version>
-      <Description>RenderPython</Description>
-      <InterpreterPath>python.exe</InterpreterPath>
-      <WindowsInterpreterPath>pythonw.exe</WindowsInterpreterPath>
-      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
-      <Architecture>X64</Architecture>
-    </Interpreter>
+    <Folder Include="Render\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Render\" />
+    <InterpreterReference Include="Global|VisualStudio|reRender" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

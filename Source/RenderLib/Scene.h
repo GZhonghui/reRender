@@ -87,7 +87,7 @@ protected:
 			return;
 		}
 
-		int AllSSP = m_Config->core * m_Config->ssp;
+		int AllSSP = m_Config->core * m_Config->spp;
 		double OneInAll = 1.0 / AllSSP;
 
 		int BufferSize = m_Config->windowWidth * m_Config->windowHeight * 3;
@@ -134,7 +134,7 @@ public:
 		int BufferSize = m_Config->windowWidth * m_Config->windowHeight * 3;
 		uint8_t* Pixel = new uint8_t[BufferSize];
 
-		int AllSSP = m_Config->core * m_Config->ssp;
+		int AllSSP = m_Config->core * m_Config->spp;
 		double NowProcess = 1.0 * AllSSP / RenderedSSP;
 
 		for (int i = 0; i < BufferSize; i += 1)

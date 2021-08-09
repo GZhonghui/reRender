@@ -14,7 +14,7 @@ void Scene::RenderWorkerThread(uint32_t tID, Scene* scene, Semaphore* Done)
 	const bool enableMSAA = scene->m_Config->enableMSAA;
 	const bool enableGammaCorrection = scene->m_Config->enableGammaCorrection;
 
-	int ssp = scene->m_Config->ssp;
+	int ssp = scene->m_Config->spp;
 
 	const int Width = scene->m_Config->windowWidth;
 	const int Height = scene->m_Config->windowHeight;

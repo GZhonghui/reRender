@@ -6,7 +6,7 @@ def main():
     
     scene=StaticScene()
 
-    scene.SetRenderConfig('ssp',2)
+    scene.SetRenderConfig('spp',2)
     scene.SetRenderConfig('core',24)
     scene.SetRenderConfig('target_pos',(0,0,0))
     scene.SetRenderConfig('camera_pos',(10,-10,4))

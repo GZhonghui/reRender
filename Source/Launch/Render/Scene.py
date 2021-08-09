@@ -1,3 +1,8 @@
+# Python Virtual Env
+# OpenCV
+# NumPy
+# reprint
+
 from Render.Print import Print
 
 try:
@@ -94,7 +99,7 @@ class StaticScene:
         self.lessOutput=True
 
         #Default Render Config
-        self.SetRenderConfig('ssp',2)
+        self.SetRenderConfig('spp',2)
         self.SetRenderConfig('core',2)
         self.SetRenderConfig('resolution',(1024,768))
         self.SetRenderConfig('horizontal_angle',120)

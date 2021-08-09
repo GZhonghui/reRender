@@ -6,7 +6,7 @@ public:
 	RenderConfig()
 	{
 		//Default Config
-		ssp = 2;
+		spp = 2;
 		core = 2;
 		windowWidth = 1024;
 		windowHeight = 768;
@@ -23,7 +23,7 @@ public:
 	~RenderConfig() = default;
 
 public:
-	int ssp;
+	int spp;
 	int core;
 	int windowWidth;
 	int windowHeight;
