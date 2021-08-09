@@ -18,8 +18,6 @@
 ![3D Model](readMe/Res_Model.png)
 ### ✔AI Denoise
 ![Denoise](readMe/Res_deNoise.png)
-### ✔Fluid Surface Reconstruction
-### ✔Render Water
 ### ✔Render Animation
 ### ✔Encode to Image or Video
 ### ✔Signed Distance Field
