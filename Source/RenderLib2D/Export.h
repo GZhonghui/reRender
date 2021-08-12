@@ -11,10 +11,10 @@
 
 #include"Scene.h"
 
-extern "C" RENDERLIB2D_API void initAllLib(int Width, int Height);
+extern "C" RENDERLIB2D_API void initAllLib(int Width, int Height, int Sample);
 
 extern "C" RENDERLIB2D_API void clearAllLib();
 
-extern "C" RENDERLIB2D_API void addObject();
+extern "C" RENDERLIB2D_API void addObject(int Type);
 
-extern "C" RENDERLIB2D_API void Render();
+extern "C" RENDERLIB2D_API void Render(const char* filePath);

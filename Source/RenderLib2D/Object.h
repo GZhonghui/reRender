@@ -3,6 +3,8 @@
 #include"MathAIO.h"
 #include"ToolAIO.h"
 
+#include"Material.h"
+
 enum class oType
 {
     LINE, SEGMENT, CAPSULE, TRIANGLE, CIRCLE
@@ -110,7 +112,9 @@ public:
 public:
     virtual double SDF(const Point& originPoint)
     {
-        return 0;
+        auto Offset = m_Center - originPoint;
+
+        return Offset.norm() - m_Radius;
     }
 };
 
@@ -118,14 +122,32 @@ class Shape
 {
 protected:
     std::vector<std::shared_ptr<Object>> m_SubObjects;
+    std::shared_ptr<Material> m_Material;
 
 public:
-    Shape() = default;
+    Shape(std::shared_ptr<Material> shapeMaterial) :m_Material(shapeMaterial) {}
     ~Shape() = default;
 
 public:
     void Add(std::shared_ptr<Object> newObject)
     {
         m_SubObjects.push_back(newObject);
+    }
+
+    double SDF(const Point& originPoint)
+    {
+        double sdfDistance = inf;
+
+        for (auto oIndex = m_SubObjects.begin(); oIndex != m_SubObjects.end(); ++oIndex)
+        {
+            sdfDistance = std::min(sdfDistance, (*oIndex)->SDF(originPoint));
+        }
+
+        return sdfDistance;
+    }
+
+    std::shared_ptr<Material> getMaterial() const noexcept
+    {
+        return m_Material;
     }
 };

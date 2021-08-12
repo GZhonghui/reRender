@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>c282eaa7-5aa6-49e4-8b9c-ed3e2afad93b</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Launch.py</StartupFile>
+    <StartupFile>Render2D.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -23,10 +23,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Launch.py" />
+    <Compile Include="Render2D.py" />
     <Compile Include="Render\Print.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Render\Scene.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Render\Scene2D.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Render\__init__.py">
