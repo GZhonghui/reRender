@@ -7,7 +7,7 @@
 
 enum class oType
 {
-    LINE, SEGMENT, CAPSULE, TRIANGLE, CIRCLE
+    LINE, SEGMENT, CAPSULE, TRIANGLE, BOX, CIRCLE
 };
 
 class Object
@@ -20,7 +20,7 @@ public:
     virtual ~Object() = default;
 
 public:
-    virtual oType getType() const noexcept { return m_Type; }
+    oType getType() const noexcept { return m_Type; }
 
 public:
     virtual double SDF(const Point& originPoint) = 0;
@@ -30,17 +30,17 @@ class Line : public Object
 {
 protected:
     Point m_PointOnLine;
-    Direction m_Dir;
+    Direction m_Normal;
 
 public:
-    Line(const Point& PointOnLine, const Direction& Dir) :
-        Object(oType::LINE), m_PointOnLine(PointOnLine), m_Dir(Dir) {}
+    Line(const Point& PointOnLine, const Direction& Normal) :
+        Object(oType::LINE), m_PointOnLine(PointOnLine), m_Normal(Normal.normalized()) {}
     virtual ~Line() = default;
 
 public:
     virtual double SDF(const Point& originPoint)
     {
-        return 0;
+        return (originPoint - m_PointOnLine).dot(m_Normal);
     }
 };
 
@@ -58,7 +58,11 @@ public:
 public:
     virtual double SDF(const Point& originPoint)
     {
-        return 0;
+        auto U = m_PointB - m_PointA;
+        auto V = originPoint - m_PointA;
+        auto pX = m_PointA + Limit(V.dot(U) / U.dot(U), 0, 1) * U;
+        
+        return (originPoint - pX).norm();
     }
 };
 
@@ -67,16 +71,17 @@ class Capsule : public Object
 protected:
     Point m_PointA;
     Point m_PointB;
+    double m_Radius;
 
 public:
-    Capsule(const Point& PointA, const Point& PointB) :
-        Object(oType::CAPSULE), m_PointA(PointA), m_PointB(PointB) {}
+    Capsule(const Point& PointA, const Point& PointB, double Radius) :
+        Object(oType::CAPSULE), m_PointA(PointA), m_PointB(PointB), m_Radius(Radius) {}
     virtual ~Capsule() = default;
 
 public:
     virtual double SDF(const Point& originPoint)
     {
-        return 0;
+        return Segment(m_PointA, m_PointB).SDF(originPoint) - m_Radius;
     }
 };
 
@@ -90,10 +95,26 @@ protected:
 public:
     Triangle(const Point& PointA, const Point& PointB, const Point& PointC) :
         Object(oType::TRIANGLE), m_PointA(PointA), m_PointB(PointB), m_PointC(PointC) {}
+    virtual ~Triangle() = default;
 
 public:
     virtual double SDF(const Point& originPoint)
     {
+        // CODE HERE
+        return 0;
+    }
+};
+
+class Box : public Object
+{
+public:
+    Box() : Object(oType::BOX) {}
+    virtual ~Box() = default;
+
+public:
+    virtual double SDF(const Point& originPoint)
+    {
+        // CODE HERE
         return 0;
     }
 };

@@ -17,7 +17,7 @@ void Scene::Render(const char* filePath)
             for (auto sIndex = 1; sIndex <= m_Sample; sIndex += 1)
             {
                 
-                Result += Sample(Point(wIndex, hIndex));
+                Result += Sample(Point(wIndex, hIndex), sIndex);
             }
 
             Result = Result / m_Sample;

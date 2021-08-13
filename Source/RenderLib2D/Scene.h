@@ -39,12 +39,17 @@ public:
 
         m_Shapes.clear();
 
-        std::shared_ptr<Emission> centerMaterial = std::make_shared<Emission>(Color(0.9, 0.1, 0.0));
+        std::shared_ptr<Emission> centerMaterial = std::make_shared<Emission>(Color(0.9, 0.9, 0.9));
         std::shared_ptr<Shape> centerShape = std::make_shared<Shape>(centerMaterial);
-        centerShape->Add(std::make_shared<Circle>(Point(500, 500), 100));
-        centerShape->Add(std::make_shared<Circle>(Point(550, 550), 100));
+        centerShape->Add(std::make_shared<Capsule>(Point(200, 200), Point(400, 300), 50));
+
+        std::shared_ptr<Glass> glassMaterial = std::make_shared<Glass>();
+        std::shared_ptr<Shape> rightShape = std::make_shared<Shape>(glassMaterial);
+        rightShape->Add(std::make_shared<Circle>(Point(500, 500), 100));
+        rightShape->Add(std::make_shared<Circle>(Point(500, 550), 100));
 
         m_Shapes.push_back(centerShape);
+        m_Shapes.push_back(rightShape);
     }
 
     void Destroy()
@@ -60,13 +65,14 @@ public:
     void Render(const char* filePath);
 
 public:
-    Color Sample(const Point& originPoint)
+    Color Sample(const Point& originPoint, int sIndex)
     {
         // Uniform Sample Lighting Path ?
 
-        double randDir = Uniform(0, 2 * pi);
+        double randUnit = 2 * pi / m_Sample;
+        double randDir = Uniform(0, randUnit) + randUnit * (sIndex - 1);
 
-        return Trace(originPoint, Direction(cos(randDir), sin(randDir)), 16);
+        return Trace(originPoint, Direction(cos(randDir), sin(randDir)), 64);
     }
 
     Color Trace(const Point& originPoint, const Direction& Dir, int Depth)

@@ -28,7 +28,7 @@ protected:
 
 public:
     Emission(const Color& EmissionColor) :
-        m_EmissionColor(EmissionColor), Material(mType::EMISSION) {}
+        Material(mType::EMISSION), m_EmissionColor(EmissionColor) {}
     virtual ~Emission() = default;
 
 public:

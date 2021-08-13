@@ -24,16 +24,9 @@
 #include<STB/stb_image.h>
 #include<STB/stb_image_write.h>
 
-inline double Uniform()
+inline double Limit(double x, double Left, double Right)
 {
-#define RANDOM_MAX_LIMIT (1024)
-
-    return 1.0 * (rand() % RANDOM_MAX_LIMIT) / (RANDOM_MAX_LIMIT - 1);
-}
-
-inline double Uniform(double Left,double Right)
-{
-    return Left + Uniform() * (Right - Left);
+    return std::max(std::min(x, Right), Left);
 }
 
 const bool G_ENABLE_OUTPUT = true;
