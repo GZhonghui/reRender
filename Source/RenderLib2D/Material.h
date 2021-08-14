@@ -40,7 +40,17 @@ public:
 
 class Glass : public Material
 {
+protected:
+    double m_Reflectivity;
+
 public:
-    Glass() : Material(mType::GLASS) {}
+    Glass(double Reflectivity) :
+        Material(mType::GLASS), m_Reflectivity(Reflectivity) {}
     virtual ~Glass() = default;
+
+public:
+    double getReflectivity() const noexcept
+    {
+        return m_Reflectivity;
+    }
 };

@@ -172,6 +172,7 @@
   <ItemGroup>
     <ClInclude Include="Export.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MathAIO.h" />
     <ClInclude Include="Object.h" />

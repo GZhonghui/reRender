@@ -22,13 +22,16 @@ void Scene::Render(const char* filePath)
 
             Result = Result / m_Sample;
 
-            renderBuffer[pixelIndex + 0] = static_cast<unsigned char>(Result.x() * 255.999);
-            renderBuffer[pixelIndex + 1] = static_cast<unsigned char>(Result.y() * 255.999);
-            renderBuffer[pixelIndex + 2] = static_cast<unsigned char>(Result.z() * 255.999);
+            renderBuffer[pixelIndex + 0] = static_cast<unsigned char>(Limit(Result.x(), 0, 1) * 255.999);
+            renderBuffer[pixelIndex + 1] = static_cast<unsigned char>(Limit(Result.y(), 0, 1) * 255.999);
+            renderBuffer[pixelIndex + 2] = static_cast<unsigned char>(Limit(Result.z(), 0, 1) * 255.999);
 
             pixelIndex += 3;
+
+            printf("\r%u of %u", pixelIndex, bufferSize);
         }
     }
+    puts("");
 
     stbi_write_png(filePath, m_Width, m_Height, 3, renderBuffer, 0);
 

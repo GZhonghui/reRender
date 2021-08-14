@@ -1,5 +1,8 @@
 #pragma once
 
+// Uniform
+#pragma warning(disable:26451)
+
 #include<Eigen/Eigen>
 
 typedef Eigen::Vector2d Point;

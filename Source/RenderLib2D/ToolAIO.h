@@ -1,8 +1,5 @@
 #pragma once
 
-// Uniform
-#pragma warning(disable:26451)
-
 // Construction
 #pragma warning(disable:26495)
 
