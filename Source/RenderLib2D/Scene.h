@@ -44,6 +44,7 @@ public:
 
         m_Shapes.clear();
 
+        /*
         std::shared_ptr<Glass> centerMaterial = std::make_shared<Glass>(0.9);
         std::shared_ptr<Shape> centerShape = std::make_shared<Shape>(centerMaterial);
         centerShape->Add(std::make_shared<Capsule>(Point(200, 100), Point(200, 500), 20));
@@ -55,6 +56,24 @@ public:
         std::shared_ptr<Emission> otherMaterial = std::make_shared<Emission>(Color(1.2, 1.8, 2.8));
         std::shared_ptr<Shape> otherShape = std::make_shared<Shape>(otherMaterial);
         otherShape->Add(std::make_shared<Circle>(Point(650, 550), 50));
+
+        m_Shapes.push_back(centerShape);
+        m_Shapes.push_back(rightShape);
+        m_Shapes.push_back(otherShape);
+        */
+
+        std::shared_ptr<Glass> centerMaterial = std::make_shared<Glass>(0.2, 1.5, Color(0.6, 0, 0));
+        std::shared_ptr<Shape> centerShape = std::make_shared<Shape>(centerMaterial);
+        centerShape->Add(std::make_shared<Box>(Point(400, 180), Direction(100, 50), pi * 0.2));
+
+        std::shared_ptr<Glass> glassMaterial = std::make_shared<Glass>(0.2, 1.5, Color(0, 0.6, 0));
+        std::shared_ptr<Shape> rightShape = std::make_shared<Shape>(glassMaterial);
+        rightShape->Add(std::make_shared<Box>(Point(180, 360), Direction(100, 50), 0));
+
+        std::shared_ptr<Emission> otherMaterial = std::make_shared<Emission>(Color(3, 3, 3));
+        std::shared_ptr<Shape> otherShape = std::make_shared<Shape>(otherMaterial);
+        otherShape->Add(std::make_shared<Circle>(Point(100, 100), 50));
+        otherShape->Add(std::make_shared<Circle>(Point(500, 500), 50));
 
         m_Shapes.push_back(centerShape);
         m_Shapes.push_back(rightShape);
@@ -102,15 +121,11 @@ protected:
         uint32_t usedStep = 0;
         double   usedDistance = 0;
 
+        double Sign = Hit(tracePoint).m_Distance > 0 ? 1 : -1;
+
         while (++usedStep <= G_MAX_STEP)
         {
             auto nextStep = Hit(tracePoint);
-
-            usedDistance += nextStep.m_Distance;
-            if (usedDistance > G_MAX_DISTANCE)
-            {
-                break;
-            }
 
             // Empty Scene
             if (!nextStep.m_Material)
@@ -118,30 +133,56 @@ protected:
                 break;
             }
 
-            // Hit Something
-            if (nextStep.m_Distance < eps)
+            usedDistance += nextStep.m_Distance * Sign;
+            if (usedDistance > G_MAX_DISTANCE)
+            {
+                break;
+            }
+
+            // Hit Something at edge
+            if (nextStep.m_Distance * Sign < eps)
             {
                 if (nextStep.m_Material->getType() == mType::EMISSION)
                 {
                     return ((Emission*)nextStep.m_Material.get())->getEmissionColor();
                 }
+
                 else if (nextStep.m_Material->getType() == mType::GLASS)
                 {
-                    auto Reflectivity = ((Glass*)nextStep.m_Material.get())->getReflectivity();
+                    Color Sum = ((Glass*)nextStep.m_Material.get())->getEmissionColor();
 
-                    if (usedDepth < G_MAX_DEPTH && Reflectivity > 0)
+                    if (usedDepth < G_MAX_DEPTH)
                     {
-                        auto thisNormal = Normal(tracePoint);
-                        auto outDir = Reflect(traceDir, thisNormal);
+                        auto Reflectivity = ((Glass*)nextStep.m_Material.get())->getReflectivity();
+                        auto Eta = ((Glass*)nextStep.m_Material.get())->getEta();
 
-                        return Reflectivity * Trace(tracePoint + thisNormal * eps * 10, outDir, usedDepth + 1);
+                        // Really Need?
+                        Reflectivity = Limit(Reflectivity, 0, 1);
+                        Eta = Limit(Eta, 0.1, 10);
+
+                        auto thisNormal = Normal(tracePoint);
+
+                        Direction RefractDir;
+                        if (Refract(traceDir, thisNormal * Sign, Sign > 0 ? 1 / Eta : Eta, RefractDir))
+                        {
+                            Sum += (1 - Reflectivity) * Trace(tracePoint - bias * Sign * thisNormal, RefractDir, usedDepth + 1);
+                        }
+                        else
+                        {
+                            Reflectivity = 1;
+                        }
+
+                        auto ReflectDir = Reflect(traceDir, thisNormal * Sign);
+
+                        Sum += Reflectivity * Trace(tracePoint + thisNormal * Sign * bias, ReflectDir, usedDepth + 1);
                     }
-                    else break;
+
+                    return Sum.cwiseProduct(BeerLambert(((Glass*)nextStep.m_Material.get())->getAbsorption(), usedDistance));
                 }
             }
             else
             {
-                tracePoint += traceDir * nextStep.m_Distance;
+                tracePoint += traceDir * nextStep.m_Distance * Sign;
             }
         }
 

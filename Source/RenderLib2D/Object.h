@@ -107,15 +107,28 @@ public:
 
 class Box : public Object
 {
+protected:
+    Point m_Center;
+    Direction m_HalfLength;
+    double m_Theta;
+
 public:
-    Box() : Object(oType::BOX) {}
+    Box(const Point& Center, const Direction& HalfLength, double Theta) :
+        Object(oType::BOX), m_Center(Center), m_HalfLength(HalfLength), m_Theta(Theta) {}
     virtual ~Box() = default;
 
 public:
     virtual double SDF(const Point& originPoint)
     {
-        // CODE HERE
-        return 0;
+        auto sinTheta = std::sin(m_Theta);
+        auto cosTheta = std::cos(m_Theta);
+
+        double dx = abs((originPoint.x() - m_Center.x()) * cosTheta + (originPoint.y() - m_Center.y()) * sinTheta) - m_HalfLength.x();
+        double dy = abs((originPoint.y() - m_Center.y()) * cosTheta - (originPoint.x() - m_Center.x()) * sinTheta) - m_HalfLength.y();
+        double ax = std::max(dx, 0.0);
+        double ay = std::max(dy, 0.0);
+
+        return std::min(std::max(dx, dy), 0.0) + std::sqrt(ax * ax + ay * ay);
     }
 };
 
