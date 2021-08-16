@@ -21,6 +21,7 @@
 ### ✔编码为图像或视频
 ### ✔Signed Distance Field
 ### ✔支持渲染2D场景
+![2D Scene](Res_2D.png)
 ### ✔渲染结果实时预览
 ### ✔易用的Python接口
 

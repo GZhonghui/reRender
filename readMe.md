@@ -22,6 +22,7 @@
 ### ✔Encode to Image or Video
 ### ✔Signed Distance Field
 ### ✔2D Scene Support
+![2D Scene](readMe/Res_2D.png)
 ### ✔Real-Time Result Preview
 ### ✔Easy to Use as Python Interface
 
