@@ -21,6 +21,8 @@
 #include<STB/stb_image.h>
 #include<STB/stb_image_write.h>
 
+#include<oneTBB/tbb/parallel_for.h>
+
 inline double Limit(double x, double Left, double Right)
 {
     return std::max(std::min(x, Right), Left);

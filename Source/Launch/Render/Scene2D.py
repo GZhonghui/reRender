@@ -37,6 +37,7 @@ def Destroy():
     C_clearAllLib()
 
 def Add(Type:int):
+    # Code Here
     C_addObject(c_int(Type))
 
 def Render(filePath:str):

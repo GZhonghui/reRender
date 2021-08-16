@@ -31,7 +31,8 @@ inline bool Refract(const Direction& In, const Direction& Normal, double Eta, Di
 
 inline Color BeerLambert(const Color& Absorption, double Distance)
 {
-    auto AbWithDis = Absorption * Distance * -1;
+    const double WorldSize = 0.03;
+    auto AbWithDis = Absorption * Distance * -1 * WorldSize;
 
     return Color(exp(AbWithDis.x()), exp(AbWithDis.y()), exp(AbWithDis.z()));
 }

@@ -7,7 +7,7 @@
 #include"Light.h"
 
 const uint32_t G_MAX_STEP = 128;
-const uint32_t G_MAX_DEPTH = 3;
+const uint32_t G_MAX_DEPTH = 4;
 const double   G_MAX_DISTANCE = 1024;
 
 class HitResult
@@ -62,13 +62,15 @@ public:
         m_Shapes.push_back(otherShape);
         */
 
+        /*
         std::shared_ptr<Glass> centerMaterial = std::make_shared<Glass>(0.2, 1.5, Color(0.6, 0, 0));
         std::shared_ptr<Shape> centerShape = std::make_shared<Shape>(centerMaterial);
         centerShape->Add(std::make_shared<Box>(Point(400, 180), Direction(100, 50), pi * 0.2));
 
         std::shared_ptr<Glass> glassMaterial = std::make_shared<Glass>(0.2, 1.5, Color(0, 0.6, 0));
         std::shared_ptr<Shape> rightShape = std::make_shared<Shape>(glassMaterial);
-        rightShape->Add(std::make_shared<Box>(Point(180, 360), Direction(100, 50), 0));
+        //rightShape->Add(std::make_shared<Box>(Point(180, 360), Direction(100, 50), 0));
+        rightShape->Add(std::make_shared<Capsule>(Point(120, 360), Point(240, 360), 60));
 
         std::shared_ptr<Emission> otherMaterial = std::make_shared<Emission>(Color(3, 3, 3));
         std::shared_ptr<Shape> otherShape = std::make_shared<Shape>(otherMaterial);
@@ -78,6 +80,135 @@ public:
         m_Shapes.push_back(centerShape);
         m_Shapes.push_back(rightShape);
         m_Shapes.push_back(otherShape);
+        */
+
+        // Light
+        {
+            std::shared_ptr<Emission> thisMaterial = std::make_shared<Emission>(Color(2, 2, 2));
+            std::shared_ptr<Shape> thisShape = std::make_shared<Shape>(thisMaterial);
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(512, 48), Direction(420, 12), 0, 10));
+
+            thisShape->Add(std::make_shared<Capsule>(Point(160, 520), Point(360, 520), 20));
+            thisShape->Add(std::make_shared<Capsule>(Point(1024 - 360, 520), Point(1024 - 160, 520), 20));
+
+            m_Shapes.push_back(thisShape);
+        }
+
+        // r
+        {
+            std::shared_ptr<Glass> thisMaterial = std::make_shared<Glass>(0.2, 1.5, Color(0, 0.6, 0.9));
+            std::shared_ptr<Shape> thisShape = std::make_shared<Shape>(thisMaterial);
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(60, 310), Direction(10, 60), 0, 6));
+
+            m_Shapes.push_back(thisShape);
+        }
+
+        {
+            std::shared_ptr<Emission> thisMaterial = std::make_shared<Emission>(Color(1.2, 1.2, 1.2));
+            std::shared_ptr<Shape> thisShape = std::make_shared<Shape>(thisMaterial);
+            thisShape->Add(std::make_shared<Circle>(Point(90, 270), 20));
+
+            m_Shapes.push_back(thisShape);
+        }
+
+        // e
+        {
+            std::shared_ptr<Glass> thisMaterial = std::make_shared<Glass>(0.2, 1.5, Color(0.7, 0, 0.9));
+            std::shared_ptr<Shape> thisShape = std::make_shared<Shape>(thisMaterial);
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(135, 310), Direction(10, 60), 0, 6));
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(175, 310), Direction(40, 10), 0, 6));
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(175, 260), Direction(40, 10), 0, 6));
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(175, 360), Direction(40, 10), 0, 6));
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(205, 290), Direction(10, 30), 0, 6));
+
+            m_Shapes.push_back(thisShape);
+        }
+
+        // R
+        {
+            std::shared_ptr<Glass> thisMaterial = std::make_shared<Glass>(0.2, 1.5, Color(0, 0, 0));
+            std::shared_ptr<Shape> thisShape = std::make_shared<Shape>(thisMaterial);
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(260, 280), Direction(10, 120), 0, 6));
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(320, 170), Direction(60,  10), 0, 6));
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(320, 270), Direction(60,  10), 0, 6));
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(370, 220), Direction(10,  50), 0, 6));
+
+            m_Shapes.push_back(thisShape);
+        }
+
+        {
+            std::shared_ptr<Emission> thisMaterial = std::make_shared<Emission>(Color(1, 1.2, 1.2));
+            std::shared_ptr<Shape> thisShape = std::make_shared<Shape>(thisMaterial);
+            thisShape->Add(std::make_shared<Capsule>(Point(295, 305), Point(385, 395), 14));
+
+            m_Shapes.push_back(thisShape);
+        }
+
+        // e
+        {
+            std::shared_ptr<Glass> thisMaterial = std::make_shared<Glass>(0.2, 1.5, Color(0.6, 0.6, 0));
+            std::shared_ptr<Shape> thisShape = std::make_shared<Shape>(thisMaterial);
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(425, 310), Direction(10, 60), 0, 6));
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(465, 310), Direction(40, 10), 0, 6));
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(465, 260), Direction(40, 10), 0, 6));
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(465, 360), Direction(40, 10), 0, 6));
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(495, 290), Direction(10, 30), 0, 6));
+
+            m_Shapes.push_back(thisShape);
+        }
+
+        // n
+        {
+            std::shared_ptr<Glass> thisMaterial = std::make_shared<Glass>(0.2, 1.5, Color(0, 0, 0.7));
+            std::shared_ptr<Shape> thisShape = std::make_shared<Shape>(thisMaterial);
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(550, 310), Direction(10, 60), 0, 6));
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(630, 310), Direction(10, 60), 0, 6));
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(590, 260), Direction(40, 10), 0, 6));
+
+            m_Shapes.push_back(thisShape);
+        }
+
+        // d
+        {
+            std::shared_ptr<Glass> thisMaterial = std::make_shared<Glass>(0.2, 1.5, Color(0.6, 0, 0));
+            std::shared_ptr<Shape> thisShape = std::make_shared<Shape>(thisMaterial);
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(680, 310), Direction(10,  60), 0, 6));
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(760, 270), Direction(10, 100), 0, 6));
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(710, 260), Direction(40,  10), 0, 6));
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(710, 360), Direction(40,  10), 0, 6));
+
+            m_Shapes.push_back(thisShape);
+        }
+
+        // e
+        {
+            std::shared_ptr<Glass> thisMaterial = std::make_shared<Glass>(0.2, 1.5, Color(0.1, 0, 0.1));
+            std::shared_ptr<Shape> thisShape = std::make_shared<Shape>(thisMaterial);
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(815, 310), Direction(10, 60), 0, 6));
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(855, 310), Direction(40, 10), 0, 6));
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(855, 260), Direction(40, 10), 0, 6));
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(855, 360), Direction(40, 10), 0, 6));
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(885, 290), Direction(10, 30), 0, 6));
+
+            m_Shapes.push_back(thisShape);
+        }
+
+        // r
+        {
+            std::shared_ptr<Glass> thisMaterial = std::make_shared<Glass>(0.2, 1.5, Color(0, 0.6, 0));
+            std::shared_ptr<Shape> thisShape = std::make_shared<Shape>(thisMaterial);
+            thisShape->Add(std::make_shared<BoxWithFillet>(Point(940, 310), Direction(10, 60), 0, 6));
+
+            m_Shapes.push_back(thisShape);
+        }
+
+        {
+            std::shared_ptr<Emission> thisMaterial = std::make_shared<Emission>(Color(1.4, 1.2, 1.2));
+            std::shared_ptr<Shape> thisShape = std::make_shared<Shape>(thisMaterial);
+            thisShape->Add(std::make_shared<Circle>(Point(970, 270), 20));
+
+            m_Shapes.push_back(thisShape);
+        }
     }
 
     void Destroy()
@@ -105,6 +236,18 @@ public:
         */
 
         // Uniform Sample Lighting Path ?
+
+        // Debug Mode
+        /*
+        if (Hit(originPoint).m_Distance < 0)
+        {
+            return Color(1, 1, 1);
+        }
+        else
+        {
+            return Color(0, 0, 0);
+        }
+        */
 
         double randUnit = 2 * pi / m_Sample;
         double randDir = Uniform(0, randUnit) + randUnit * (sIndex - 1);
@@ -175,6 +318,11 @@ protected:
                         auto ReflectDir = Reflect(traceDir, thisNormal * Sign);
 
                         Sum += Reflectivity * Trace(tracePoint + thisNormal * Sign * bias, ReflectDir, usedDepth + 1);
+                    }
+
+                    if (Sign > 0)
+                    {
+                        return Sum;
                     }
 
                     return Sum.cwiseProduct(BeerLambert(((Glass*)nextStep.m_Material.get())->getAbsorption(), usedDistance));

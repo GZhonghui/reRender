@@ -7,7 +7,7 @@
 
 enum class oType
 {
-    LINE, SEGMENT, CAPSULE, TRIANGLE, BOX, CIRCLE
+    LINE, SEGMENT, CAPSULE, TRIANGLE, BOX, BOX_WITH_FILLET, CIRCLE
 };
 
 class Object
@@ -129,6 +129,27 @@ public:
         double ay = std::max(dy, 0.0);
 
         return std::min(std::max(dx, dy), 0.0) + std::sqrt(ax * ax + ay * ay);
+    }
+};
+
+class BoxWithFillet : public Object
+{
+protected:
+    Point m_Center;
+    Direction m_HalfLength;
+    double m_Theta;
+    double m_Radius;
+
+public:
+    BoxWithFillet(const Point& Center, const Direction& HalfLength, double Theta, double Radius) :
+        Object(oType::BOX_WITH_FILLET), m_Center(Center), m_HalfLength(HalfLength), m_Theta(Theta), m_Radius(Radius) {}
+    virtual ~BoxWithFillet() = default;
+
+public:
+public:
+    virtual double SDF(const Point& originPoint)
+    {
+        return Box(m_Center, m_HalfLength, m_Theta).SDF(originPoint) - m_Radius;
     }
 };
 

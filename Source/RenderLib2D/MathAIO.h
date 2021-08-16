@@ -9,8 +9,8 @@ typedef Eigen::Vector2d Point;
 typedef Eigen::Vector2d Direction;
 typedef Eigen::Vector3d Color;
 
-const double eps = static_cast<double>(1e-4);
-const double bias = eps * 10;
+const double eps = static_cast<double>(1e-6);
+const double bias = eps * 3;
 
 const double inf = std::numeric_limits<double>::infinity();
 
