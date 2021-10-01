@@ -14,14 +14,14 @@
 ### ✔3Dモデルのインポート
 ### ✔テクスチャでレンダリング
 ### ✔スカイボックスとアンビエントライトをカスタマイズする
-![3D Model](Res_Model.png)
+![3D Model](Res_01_Model.png)
 ### ✔AIノイズ除去
-![Denoise](Res_deNoise.png)
+![Denoise](Res_02_deNoise.png)
 ### ✔アニメーションをレンダリングする
 ### ✔画像またはビデオにエンコードする
 ### ✔Signed Distance Field
 ### ✔2Dシーンのサポート
-![2D Scene](Res_2D.png)
+![2D Scene](Res_03_2D.png)
 ### ✔リアルタイムの結果プレビュー
 ### ✔Pythonインターフェースとして使いやすい
 
