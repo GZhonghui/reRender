@@ -3,7 +3,7 @@
 ---
 > More Projects from the reFamily [**reSimulate**](https://github.com/GZhonghui/reSimulate)/[**reEngine**](https://github.com/GZhonghui/reEngine)
 
-## 約
+## について
 **reRender**はオフラインのレンダリングエンジンです
 
 ## 特徴
