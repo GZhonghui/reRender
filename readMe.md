@@ -11,9 +11,9 @@
 :-:
 | ![3D Model](readMe/Res_01_Model.png) |
 | AI Denoise |
-|![Denoise](readMe/Res_02_deNoise.png) |
+| ![Denoise](readMe/Res_02_deNoise.png) |
 | Render 2D Scene |
-|![2D Scene](readMe/Res_03_2D.png) |
+| ![2D Scene](readMe/Res_03_2D.png) |
 
 ## Tutorial
 **reRender** works as a Python Module
