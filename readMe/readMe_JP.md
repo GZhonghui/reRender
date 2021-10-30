@@ -6,6 +6,46 @@
 ## について
 **reRender**はオフラインのレンダリングエンジンです
 
+| レイトレーシング |
+:-:
+| ![3D Model](Res_01_Model.png) |
+| AIノイズ除去 |
+| ![Denoise](Res_02_deNoise.png) |
+| 2Dシーン |
+| ![2D Scene](Res_03_2D.png) |
+
+## 解説
+**reRender**はPythonパッケージです
+```python
+from Render.Scene import StaticScene
+
+def main():
+    
+    scene=StaticScene()
+
+    scene.SetRenderConfig('spp',2)
+    scene.SetRenderConfig('core',24)
+    scene.SetRenderConfig('target_pos',(0,0,0))
+    scene.SetRenderConfig('camera_pos',(10,-10,4))
+    scene.SetRenderConfig('horizontal_angle',100)
+    scene.SetRenderConfig('resolution',(1024,768))
+    scene.SetRenderConfig('enableGammaCorrection',1)
+    scene.SetRenderConfig('enableMSAA',1)
+
+    scene.LoadFile('../../Asset/Sphere/Sphere.obj','Self')
+    scene.LoadFile('../../Asset/Plane/Plane.obj','Standard')
+    scene.LoadFile('../../Asset/Creek','Skybox')
+
+    scene.SetRenderConfig('encode_path','../../Render.png')
+
+    scene.Render()
+
+    return None
+
+if __name__=='__main__':
+    main()
+```
+
 ## 特徴
 ### ✔レイトレーシングによる高品質の結果
 ### ✔BVH加速
@@ -14,14 +54,11 @@
 ### ✔3Dモデルのインポート
 ### ✔テクスチャでレンダリング
 ### ✔スカイボックスとアンビエントライトをカスタマイズする
-![3D Model](Res_01_Model.png)
 ### ✔AIノイズ除去
-![Denoise](Res_02_deNoise.png)
 ### ✔アニメーションをレンダリングする
 ### ✔画像またはビデオにエンコードする
 ### ✔Signed Distance Field
 ### ✔2Dシーンのサポート
-![2D Scene](Res_03_2D.png)
 ### ✔リアルタイムの結果プレビュー
 ### ✔Pythonインターフェースとして使いやすい
 
