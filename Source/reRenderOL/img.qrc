@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>img/reRender.png</file>
+        <file>img/Logo.png</file>
+        <file>img/SkyboxDefault_128.png</file>
+    </qresource>
+</RCC>
