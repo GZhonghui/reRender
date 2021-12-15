@@ -19,6 +19,7 @@
 #include <QTabWidget>
 #include <QGroupBox>
 #include <QLineEdit>
+#include <QComboBox>
 #include <QSpinBox>
 #include <QDialog>
 #include <QPixmap>
@@ -32,6 +33,8 @@
 
 #include "gl_viewwidget.h"
 
+#include "engine_core.h"
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -40,16 +43,13 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-private:
+private: // Tools
     void loadStyle(const QString &qssFile);
 
-private:
+private: // Only One
     void showAbout();
 
-protected:
-    std::unordered_set<QString> m_IDSet;
-
-protected:
+protected: // UI
     QWidget* m_MainWidget;
     QHBoxLayout* m_MainLayout;
     QVBoxLayout* m_ALayout;
@@ -84,6 +84,12 @@ protected:
     QLabel* m_BBTabSkyboxImages[6];
     QPushButton* m_BBTabSkyboxSelect[6];
 
+    QComboBox* m_BBTabMaterialSelectType;
+    QLabel* m_BBTabMaterialDiffuseTextureImage;
+    QPushButton* m_BBTabMaterialDiffuseTextureSelect;
+    QLabel* m_BBTabMaterialNormalTextureImage;
+    QPushButton* m_BBTabMaterialNormalTextureSelect;
+
     QGroupBox* m_BAProperty;
     QVBoxLayout* m_BAPropertyLayout;
     QLineEdit* m_BAPropertySelectedID;
@@ -108,7 +114,7 @@ protected:
     GL_ViewWidget* m_BAScenesCameraView;
     QLabel* m_BAScenesRenderView;
 
-protected:
+protected: // Use to connect with signal
     void changeListItem(QListWidgetItem* Current);
 
     void importIDChange(const QString& newText);
@@ -120,6 +126,8 @@ protected:
     void pushAddSphere();
 
     void pushDelete();
+
+    void pushSort();
 
     void selectSkyboxF(){ auto File = QFileDialog::getOpenFileName(); selectSkybox(File,'F'); }
     void selectSkyboxB(){ auto File = QFileDialog::getOpenFileName(); selectSkybox(File,'B'); }

@@ -7,6 +7,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    engine_core.cpp \
     gl_viewwidget.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -14,6 +15,7 @@ SOURCES += \
     wa_input.cpp
 
 HEADERS += \
+    engine_core.h \
     gl_viewwidget.h \
     mainwindow.h \
     wa_button.h \
