@@ -85,9 +85,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     m_BBTabWidget = new QTabWidget(this);
     m_BBTabSkybox = new QWidget(m_BBTabWidget);
+    m_BBTabCamera = new QWidget(m_BBTabWidget);
     m_BBTabMaterial = new QWidget(m_BBTabWidget);
     m_BBTabRender = new QWidget(m_BBTabWidget);
     m_BBTabWidget->addTab(m_BBTabSkybox,"Skybox");
+    m_BBTabWidget->addTab(m_BBTabCamera,"Camera");
     m_BBTabWidget->addTab(m_BBTabMaterial,"Material");
     m_BBTabWidget->addTab(m_BBTabRender,"Render");
 
@@ -174,6 +176,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     m_BBTabMaterialSelectType->addItem("Diffuse");
     m_BBTabMaterialSelectType->addItem("Metal");
+    m_BBTabMaterialSelectType->addItem("Glass");
+    m_BBTabMaterialSelectType->addItem("Emit");
 
     m_BALayout = new QHBoxLayout(this);
 

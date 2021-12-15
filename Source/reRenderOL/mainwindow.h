@@ -78,6 +78,7 @@ protected: // UI
 
     QTabWidget* m_BBTabWidget;
     QWidget* m_BBTabSkybox;
+    QWidget* m_BBTabCamera;
     QWidget* m_BBTabMaterial;
     QWidget* m_BBTabRender;
 
