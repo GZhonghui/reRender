@@ -11,8 +11,8 @@ QWidget* WA_Button::createWidget(QWidget *parent)
     {
         m_Widget = new QWidget(parent);
 
-        m_Button = new QPushButton(m_Text,parent);
-        m_Layout = new QHBoxLayout(parent);
+        m_Button = new QPushButton(m_Text,m_Widget);
+        m_Layout = new QHBoxLayout(m_Widget);
         
         m_Layout->addWidget(m_Button);
         m_Layout->setContentsMargins(10,m_MarginsA,10,m_MarginsB);

@@ -1,65 +1,60 @@
 #include "mainwindow.h"
 
-namespace ECore
-{
-    extern std::unordered_map<QString,std::unique_ptr<SceneObj>> Objects;
-
-    extern QImage Skyboxs[6];
-}
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-{
-    m_MainWidget = new QWidget(this);
+{   
+    auto MainWidget = new QWidget(this);
 
-    m_MainLayout = new QHBoxLayout(this);
-    m_ALayout = new QVBoxLayout(this);
-    m_BLayout = new QVBoxLayout(this);
+    auto MainLayout = DL(new QHBoxLayout());
+    auto ALayout = DL(new QVBoxLayout());
+    auto BLayout = DL(new QVBoxLayout());
 
-    m_MainLayout->addLayout(m_ALayout);
-    m_MainLayout->addLayout(m_BLayout);
-    m_MainLayout->setStretchFactor(m_ALayout,2);
-    m_MainLayout->setStretchFactor(m_BLayout,8);
-    m_MainWidget->setLayout(m_MainLayout);
+    MainLayout->addLayout(ALayout);
+    MainLayout->addLayout(BLayout);
+    MainLayout->setStretchFactor(ALayout,2);
+    MainLayout->setStretchFactor(BLayout,8);
+    MainWidget->setLayout(MainLayout);
 
-    m_AToolsLayout = new QGridLayout(this);
+    auto AToolsLayout = DL(new QGridLayout());
 
-    m_AToolsAboutButton = new QPushButton("About",this);
-    m_AToolsImportButton = new QPushButton("Import",this);
-    m_AToolsDeleteButton = new QPushButton("Delete",this);
-    m_AToolsAddButton = new QPushButton("Add",this);
-    m_AToolsSortButton = new QPushButton("Sort",this);
+    auto AToolsAboutButton = new QPushButton("About",MainWidget);
+    auto AToolsImportButton = new QPushButton("Import",MainWidget);
+    auto AToolsDeleteButton = new QPushButton("Delete",MainWidget);
+    auto AToolsAddButton = new QPushButton("Add",MainWidget);
+    auto AToolsSortButton = new QPushButton("Sort",MainWidget);
 
-    connect(m_AToolsAboutButton,&QPushButton::pressed,this,&MainWindow::showAbout);
-    connect(m_AToolsSortButton,&QPushButton::pressed,this,&MainWindow::pushSort);
+    // Tools: About Delete Sort
+    connect(AToolsAboutButton,&QPushButton::pressed,this,&MainWindow::showAbout);
+    connect(AToolsDeleteButton,&QPushButton::pressed,this,&MainWindow::pushDelete);
+    connect(AToolsSortButton,&QPushButton::pressed,this,&MainWindow::pushSort);
 
-    m_AToolsImportMenu = new QMenu(this);
-    m_AToolsImportMenuInput = new WA_Input(m_AToolsImportMenu);
-    m_AToolsImportMenuSelect = new WA_Button("Select", m_AToolsImportMenu);
-    m_AToolsImportMenu->addAction(m_AToolsImportMenuInput);
-    m_AToolsImportMenu->addSeparator();
-    m_AToolsImportMenu->addAction(m_AToolsImportMenuSelect);
-    m_AToolsImportButton->setMenu(m_AToolsImportMenu);
-    m_AToolsImportButton->setStyleSheet("QPushButton::menu-indicator{image:none}");
+    // Tool: Import
+    auto AToolsImportMenu = new QMenu(AToolsImportButton);
+    m_AToolsImportMenuInput = new WA_Input(AToolsImportMenu);
+    m_AToolsImportMenuSelect = new WA_Button("Select", AToolsImportMenu);
+    AToolsImportMenu->addAction(m_AToolsImportMenuInput);
+    AToolsImportMenu->addSeparator();
+    AToolsImportMenu->addAction(m_AToolsImportMenuSelect);
+    AToolsImportButton->setMenu(AToolsImportMenu);
+    AToolsImportButton->setStyleSheet("QPushButton::menu-indicator{image:none}");
     m_AToolsImportMenuSelect->m_Button->setEnabled(false);
     connect(m_AToolsImportMenuInput->m_Line,&QLineEdit::textChanged,this,&MainWindow::importIDChange);
     connect(m_AToolsImportMenuSelect->m_Button,&QPushButton::pressed,this,&MainWindow::pushImportMesh);
 
-    connect(m_AToolsDeleteButton,&QPushButton::pressed,this,&MainWindow::pushDelete);
-
-    m_AToolsAddMenu = new QMenu(this);
-    m_AToolsAddMenuInput = new WA_Input(m_AToolsAddMenu);
-    m_AToolsAddMenuCamera = new WA_Button("Camera", m_AToolsAddMenu);
-    m_AToolsAddMenuCube = new WA_Button("Stranded Cube", m_AToolsAddMenu,10,5);
-    m_AToolsAddMenuSphere = new WA_Button("Prefect Sphere", m_AToolsAddMenu,5,10);
-    m_AToolsAddMenu->addAction(m_AToolsAddMenuInput);
-    m_AToolsAddMenu->addSeparator();
-    m_AToolsAddMenu->addAction(m_AToolsAddMenuCamera);
-    m_AToolsAddMenu->addSeparator();
-    m_AToolsAddMenu->addAction(m_AToolsAddMenuCube);
-    m_AToolsAddMenu->addAction(m_AToolsAddMenuSphere);
-    m_AToolsAddButton->setMenu(m_AToolsAddMenu);
-    m_AToolsAddButton->setStyleSheet("QPushButton::menu-indicator{image:none}");
+    // Tool: Add
+    auto AToolsAddMenu = new QMenu(AToolsAddButton);
+    m_AToolsAddMenuInput = new WA_Input(AToolsAddMenu);
+    m_AToolsAddMenuCamera = new WA_Button("Camera", AToolsAddMenu);
+    m_AToolsAddMenuCube = new WA_Button("Stranded Cube", AToolsAddMenu,10,5);
+    m_AToolsAddMenuSphere = new WA_Button("Prefect Sphere", AToolsAddMenu,5,10);
+    AToolsAddMenu->addAction(m_AToolsAddMenuInput);
+    AToolsAddMenu->addSeparator();
+    AToolsAddMenu->addAction(m_AToolsAddMenuCamera);
+    AToolsAddMenu->addSeparator();
+    AToolsAddMenu->addAction(m_AToolsAddMenuCube);
+    AToolsAddMenu->addAction(m_AToolsAddMenuSphere);
+    AToolsAddButton->setMenu(AToolsAddMenu);
+    AToolsAddButton->setStyleSheet("QPushButton::menu-indicator{image:none}");
     m_AToolsAddMenuCamera->m_Button->setEnabled(false);
     m_AToolsAddMenuCube->m_Button->setEnabled(false);
     m_AToolsAddMenuSphere->m_Button->setEnabled(false);
@@ -68,186 +63,210 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_AToolsAddMenuCube->m_Button,&QPushButton::pressed,this,&MainWindow::pushAddCube);
     connect(m_AToolsAddMenuSphere->m_Button,&QPushButton::pressed,this,&MainWindow::pushAddSphere);
 
-    m_AToolsLayout->addWidget(m_AToolsAboutButton,0,0,1,2);
-    m_AToolsLayout->addWidget(m_AToolsImportButton,1,0,1,1);
-    m_AToolsLayout->addWidget(m_AToolsDeleteButton,1,1,1,1);
-    m_AToolsLayout->addWidget(m_AToolsAddButton,2,0,1,1);
-    m_AToolsLayout->addWidget(m_AToolsSortButton,2,1,1,1);
+    // Tools Grid
+    AToolsLayout->addWidget(AToolsAboutButton,0,0,1,2);
+    AToolsLayout->addWidget(AToolsImportButton,1,0,1,1);
+    AToolsLayout->addWidget(AToolsDeleteButton,1,1,1,1);
+    AToolsLayout->addWidget(AToolsAddButton,2,0,1,1);
+    AToolsLayout->addWidget(AToolsSortButton,2,1,1,1);
 
-    m_AList = new QListWidget(this);
+    m_AList = new QListWidget(MainWidget);
     m_AList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     connect(m_AList,&QListWidget::currentItemChanged,this,&MainWindow::changeListItem);
 
-    m_ALayout->addLayout(m_AToolsLayout);
-    m_ALayout->addWidget(m_AList);
-    m_ALayout->setStretchFactor(m_AToolsLayout,3);
-    m_ALayout->setStretchFactor(m_AList,7);
+    ALayout->addLayout(AToolsLayout);
+    ALayout->addWidget(m_AList);
+    ALayout->setStretchFactor(AToolsLayout,3);
+    ALayout->setStretchFactor(m_AList,7);
+    // Left is End Here
 
-    m_BBTabWidget = new QTabWidget(this);
-    m_BBTabSkybox = new QWidget(m_BBTabWidget);
-    m_BBTabCamera = new QWidget(m_BBTabWidget);
-    m_BBTabMaterial = new QWidget(m_BBTabWidget);
-    m_BBTabRender = new QWidget(m_BBTabWidget);
-    m_BBTabWidget->addTab(m_BBTabSkybox,"Skybox");
-    m_BBTabWidget->addTab(m_BBTabCamera,"Camera");
-    m_BBTabWidget->addTab(m_BBTabMaterial,"Material");
-    m_BBTabWidget->addTab(m_BBTabRender,"Render");
+    // BB Tabs
+    auto BBTabWidget = new QTabWidget(MainWidget);
+    auto BBTabSkybox = new QWidget(BBTabWidget);
+    auto BBTabCamera = new QWidget(BBTabWidget);
+    auto BBTabMaterial = new QWidget(BBTabWidget);
+    auto BBTabRender = new QWidget(BBTabWidget);
+    BBTabWidget->addTab(BBTabSkybox,"Skybox");
+    BBTabWidget->addTab(BBTabCamera,"Camera");
+    BBTabWidget->addTab(BBTabMaterial,"Material");
+    BBTabWidget->addTab(BBTabRender,"Render");
 
-    QImage blankImage;
-    blankImage.load(":/img/SkyboxDefault_128.png");
+    // A Default Image 128x128
+    QImage DefaultImage;
+    DefaultImage.load(":/img/SkyboxDefault_128.png");
 
+    // Use in Tab Skybox
     QString Hips[6]=
     {
         "[F]ront","[B]ack","[T]op","[D]own","[L]eft","[R]ight"
     };
 
-    for(int i=0;i<6;++i) m_BBTabSkyboxImages[i] = new QLabel(m_BBTabSkybox);
-    for(int i=0;i<6;++i) m_BBTabSkyboxSelect[i] = new QPushButton("Select",m_BBTabSkybox);
+    QPushButton* BBTabSkyboxSelect[6];
 
-    connect(m_BBTabSkyboxSelect[0],&QPushButton::pressed,this,&MainWindow::selectSkyboxF);
-    connect(m_BBTabSkyboxSelect[1],&QPushButton::pressed,this,&MainWindow::selectSkyboxB);
-    connect(m_BBTabSkyboxSelect[2],&QPushButton::pressed,this,&MainWindow::selectSkyboxT);
-    connect(m_BBTabSkyboxSelect[3],&QPushButton::pressed,this,&MainWindow::selectSkyboxD);
-    connect(m_BBTabSkyboxSelect[4],&QPushButton::pressed,this,&MainWindow::selectSkyboxL);
-    connect(m_BBTabSkyboxSelect[5],&QPushButton::pressed,this,&MainWindow::selectSkyboxR);
+    for(int i=0;i<6;++i) m_BBTabSkyboxImages[i] = new QLabel(BBTabSkybox);
+    for(int i=0;i<6;++i) BBTabSkyboxSelect[i] = new QPushButton("Select",BBTabSkybox);
 
-    auto TabSkyboxLayout = new QHBoxLayout(this);
+    connect(BBTabSkyboxSelect[0],&QPushButton::pressed,this,&MainWindow::selectSkyboxF);
+    connect(BBTabSkyboxSelect[1],&QPushButton::pressed,this,&MainWindow::selectSkyboxB);
+    connect(BBTabSkyboxSelect[2],&QPushButton::pressed,this,&MainWindow::selectSkyboxT);
+    connect(BBTabSkyboxSelect[3],&QPushButton::pressed,this,&MainWindow::selectSkyboxD);
+    connect(BBTabSkyboxSelect[4],&QPushButton::pressed,this,&MainWindow::selectSkyboxL);
+    connect(BBTabSkyboxSelect[5],&QPushButton::pressed,this,&MainWindow::selectSkyboxR);
+
+    auto TabSkyboxLayout = DL(new QHBoxLayout());
     for(int i=0;i<6;++i)
     {
         m_BBTabSkyboxImages[i]->setFixedSize(128,128);
-        m_BBTabSkyboxImages[i]->setPixmap(QPixmap::fromImage(blankImage));
+        m_BBTabSkyboxImages[i]->setPixmap(QPixmap::fromImage(DefaultImage));
 
-        auto thisLayout = new QVBoxLayout(this);
-        thisLayout->addWidget(new QLabel(Hips[i]+":",m_BBTabSkybox));
+        auto thisLayout = DL(new QVBoxLayout());
+        thisLayout->addWidget(new QLabel(Hips[i]+":",BBTabSkybox));
         thisLayout->addWidget(m_BBTabSkyboxImages[i]);
-        thisLayout->addWidget(m_BBTabSkyboxSelect[i]);
+        thisLayout->addWidget(BBTabSkyboxSelect[i]);
         thisLayout->addStretch();
 
         TabSkyboxLayout->addLayout(thisLayout);
     }
     TabSkyboxLayout->addStretch();
-    m_BBTabSkybox->setLayout(TabSkyboxLayout);
+    BBTabSkybox->setLayout(TabSkyboxLayout);
+    // Tab: Skybox is End
 
-    m_BBTabMaterialSelectType = new QComboBox(m_BBTabMaterial);
-    QVBoxLayout* m_BBTabMaterialLayout = new QVBoxLayout(this);
-    m_BBTabMaterial->setLayout(m_BBTabMaterialLayout);
-    m_BBTabMaterialLayout->addWidget(m_BBTabMaterialSelectType);
+    m_BBTabMaterialSelectType = new QComboBox(BBTabMaterial);
+    auto BBTabMaterialLayout = DL(new QVBoxLayout());
+    BBTabMaterial->setLayout(BBTabMaterialLayout);
+    BBTabMaterialLayout->addWidget(m_BBTabMaterialSelectType);
 
-    QHBoxLayout* m_BBTabMaterialParameterLayout = new QHBoxLayout(this);
-    QVBoxLayout* m_BBTabMaterialParameterDetailLayout = new QVBoxLayout(this);
-    m_BBTabMaterialParameterLayout->addLayout(m_BBTabMaterialParameterDetailLayout);
-    m_BBTabMaterialParameterDetailLayout->addWidget(new QLabel("Color",m_BBTabMaterial));
-    m_BBTabMaterialParameterDetailLayout->addWidget(new QLabel("Light",m_BBTabMaterial));
-    m_BBTabMaterialParameterDetailLayout->addStretch();
-
-    m_BBTabMaterialParameterLayout->addSpacing(128);
-
-    auto VLine = new QFrame(this);
-    VLine->setFrameShape(QFrame::VLine);
-    VLine->setFrameShadow(QFrame::Plain);
-    m_BBTabMaterialParameterLayout->addWidget(VLine);
-
-    QVBoxLayout* m_BBTabMaterialParameterDiffuseTextureLayout = new QVBoxLayout(this);
-    m_BBTabMaterialDiffuseTextureSelect = new QPushButton("Select",m_BBTabMaterial);
-    m_BBTabMaterialDiffuseTextureImage = new QLabel(m_BBTabMaterial);
-    m_BBTabMaterialDiffuseTextureImage->setFixedSize(128,128);
-    m_BBTabMaterialDiffuseTextureImage->setPixmap(QPixmap::fromImage(blankImage));
-    m_BBTabMaterialParameterDiffuseTextureLayout->addWidget(new QLabel("Diffuse:"));
-    m_BBTabMaterialParameterDiffuseTextureLayout->addWidget(m_BBTabMaterialDiffuseTextureImage);
-    m_BBTabMaterialParameterDiffuseTextureLayout->addWidget(m_BBTabMaterialDiffuseTextureSelect);
-    m_BBTabMaterialParameterDiffuseTextureLayout->addStretch();
-    m_BBTabMaterialParameterLayout->addLayout(m_BBTabMaterialParameterDiffuseTextureLayout);
-
-    QVBoxLayout* m_BBTabMaterialParameterNormalTextureLayout = new QVBoxLayout(this);
-    m_BBTabMaterialNormalTextureSelect = new QPushButton("Select",m_BBTabMaterial);
-    m_BBTabMaterialNormalTextureImage = new QLabel(m_BBTabMaterial);
-    m_BBTabMaterialNormalTextureImage->setFixedSize(128,128);
-    m_BBTabMaterialNormalTextureImage->setPixmap(QPixmap::fromImage(blankImage));
-    m_BBTabMaterialParameterNormalTextureLayout->addWidget(new QLabel("Normal:"));
-    m_BBTabMaterialParameterNormalTextureLayout->addWidget(m_BBTabMaterialNormalTextureImage);
-    m_BBTabMaterialParameterNormalTextureLayout->addWidget(m_BBTabMaterialNormalTextureSelect);
-    m_BBTabMaterialParameterNormalTextureLayout->addStretch();
-    m_BBTabMaterialParameterLayout->addLayout(m_BBTabMaterialParameterNormalTextureLayout);
-
-    m_BBTabMaterialParameterLayout->addStretch();
-    m_BBTabMaterialLayout->addLayout(m_BBTabMaterialParameterLayout);
-
-    m_BBTabMaterialLayout->addStretch();
-
+    // Material Types
     m_BBTabMaterialSelectType->addItem("Diffuse");
     m_BBTabMaterialSelectType->addItem("Metal");
     m_BBTabMaterialSelectType->addItem("Glass");
     m_BBTabMaterialSelectType->addItem("Emit");
 
-    m_BALayout = new QHBoxLayout(this);
+    auto BBTabMaterialParameterLayout = DL(new QHBoxLayout());
+    auto BBTabMaterialParameterDetailLayout = DL(new QVBoxLayout());
+    BBTabMaterialParameterLayout->addLayout(BBTabMaterialParameterDetailLayout);
+    BBTabMaterialParameterDetailLayout->addWidget(new QLabel("Color:",BBTabMaterial));
+    BBTabMaterialParameterDetailLayout->addWidget(new QLabel("Light:",BBTabMaterial));
+    BBTabMaterialParameterDetailLayout->addStretch();
 
-    m_BAProperty = new QGroupBox("Property",this);
-    m_BAPropertyLayout = new QVBoxLayout(m_BAProperty);
-    m_BAProperty->setLayout(m_BAPropertyLayout);
+    BBTabMaterialParameterLayout->addSpacing(128);
 
-    m_BAPropertyLayout->addWidget(new QLabel("Selected ID:",m_BAProperty));
+    // Add a Line Only for Once
+    auto VLine = new QFrame(this);
+    VLine->setFrameShape(QFrame::VLine);
+    VLine->setFrameShadow(QFrame::Plain);
+    BBTabMaterialParameterLayout->addWidget(VLine);
 
-    m_BAPropertySelectedID = new QLineEdit("Nothing",m_BAProperty);
+    // Diffuse Texture in Material Tab
+    auto BBTabMaterialParameterDiffuseTextureLayout = DL(new QVBoxLayout());
+    m_BBTabMaterialDiffuseTextureSelect = new QPushButton("Select",BBTabMaterial);
+    m_BBTabMaterialDiffuseTextureImage = new QLabel(BBTabMaterial);
+    m_BBTabMaterialDiffuseTextureImage->setFixedSize(128,128);
+    m_BBTabMaterialDiffuseTextureImage->setPixmap(QPixmap::fromImage(DefaultImage));
+    BBTabMaterialParameterDiffuseTextureLayout->addWidget(new QLabel("Diffuse:"));
+    BBTabMaterialParameterDiffuseTextureLayout->addWidget(m_BBTabMaterialDiffuseTextureImage);
+    BBTabMaterialParameterDiffuseTextureLayout->addWidget(m_BBTabMaterialDiffuseTextureSelect);
+    BBTabMaterialParameterDiffuseTextureLayout->addStretch();
+    BBTabMaterialParameterLayout->addLayout(BBTabMaterialParameterDiffuseTextureLayout);
+
+    // Normal Texture in Material Tab
+    auto BBTabMaterialParameterNormalTextureLayout = DL(new QVBoxLayout());
+    m_BBTabMaterialNormalTextureSelect = new QPushButton("Select",BBTabMaterial);
+    m_BBTabMaterialNormalTextureImage = new QLabel(BBTabMaterial);
+    m_BBTabMaterialNormalTextureImage->setFixedSize(128,128);
+    m_BBTabMaterialNormalTextureImage->setPixmap(QPixmap::fromImage(DefaultImage));
+    BBTabMaterialParameterNormalTextureLayout->addWidget(new QLabel("Normal:"));
+    BBTabMaterialParameterNormalTextureLayout->addWidget(m_BBTabMaterialNormalTextureImage);
+    BBTabMaterialParameterNormalTextureLayout->addWidget(m_BBTabMaterialNormalTextureSelect);
+    BBTabMaterialParameterNormalTextureLayout->addStretch();
+    BBTabMaterialParameterLayout->addLayout(BBTabMaterialParameterNormalTextureLayout);
+
+    BBTabMaterialParameterLayout->addStretch();
+    BBTabMaterialLayout->addLayout(BBTabMaterialParameterLayout);
+    BBTabMaterialLayout->addStretch();
+    // Material Tab is End
+
+    // BA Layout: Property and Scenes
+    auto BALayout = DL(new QHBoxLayout());
+
+    // Property
+    auto BAProperty = new QGroupBox("Property",MainWidget);
+    auto BAPropertyLayout = DL(new QVBoxLayout());
+    BAProperty->setLayout(BAPropertyLayout);
+
+    BAPropertyLayout->addWidget(new QLabel("Selected ID:",BAProperty));
+    m_BAPropertySelectedID = new QLineEdit("Nothing",BAProperty);
     m_BAPropertySelectedID->setReadOnly(true);
-    m_BAPropertyLayout->addWidget(m_BAPropertySelectedID);
+    BAPropertyLayout->addWidget(m_BAPropertySelectedID);
 
-    m_BAPropertyLayout->addWidget(new QLabel("Selected Type:",m_BAProperty));
-
-    m_BAPropertySelectedType = new QLineEdit("Nothing",m_BAProperty);
+    BAPropertyLayout->addWidget(new QLabel("Selected Type:",BAProperty));
+    m_BAPropertySelectedType = new QLineEdit("Nothing",BAProperty);
     m_BAPropertySelectedType->setReadOnly(true);
-    m_BAPropertyLayout->addWidget(m_BAPropertySelectedType);
+    BAPropertyLayout->addWidget(m_BAPropertySelectedType);
 
+    // Add a Line Only for Once
     auto HLine = new QFrame(this);
     HLine->setFrameShape(QFrame::HLine);
     HLine->setFrameShadow(QFrame::Plain);
+    BAPropertyLayout->addWidget(HLine);
 
-    m_BAPropertyLayout->addWidget(HLine);
 
-    m_BAPropertyLayout->addWidget(new QLabel("Location:",m_BAProperty));
+
+
+
+
+
+
+
+
+
+    // Works here
+
+    BAPropertyLayout->addWidget(new QLabel("Location:",BAProperty));
     for(int i=0;i<3;++i)
     {
-        m_BAPropertyLocation[i] = new QDoubleSpinBox(m_BAProperty);
+        m_BAPropertyLocation[i] = new QDoubleSpinBox(BAProperty);
         m_BAPropertyLocation[i]->setMinimum(-99);
         m_BAPropertyLocation[i]->setMaximum(+99);
     }
     auto LocationLayout = new QHBoxLayout(this);
     for(int i=0;i<3;++i) LocationLayout->addWidget(m_BAPropertyLocation[i]);
-    m_BAPropertyLayout->addLayout(LocationLayout);
+    BAPropertyLayout->addLayout(LocationLayout);
 
-    m_BAPropertyLayout->addWidget(new QLabel("Rotation:",m_BAProperty));
+    BAPropertyLayout->addWidget(new QLabel("Rotation:",BAProperty));
     for(int i=0;i<3;++i)
     {
-        m_BAPropertyRotation[i] = new QDoubleSpinBox(m_BAProperty);
+        m_BAPropertyRotation[i] = new QDoubleSpinBox(BAProperty);
         m_BAPropertyRotation[i]->setMinimum(-360);
         m_BAPropertyRotation[i]->setMaximum(+360);
     }
     auto RotationLayout = new QHBoxLayout(this);
     for(int i=0;i<3;++i) RotationLayout->addWidget(m_BAPropertyRotation[i]);
-    m_BAPropertyLayout->addLayout(RotationLayout);
+    BAPropertyLayout->addLayout(RotationLayout);
 
-    m_BAPropertyLayout->addWidget(new QLabel("Scale:",m_BAProperty));
+    BAPropertyLayout->addWidget(new QLabel("Scale:",BAProperty));
     for(int i=0;i<3;++i)
     {
-        m_BAPropertyScale[i] = new QDoubleSpinBox(m_BAProperty);
+        m_BAPropertyScale[i] = new QDoubleSpinBox(BAProperty);
         m_BAPropertyScale[i]->setMinimum(0.1);
         m_BAPropertyScale[i]->setMaximum(100);
     }
     auto ScaleLayout = new QHBoxLayout(this);
     for(int i=0;i<3;++i) ScaleLayout->addWidget(m_BAPropertyScale[i]);
-    m_BAPropertyLayout->addLayout(ScaleLayout);
+    BAPropertyLayout->addLayout(ScaleLayout);
 
-    m_BAPropertyLayout->addWidget(new QLabel("Target:",m_BAProperty));
+    BAPropertyLayout->addWidget(new QLabel("Target:",BAProperty));
     for(int i=0;i<3;++i)
     {
-        m_BAPropertyTarget[i] = new QDoubleSpinBox(m_BAProperty);
+        m_BAPropertyTarget[i] = new QDoubleSpinBox(BAProperty);
         m_BAPropertyTarget[i]->setMinimum(-99);
         m_BAPropertyTarget[i]->setMaximum(+99);
     }
     auto TargetLayout = new QHBoxLayout(this);
     for(int i=0;i<3;++i) TargetLayout->addWidget(m_BAPropertyTarget[i]);
-    m_BAPropertyLayout->addLayout(TargetLayout);
+    BAPropertyLayout->addLayout(TargetLayout);
 
-    m_BAPropertyLayout->addStretch();
+    BAPropertyLayout->addStretch();
 
     m_BAScenes = new QTabWidget(this);
     m_BAScenesEdit = new QWidget(m_BAScenes);
@@ -273,24 +292,27 @@ MainWindow::MainWindow(QWidget *parent)
     m_BAScenesRender->setLayout(m_BAScenesRenderLayout);
     m_BAScenesRenderLayout->addWidget(m_BAScenesRenderView);
 
-    m_BALayout->addWidget(m_BAProperty);
-    m_BALayout->addWidget(m_BAScenes);
-    m_BALayout->setStretchFactor(m_BAProperty,2);
-    m_BALayout->setStretchFactor(m_BAScenes,6);
+    BALayout->addWidget(BAProperty);
+    BALayout->addWidget(m_BAScenes);
+    BALayout->setStretchFactor(BAProperty,2);
+    BALayout->setStretchFactor(m_BAScenes,6);
 
-    m_BLayout->addLayout(m_BALayout);
-    m_BLayout->addWidget(m_BBTabWidget);
-    m_BLayout->setStretchFactor(m_BALayout,7);
-    m_BLayout->setStretchFactor(m_BBTabWidget,3);
+    BLayout->addLayout(BALayout);
+    BLayout->addWidget(BBTabWidget);
+    BLayout->setStretchFactor(BALayout,7);
+    BLayout->setStretchFactor(BBTabWidget,3);
 
     this->setFixedSize(1480,920);
-    this->setCentralWidget(m_MainWidget);
+    this->setCentralWidget(MainWidget);
 
     this->loadStyle(":/qss/psblack.css");
     this->setWindowIcon(QPixmap(":/img/Logo.png"));
 }
 
-MainWindow::~MainWindow(){}
+MainWindow::~MainWindow()
+{
+    DL_Clear();
+}
 
 void MainWindow::loadStyle(const QString &qssFile)
 {

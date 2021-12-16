@@ -1,3 +1,6 @@
+#define DEF_TOOL
+#include "tool_aio.h"
+
 #include "mainwindow.h"
 
 #include <QtGui>

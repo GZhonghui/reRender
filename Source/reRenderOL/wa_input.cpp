@@ -9,9 +9,9 @@ QWidget* WA_Input::createWidget(QWidget *parent)
     {
         m_Widget = new QWidget(parent);
 
-        m_Layout = new QHBoxLayout(parent);
-        m_Text = new QLabel("ID: ",parent);
-        m_Line = new QLineEdit(parent);
+        m_Layout = new QHBoxLayout(m_Widget);
+        m_Text = new QLabel("ID: ",m_Widget);
+        m_Line = new QLineEdit(m_Widget);
         
         m_Layout->addWidget(m_Text);
         m_Layout->addWidget(m_Line);

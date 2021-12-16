@@ -28,6 +28,8 @@
 #include <QMenu>
 #include <QLine>
 
+#include "tool_aio.h"
+
 #include "wa_input.h"
 #include "wa_button.h"
 
@@ -46,55 +48,43 @@ public:
 private: // Tools
     void loadStyle(const QString &qssFile);
 
-private: // Only One
-    void showAbout();
-
 protected: // UI
-    QWidget* m_MainWidget;
-    QHBoxLayout* m_MainLayout;
-    QVBoxLayout* m_ALayout;
-    QVBoxLayout* m_BLayout;
-
-    QHBoxLayout* m_BALayout;
-
-    QGridLayout* m_AToolsLayout;
-    QPushButton* m_AToolsAboutButton;
-    QPushButton* m_AToolsImportButton;
-    QPushButton* m_AToolsDeleteButton;
-    QPushButton* m_AToolsAddButton;
-    QPushButton* m_AToolsSortButton;
-
-    QMenu* m_AToolsImportMenu;
+    // Import Button
     WA_Input* m_AToolsImportMenuInput;
     WA_Button* m_AToolsImportMenuSelect;
 
-    QMenu* m_AToolsAddMenu;
+    // Add Button
     WA_Input* m_AToolsAddMenuInput;
     WA_Button* m_AToolsAddMenuCamera;
     WA_Button* m_AToolsAddMenuCube;
     WA_Button* m_AToolsAddMenuSphere;
 
+    // Left List
     QListWidget* m_AList;
-
-    QTabWidget* m_BBTabWidget;
-    QWidget* m_BBTabSkybox;
-    QWidget* m_BBTabCamera;
-    QWidget* m_BBTabMaterial;
-    QWidget* m_BBTabRender;
-
+    
+    // Use is Skybox Tab, Order = F B T D L R
     QLabel* m_BBTabSkyboxImages[6];
-    QPushButton* m_BBTabSkyboxSelect[6];
 
+    // Use in Material Tab
     QComboBox* m_BBTabMaterialSelectType;
+    // Image and Button
     QLabel* m_BBTabMaterialDiffuseTextureImage;
     QPushButton* m_BBTabMaterialDiffuseTextureSelect;
     QLabel* m_BBTabMaterialNormalTextureImage;
     QPushButton* m_BBTabMaterialNormalTextureSelect;
 
-    QGroupBox* m_BAProperty;
-    QVBoxLayout* m_BAPropertyLayout;
+    // ID and Type of Selected Obj in Left List
     QLineEdit* m_BAPropertySelectedID;
     QLineEdit* m_BAPropertySelectedType;
+
+
+    // Works here
+
+
+
+
+
+
 
     QDoubleSpinBox* m_BAPropertyLocation[3];
     QDoubleSpinBox* m_BAPropertyRotation[3];
@@ -116,20 +106,29 @@ protected: // UI
     QLabel* m_BAScenesRenderView;
 
 protected: // Use to connect with signal
+    // List solts, Important
     void changeListItem(QListWidgetItem* Current);
 
+    // Import Button solts
     void importIDChange(const QString& newText);
     void pushImportMesh();
 
+    // Add Button solts
     void addIDChange(const QString& newText);
     void pushAddCamera();
     void pushAddCube();
     void pushAddSphere();
 
+    // Delete Button
     void pushDelete();
 
+    // Sort Button
     void pushSort();
 
+    // About Button
+    void showAbout();
+
+    // Tab: Skybox, Select Buttons solts
     void selectSkyboxF(){ auto File = QFileDialog::getOpenFileName(); selectSkybox(File,'F'); }
     void selectSkyboxB(){ auto File = QFileDialog::getOpenFileName(); selectSkybox(File,'B'); }
     void selectSkyboxT(){ auto File = QFileDialog::getOpenFileName(); selectSkybox(File,'T'); }

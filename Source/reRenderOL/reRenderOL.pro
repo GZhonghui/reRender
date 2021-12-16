@@ -18,6 +18,7 @@ HEADERS += \
     engine_core.h \
     gl_viewwidget.h \
     mainwindow.h \
+    tool_aio.h \
     wa_button.h \
     wa_input.h
 
