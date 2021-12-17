@@ -14,8 +14,8 @@
 
 namespace ECore
 {
-    enum OType { MESH, SPHERE, CAMERA };
-    enum MType { DIFFUSE, METAL, GLASS, EMIT };
+    enum class OType { MESH, SPHERE, CAMERA };
+    enum class MType { DIFFUSE, METAL, GLASS, EMIT };
 
     class SceneObj
     {

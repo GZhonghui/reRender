@@ -10,7 +10,10 @@
 
 #ifdef DEF_TOOL
 
-std::vector<QLayout*> DeadObjects;
+/*
+std::vector<QHBoxLayout*> DeadObjectsH;
+std::vector<QVBoxLayout*> DeadObjectsV;
+std::vector<QGridLayout*> DeadObjectsG;
 
 template <class T>
 T* DL(T* P)
@@ -23,24 +26,35 @@ template QHBoxLayout* DL<QHBoxLayout>(QHBoxLayout*);
 template QVBoxLayout* DL<QVBoxLayout>(QVBoxLayout*);
 template QGridLayout* DL<QGridLayout>(QGridLayout*);
 
+
 void DL_Clear()
 {
-    for(auto i=DeadObjects.begin();i!=DeadObjects.end();++i)
-    {
-        delete *i;
-    }
-    DeadObjects.clear();
+    for(auto i=DeadObjectsH.begin();i!=DeadObjectsH.end();++i) delete *i; DeadObjectsH.clear();
+    for(auto i=DeadObjectsV.begin();i!=DeadObjectsV.end();++i) delete *i; DeadObjectsV.clear();
+    for(auto i=DeadObjectsG.begin();i!=DeadObjectsG.end();++i) delete *i; DeadObjectsG.clear();
 }
+*/
 
 #else
 
-extern std::vector<QObject*> DeadObjects;
+/*
+extern std::vector<QHBoxLayout*> DeadObjectsH;
+extern std::vector<QVBoxLayout*> DeadObjectsV;
+extern std::vector<QGridLayout*> DeadObjectsG;
+
 
 template <class T>
 T* DL(T* P);
 
 void DL_Clear();
+*/
 
 #endif // DEF_TOOL
+
+/*
+inline QHBoxLayout* DL(QHBoxLayout* P) { DeadObjectsH.push_back(P); return P; }
+inline QVBoxLayout* DL(QVBoxLayout* P) { DeadObjectsV.push_back(P); return P; }
+inline QGridLayout* DL(QGridLayout* P) { DeadObjectsG.push_back(P); return P; }
+*/
 
 #endif // TOOL_AIO_H

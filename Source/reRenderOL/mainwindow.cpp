@@ -5,9 +5,9 @@ MainWindow::MainWindow(QWidget *parent)
 {   
     auto MainWidget = new QWidget(this);
 
-    auto MainLayout = DL(new QHBoxLayout());
-    auto ALayout = DL(new QVBoxLayout());
-    auto BLayout = DL(new QVBoxLayout());
+    auto MainLayout = new QHBoxLayout();
+    auto ALayout = new QVBoxLayout();
+    auto BLayout = new QVBoxLayout();
 
     MainLayout->addLayout(ALayout);
     MainLayout->addLayout(BLayout);
@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
     MainLayout->setStretchFactor(BLayout,8);
     MainWidget->setLayout(MainLayout);
 
-    auto AToolsLayout = DL(new QGridLayout());
+    auto AToolsLayout = new QGridLayout();
 
     auto AToolsAboutButton = new QPushButton("About",MainWidget);
     auto AToolsImportButton = new QPushButton("Import",MainWidget);
@@ -113,13 +113,13 @@ MainWindow::MainWindow(QWidget *parent)
     connect(BBTabSkyboxSelect[4],&QPushButton::pressed,this,&MainWindow::selectSkyboxL);
     connect(BBTabSkyboxSelect[5],&QPushButton::pressed,this,&MainWindow::selectSkyboxR);
 
-    auto TabSkyboxLayout = DL(new QHBoxLayout());
+    auto TabSkyboxLayout = new QHBoxLayout();
     for(int i=0;i<6;++i)
     {
         m_BBTabSkyboxImages[i]->setFixedSize(128,128);
         m_BBTabSkyboxImages[i]->setPixmap(QPixmap::fromImage(DefaultImage));
 
-        auto thisLayout = DL(new QVBoxLayout());
+        auto thisLayout = new QVBoxLayout();
         thisLayout->addWidget(new QLabel(Hips[i]+":",BBTabSkybox));
         thisLayout->addWidget(m_BBTabSkyboxImages[i]);
         thisLayout->addWidget(BBTabSkyboxSelect[i]);
@@ -131,8 +131,16 @@ MainWindow::MainWindow(QWidget *parent)
     BBTabSkybox->setLayout(TabSkyboxLayout);
     // Tab: Skybox is End
 
+    m_BBTabCameraSelectWhich = new QComboBox(BBTabCamera);
+    auto BBTabCameraLayout = new QVBoxLayout();
+    BBTabCamera->setLayout(BBTabCameraLayout);
+    BBTabCameraLayout->addWidget(m_BBTabCameraSelectWhich);
+    BBTabCameraLayout->addStretch();
+
+    m_BBTabCameraSelectWhich->setEnabled(false);
+
     m_BBTabMaterialSelectType = new QComboBox(BBTabMaterial);
-    auto BBTabMaterialLayout = DL(new QVBoxLayout());
+    auto BBTabMaterialLayout = new QVBoxLayout();
     BBTabMaterial->setLayout(BBTabMaterialLayout);
     BBTabMaterialLayout->addWidget(m_BBTabMaterialSelectType);
 
@@ -142,8 +150,12 @@ MainWindow::MainWindow(QWidget *parent)
     m_BBTabMaterialSelectType->addItem("Glass");
     m_BBTabMaterialSelectType->addItem("Emit");
 
-    auto BBTabMaterialParameterLayout = DL(new QHBoxLayout());
-    auto BBTabMaterialParameterDetailLayout = DL(new QVBoxLayout());
+    m_BBTabMaterialSelectType->setEnabled(false);
+
+    connect(m_BBTabMaterialSelectType,&QComboBox::currentIndexChanged,this,&MainWindow::materialTypeChanged);
+
+    auto BBTabMaterialParameterLayout = new QHBoxLayout();
+    auto BBTabMaterialParameterDetailLayout = new QVBoxLayout();
     BBTabMaterialParameterLayout->addLayout(BBTabMaterialParameterDetailLayout);
     BBTabMaterialParameterDetailLayout->addWidget(new QLabel("Color:",BBTabMaterial));
     BBTabMaterialParameterDetailLayout->addWidget(new QLabel("Light:",BBTabMaterial));
@@ -158,7 +170,7 @@ MainWindow::MainWindow(QWidget *parent)
     BBTabMaterialParameterLayout->addWidget(VLine);
 
     // Diffuse Texture in Material Tab
-    auto BBTabMaterialParameterDiffuseTextureLayout = DL(new QVBoxLayout());
+    auto BBTabMaterialParameterDiffuseTextureLayout = new QVBoxLayout();
     m_BBTabMaterialDiffuseTextureSelect = new QPushButton("Select",BBTabMaterial);
     m_BBTabMaterialDiffuseTextureImage = new QLabel(BBTabMaterial);
     m_BBTabMaterialDiffuseTextureImage->setFixedSize(128,128);
@@ -170,7 +182,7 @@ MainWindow::MainWindow(QWidget *parent)
     BBTabMaterialParameterLayout->addLayout(BBTabMaterialParameterDiffuseTextureLayout);
 
     // Normal Texture in Material Tab
-    auto BBTabMaterialParameterNormalTextureLayout = DL(new QVBoxLayout());
+    auto BBTabMaterialParameterNormalTextureLayout = new QVBoxLayout();
     m_BBTabMaterialNormalTextureSelect = new QPushButton("Select",BBTabMaterial);
     m_BBTabMaterialNormalTextureImage = new QLabel(BBTabMaterial);
     m_BBTabMaterialNormalTextureImage->setFixedSize(128,128);
@@ -186,12 +198,20 @@ MainWindow::MainWindow(QWidget *parent)
     BBTabMaterialLayout->addStretch();
     // Material Tab is End
 
+    auto BBTabRenderRenderButton = new QPushButton("Render",BBTabRender);
+    connect(BBTabRenderRenderButton,&QPushButton::pressed,this,&MainWindow::pushRender);
+
+    auto BBTabRenderLayout = new QVBoxLayout();
+    BBTabRenderLayout->addWidget(BBTabRenderRenderButton);
+    BBTabRenderLayout->addStretch();
+    BBTabRender->setLayout(BBTabRenderLayout);
+
     // BA Layout: Property and Scenes
-    auto BALayout = DL(new QHBoxLayout());
+    auto BALayout = new QHBoxLayout();
 
     // Property
     auto BAProperty = new QGroupBox("Property",MainWidget);
-    auto BAPropertyLayout = DL(new QVBoxLayout());
+    auto BAPropertyLayout = new QVBoxLayout();
     BAProperty->setLayout(BAPropertyLayout);
 
     BAPropertyLayout->addWidget(new QLabel("Selected ID:",BAProperty));
@@ -210,92 +230,90 @@ MainWindow::MainWindow(QWidget *parent)
     HLine->setFrameShadow(QFrame::Plain);
     BAPropertyLayout->addWidget(HLine);
 
-
-
-
-
-
-
-
-
-
-
-    // Works here
-
+    // Input Location
     BAPropertyLayout->addWidget(new QLabel("Location:",BAProperty));
     for(int i=0;i<3;++i)
     {
         m_BAPropertyLocation[i] = new QDoubleSpinBox(BAProperty);
         m_BAPropertyLocation[i]->setMinimum(-99);
         m_BAPropertyLocation[i]->setMaximum(+99);
+        m_BAPropertyLocation[i]->setEnabled(false);
     }
-    auto LocationLayout = new QHBoxLayout(this);
+    auto LocationLayout = new QHBoxLayout();
     for(int i=0;i<3;++i) LocationLayout->addWidget(m_BAPropertyLocation[i]);
     BAPropertyLayout->addLayout(LocationLayout);
 
+    // Input Rotation
     BAPropertyLayout->addWidget(new QLabel("Rotation:",BAProperty));
     for(int i=0;i<3;++i)
     {
         m_BAPropertyRotation[i] = new QDoubleSpinBox(BAProperty);
         m_BAPropertyRotation[i]->setMinimum(-360);
         m_BAPropertyRotation[i]->setMaximum(+360);
+        m_BAPropertyRotation[i]->setEnabled(false);
     }
-    auto RotationLayout = new QHBoxLayout(this);
+    auto RotationLayout = new QHBoxLayout();
     for(int i=0;i<3;++i) RotationLayout->addWidget(m_BAPropertyRotation[i]);
     BAPropertyLayout->addLayout(RotationLayout);
 
+    // Input Scale
     BAPropertyLayout->addWidget(new QLabel("Scale:",BAProperty));
     for(int i=0;i<3;++i)
     {
         m_BAPropertyScale[i] = new QDoubleSpinBox(BAProperty);
         m_BAPropertyScale[i]->setMinimum(0.1);
         m_BAPropertyScale[i]->setMaximum(100);
+        m_BAPropertyScale[i]->setEnabled(false);
     }
-    auto ScaleLayout = new QHBoxLayout(this);
+    auto ScaleLayout = new QHBoxLayout();
     for(int i=0;i<3;++i) ScaleLayout->addWidget(m_BAPropertyScale[i]);
     BAPropertyLayout->addLayout(ScaleLayout);
 
+    // Input Target
     BAPropertyLayout->addWidget(new QLabel("Target:",BAProperty));
     for(int i=0;i<3;++i)
     {
         m_BAPropertyTarget[i] = new QDoubleSpinBox(BAProperty);
         m_BAPropertyTarget[i]->setMinimum(-99);
         m_BAPropertyTarget[i]->setMaximum(+99);
+        m_BAPropertyTarget[i]->setEnabled(false);
     }
-    auto TargetLayout = new QHBoxLayout(this);
+    auto TargetLayout = new QHBoxLayout();
     for(int i=0;i<3;++i) TargetLayout->addWidget(m_BAPropertyTarget[i]);
     BAPropertyLayout->addLayout(TargetLayout);
 
     BAPropertyLayout->addStretch();
+    // Property is End
 
-    m_BAScenes = new QTabWidget(this);
-    m_BAScenesEdit = new QWidget(m_BAScenes);
-    m_BAScenesCamera = new QWidget(m_BAScenes);
-    m_BAScenesRender = new QWidget(m_BAScenes);
-    m_BAScenes->addTab(m_BAScenesEdit,"Edit");
-    m_BAScenes->addTab(m_BAScenesCamera,"Camera");
-    m_BAScenes->addTab(m_BAScenesRender,"Render");
+    auto BAScenes = new QTabWidget(MainWidget);
+    auto BAScenesEdit = new QWidget(BAScenes);
+    auto BAScenesCamera = new QWidget(BAScenes);
+    auto BAScenesRender = new QWidget(BAScenes);
+    BAScenes->addTab(BAScenesEdit,"Edit");
+    BAScenes->addTab(BAScenesCamera,"Camera");
+    BAScenes->addTab(BAScenesRender,"Render");
 
-    m_BAScenesEditLayout = new QVBoxLayout(this);
-    m_BAScenesEditView = new GL_ViewWidget(this);
-    m_BAScenesEdit->setLayout(m_BAScenesEditLayout);
-    m_BAScenesEditLayout->addWidget(m_BAScenesEditView);
+    auto BAScenesEditLayout = new QVBoxLayout();
+    m_BAScenesEditView = new GL_ViewWidget(BAScenes);
+    BAScenesEdit->setLayout(BAScenesEditLayout);
+    BAScenesEditLayout->addWidget(m_BAScenesEditView);
 
-    m_BAScenesCameraLayout = new QVBoxLayout(this);
-    m_BAScenesCameraView = new GL_ViewWidget(this);
-    m_BAScenesCamera->setLayout(m_BAScenesCameraLayout);
-    m_BAScenesCameraLayout->addWidget(m_BAScenesCameraView);
+    auto BAScenesCameraLayout = new QVBoxLayout();
+    m_BAScenesCameraView = new GL_ViewWidget(BAScenes);
+    BAScenesCamera->setLayout(BAScenesCameraLayout);
+    BAScenesCameraLayout->addWidget(m_BAScenesCameraView);
 
-    m_BAScenesRenderLayout = new QVBoxLayout(this);
-    m_BAScenesRenderView = new QLabel("Render Result",this);
+    auto BAScenesRenderLayout = new QVBoxLayout();
+    m_BAScenesRenderView = new QLabel("Render Result",BAScenes);
     m_BAScenesRenderView->setAlignment(Qt::AlignCenter);
-    m_BAScenesRender->setLayout(m_BAScenesRenderLayout);
-    m_BAScenesRenderLayout->addWidget(m_BAScenesRenderView);
+    BAScenesRender->setLayout(BAScenesRenderLayout);
+    BAScenesRenderLayout->addWidget(m_BAScenesRenderView);
+    // 3 Scenes are End
 
     BALayout->addWidget(BAProperty);
-    BALayout->addWidget(m_BAScenes);
+    BALayout->addWidget(BAScenes);
     BALayout->setStretchFactor(BAProperty,2);
-    BALayout->setStretchFactor(m_BAScenes,6);
+    BALayout->setStretchFactor(BAScenes,6);
 
     BLayout->addLayout(BALayout);
     BLayout->addWidget(BBTabWidget);
@@ -309,10 +327,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->setWindowIcon(QPixmap(":/img/Logo.png"));
 }
 
-MainWindow::~MainWindow()
-{
-    DL_Clear();
-}
+MainWindow::~MainWindow() {}
 
 void MainWindow::loadStyle(const QString &qssFile)
 {
@@ -396,7 +411,32 @@ void MainWindow::changeListItem(QListWidgetItem* Current)
     };
     if(Current)
     {
-        m_BAPropertySelectedID->setText(Current->text());
+        int ThisMaterialType = 0;
+        switch(ECore::Objects[Current->text()]->m_MType)
+        {
+        case ECore::MType::DIFFUSE:
+        {
+            ThisMaterialType = 0;
+        }
+        break;
+        case ECore::MType::METAL:
+        {
+            ThisMaterialType = 1;
+        }
+        break;
+        case ECore::MType::GLASS:
+        {
+            ThisMaterialType = 2;
+        }
+        break;
+        case ECore::MType::EMIT:
+        {
+            ThisMaterialType = 3;
+        }
+        break;
+        }
+        // Index starts at 0
+        m_BBTabMaterialSelectType->setCurrentIndex(ThisMaterialType);
 
         QString SelectedType = "Nothing";
         switch(ECore::Objects[Current->text()]->m_OType)
@@ -408,6 +448,8 @@ void MainWindow::changeListItem(QListWidgetItem* Current)
             EnableSpinBox(true,m_BAPropertyRotation);
             EnableSpinBox(true,m_BAPropertyScale);
             EnableSpinBox(false,m_BAPropertyTarget);
+
+            m_BBTabMaterialSelectType->setEnabled(true);
         }
         break;
         case ECore::OType::SPHERE:
@@ -417,6 +459,8 @@ void MainWindow::changeListItem(QListWidgetItem* Current)
             EnableSpinBox(true,m_BAPropertyRotation);
             EnableSpinBox(true,m_BAPropertyScale);
             EnableSpinBox(false,m_BAPropertyTarget);
+
+            m_BBTabMaterialSelectType->setEnabled(true);
         }
         break;
         case ECore::OType::CAMERA:
@@ -426,10 +470,13 @@ void MainWindow::changeListItem(QListWidgetItem* Current)
             EnableSpinBox(false,m_BAPropertyRotation);
             EnableSpinBox(false,m_BAPropertyScale);
             EnableSpinBox(true,m_BAPropertyTarget);
+
+            m_BBTabMaterialSelectType->setEnabled(false);
         }
         break;
         }
 
+        m_BAPropertySelectedID->setText(Current->text());
         m_BAPropertySelectedType->setText(SelectedType);
     }
     else
@@ -441,6 +488,8 @@ void MainWindow::changeListItem(QListWidgetItem* Current)
         EnableSpinBox(false,m_BAPropertyRotation);
         EnableSpinBox(false,m_BAPropertyScale);
         EnableSpinBox(false,m_BAPropertyTarget);
+
+        m_BBTabMaterialSelectType->setEnabled(false);
     }
 }
 
@@ -467,6 +516,7 @@ void MainWindow::pushImportMesh()
             ECore::Objects[ID] = std::make_unique<ECore::SceneObj>();
             ECore::Objects[ID]->m_ID = ID;
             ECore::Objects[ID]->m_OType = ECore::OType::MESH;
+            ECore::Objects[ID]->m_MType = ECore::MType::DIFFUSE;
         }
 
         m_AToolsImportMenuInput->m_Line->setText("");
@@ -497,6 +547,10 @@ void MainWindow::pushAddCamera()
         ECore::Objects[ID] = std::make_unique<ECore::SceneObj>();
         ECore::Objects[ID]->m_ID = ID;
         ECore::Objects[ID]->m_OType = ECore::OType::CAMERA;
+        ECore::Objects[ID]->m_MType = ECore::MType::DIFFUSE;
+
+        m_BBTabCameraSelectWhich->setEnabled(true);
+        m_BBTabCameraSelectWhich->addItem(ID);
 
         m_AToolsAddMenuInput->m_Line->setText("");
     }
@@ -511,6 +565,7 @@ void MainWindow::pushAddCube()
         ECore::Objects[ID] = std::make_unique<ECore::SceneObj>();
         ECore::Objects[ID]->m_ID = ID;
         ECore::Objects[ID]->m_OType = ECore::OType::MESH;
+        ECore::Objects[ID]->m_MType = ECore::MType::DIFFUSE;
 
         m_AToolsAddMenuInput->m_Line->setText("");
     }
@@ -525,6 +580,7 @@ void MainWindow::pushAddSphere()
         ECore::Objects[ID] = std::make_unique<ECore::SceneObj>();
         ECore::Objects[ID]->m_ID = ID;
         ECore::Objects[ID]->m_OType = ECore::OType::SPHERE;
+        ECore::Objects[ID]->m_MType = ECore::MType::DIFFUSE;
 
         m_AToolsAddMenuInput->m_Line->setText("");
     }
@@ -534,9 +590,22 @@ void MainWindow::pushDelete()
 {
     if(m_AList->currentItem())
     {
-        if(ECore::Objects.count(m_AList->currentItem()->text()))
+        QString ID = m_AList->currentItem()->text();
+        if(ECore::Objects.count(ID))
         {
-            ECore::Objects.erase(m_AList->currentItem()->text());
+            if(ECore::Objects[ID]->m_OType == ECore::OType::CAMERA)
+            {
+                int CurrentCameraIndex = m_BBTabCameraSelectWhich->findText(ID);
+                if(CurrentCameraIndex != -1)
+                {
+                    m_BBTabCameraSelectWhich->removeItem(CurrentCameraIndex);
+                    if(!m_BBTabCameraSelectWhich->count())
+                    {
+                        m_BBTabCameraSelectWhich->setEnabled(false);
+                    }
+                }
+            }
+            ECore::Objects.erase(ID);
         }
         m_AList->takeItem(m_AList->currentRow());
     }
@@ -545,13 +614,13 @@ void MainWindow::pushDelete()
 void MainWindow::pushSort()
 {
     m_AList->clear();
-    QVector<QString> IDs;
+    QVector<QString> IDArray;
     for(auto i=ECore::Objects.begin();i!=ECore::Objects.end();++i)
     {
-        IDs.push_back(i->first);
+        IDArray.push_back(i->first);
     }
-    IDs.sort();
-    for(auto i=IDs.begin();i!=IDs.end();++i)
+    IDArray.sort();
+    for(auto i=IDArray.begin();i!=IDArray.end();++i)
     {
         m_AList->addItem(*i);
     }
@@ -568,6 +637,46 @@ void MainWindow::selectSkybox(const QString& filePath, char Which)
     {
         auto smallImage = selectedImage.scaled(128,128);
         m_BBTabSkyboxImages[ToIndex[Which]]->setPixmap(QPixmap::fromImage(smallImage));
-        ECore::Skyboxs[ToIndex[Which]] = selectedImage;
+        ECore::Skyboxs[ToIndex[Which]] = selectedImage; // Save the full image
     }
+}
+
+// Index starts at 0
+void MainWindow::materialTypeChanged(int Index)
+{
+    auto Current = m_AList->currentItem();
+    if(Current)
+    {
+        ECore::MType newType = ECore::MType::DIFFUSE;
+        switch(Index)
+        {
+        case 0:
+        {
+            newType = ECore::MType::DIFFUSE;
+        }
+        break;
+        case 1:
+        {
+            newType = ECore::MType::METAL;
+        }
+        break;
+        case 2:
+        {
+            newType = ECore::MType::GLASS;
+        }
+        break;
+        case 3:
+        {
+            newType = ECore::MType::EMIT;
+        }
+        break;
+        }
+        ECore::Objects[Current->text()]->m_MType = newType;
+    }
+}
+
+// Important: Push Render Button
+void MainWindow::pushRender()
+{
+
 }

@@ -65,6 +65,9 @@ protected: // UI
     // Use is Skybox Tab, Order = F B T D L R
     QLabel* m_BBTabSkyboxImages[6];
 
+    // Use in Camera Tab
+    QComboBox* m_BBTabCameraSelectWhich;
+
     // Use in Material Tab
     QComboBox* m_BBTabMaterialSelectType;
     // Image and Button
@@ -77,30 +80,14 @@ protected: // UI
     QLineEdit* m_BAPropertySelectedID;
     QLineEdit* m_BAPropertySelectedType;
 
-
-    // Works here
-
-
-
-
-
-
-
+    // Input Box of Property Group
     QDoubleSpinBox* m_BAPropertyLocation[3];
     QDoubleSpinBox* m_BAPropertyRotation[3];
     QDoubleSpinBox* m_BAPropertyScale[3];
 
     QDoubleSpinBox* m_BAPropertyTarget[3];
 
-    QTabWidget* m_BAScenes;
-    QWidget* m_BAScenesEdit;
-    QWidget* m_BAScenesCamera;
-    QWidget* m_BAScenesRender;
-
-    QVBoxLayout* m_BAScenesEditLayout;
-    QVBoxLayout* m_BAScenesCameraLayout;
-    QVBoxLayout* m_BAScenesRenderLayout;
-
+    // 3 Views in Scenes
     GL_ViewWidget* m_BAScenesEditView;
     GL_ViewWidget* m_BAScenesCameraView;
     QLabel* m_BAScenesRenderView;
@@ -136,5 +123,11 @@ protected: // Use to connect with signal
     void selectSkyboxL(){ auto File = QFileDialog::getOpenFileName(); selectSkybox(File,'L'); }
     void selectSkyboxR(){ auto File = QFileDialog::getOpenFileName(); selectSkybox(File,'R'); }
     void selectSkybox(const QString& filePath, char Which);
+
+    // Tab Material, Change Type
+    void materialTypeChanged(int Index);
+
+    // Render Button in Render Tab
+    void pushRender();
 };
 #endif // MAINWINDOW_H
