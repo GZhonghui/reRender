@@ -157,8 +157,6 @@ MainWindow::MainWindow(QWidget *parent)
     auto BBTabMaterialParameterLayout = new QHBoxLayout();
     auto BBTabMaterialParameterDetailLayout = new QVBoxLayout();
     BBTabMaterialParameterLayout->addLayout(BBTabMaterialParameterDetailLayout);
-    BBTabMaterialParameterDetailLayout->addWidget(new QLabel("Color:",BBTabMaterial));
-    BBTabMaterialParameterDetailLayout->addWidget(new QLabel("Light:",BBTabMaterial));
     BBTabMaterialParameterDetailLayout->addStretch();
 
     BBTabMaterialParameterLayout->addSpacing(128);
@@ -203,8 +201,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto BBTabRenderLayout = new QVBoxLayout();
     BBTabRenderLayout->addWidget(BBTabRenderRenderButton);
+
+    m_RenderProgress = new QProgressBar(BBTabRender);
+    BBTabRenderLayout->addWidget(m_RenderProgress);
+    m_RenderProgress->setRange(0,100);
+    m_RenderProgress->setValue(50);
+
     BBTabRenderLayout->addStretch();
     BBTabRender->setLayout(BBTabRenderLayout);
+    // Render Tab is End
 
     // BA Layout: Property and Scenes
     auto BALayout = new QHBoxLayout();
@@ -299,7 +304,8 @@ MainWindow::MainWindow(QWidget *parent)
     BAScenesEditLayout->addWidget(m_BAScenesEditView);
 
     auto BAScenesCameraLayout = new QVBoxLayout();
-    m_BAScenesCameraView = new GL_ViewWidget(BAScenes);
+    m_BAScenesCameraView = new QLabel("Camera Live",BAScenes);
+    m_BAScenesCameraView->setAlignment(Qt::AlignCenter);
     BAScenesCamera->setLayout(BAScenesCameraLayout);
     BAScenesCameraLayout->addWidget(m_BAScenesCameraView);
 
@@ -678,5 +684,5 @@ void MainWindow::materialTypeChanged(int Index)
 // Important: Push Render Button
 void MainWindow::pushRender()
 {
-
+    m_RenderProgress->setValue(m_RenderProgress->value()+1);
 }

@@ -9,6 +9,7 @@
 #include <QtWidgets>
 
 #include <QDoubleSpinBox>
+#include <QProgressBar>
 #include <QMainWindow>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -29,6 +30,7 @@
 #include <QLine>
 
 #include "tool_aio.h"
+#include "math_aio.h"
 
 #include "wa_input.h"
 #include "wa_button.h"
@@ -76,6 +78,9 @@ protected: // UI
     QLabel* m_BBTabMaterialNormalTextureImage;
     QPushButton* m_BBTabMaterialNormalTextureSelect;
 
+    // Use in Render Tab
+    QProgressBar* m_RenderProgress;
+
     // ID and Type of Selected Obj in Left List
     QLineEdit* m_BAPropertySelectedID;
     QLineEdit* m_BAPropertySelectedType;
@@ -89,7 +94,7 @@ protected: // UI
 
     // 3 Views in Scenes
     GL_ViewWidget* m_BAScenesEditView;
-    GL_ViewWidget* m_BAScenesCameraView;
+    QLabel* m_BAScenesCameraView;
     QLabel* m_BAScenesRenderView;
 
 protected: // Use to connect with signal

@@ -16,8 +16,11 @@ SOURCES += \
 
 HEADERS += \
     engine_core.h \
+    gl_misc.h \
     gl_viewwidget.h \
     mainwindow.h \
+    math_aio.h \
+    shader.h \
     tool_aio.h \
     wa_button.h \
     wa_input.h

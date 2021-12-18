@@ -2,6 +2,7 @@
 #define TOOL_AIO_H
 
 #include <vector>
+#include <cstdint>
 
 #include <QApplication>
 #include <QHBoxLayout>
