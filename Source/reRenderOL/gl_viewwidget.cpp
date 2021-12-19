@@ -1,5 +1,8 @@
 #include "gl_viewwidget.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <STB/stb_image.h>
+
 GL_ViewWidget::GL_ViewWidget(QWidget *parent):
     QOpenGLWidget(parent) {}
 
@@ -92,11 +95,6 @@ void GL_ViewWidget::destroySkybox()
     glDeleteBuffers(1, &m_SkyboxVBOID);
 }
 
-void GL_ViewWidget::changeSkybox(int Which, const QPixmap& Image)
-{
-
-}
-
 void GL_ViewWidget::renderSkybox(glm::mat4* VP)
 {
     glDepthMask(GL_FALSE);
@@ -118,6 +116,62 @@ void GL_ViewWidget::renderSkybox(glm::mat4* VP)
     glDrawArrays(GL_TRIANGLES, 0, 36);
 
     glDepthMask(GL_TRUE);
+}
+
+void GL_ViewWidget::changeSkybox(int Which, const QImage& Image)
+{
+    int texWidth = Image.width(), texHeight = Image.height(), texChannels;
+    unsigned char* texData;//= Image.bits();
+
+    // Don't Need On Cubemap
+    // stbi_set_flip_vertically_on_load(false);
+
+    texData = stbi_load("0.png", &texWidth, &texHeight, &texChannels, 3);
+    if(!texData)
+    {
+        qDebug() << "Load Failed";
+    }else
+    {
+        qDebug() << "Load Done";
+    }
+
+    switch(Which)
+    {
+    case 0:
+    {
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGB, texWidth, texHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, texData);
+    }
+    break;
+    case 1:
+    {
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGB, texWidth, texHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, texData);
+    }
+    break;
+    case 2:
+    {
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGB, texWidth, texHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, texData);
+    }
+    break;
+    case 3:
+    {
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGB, texWidth, texHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, texData);
+    }
+    break;
+    case 4:
+    {
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGB, texWidth, texHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, texData);
+    }
+    break;
+    case 5:
+    {
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGB, texWidth, texHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, texData);
+    }
+    break;
+    }
+
+    stbi_image_free(texData);
+        
+    // stbi_set_flip_vertically_on_load(true);
 }
 
 void GL_ViewWidget::Destroy()
@@ -143,5 +197,5 @@ void GL_ViewWidget::paintGL()
 
     VP[1] = glm::perspective(glm::radians(100.0), (double)1024 / 768, 0.1, 100.0);
 
-    renderSkybox(VP);
+    // renderSkybox(VP);
 }

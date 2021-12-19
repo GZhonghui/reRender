@@ -30,9 +30,12 @@ protected:
 private: // Tools
     void initSkybox();
     void destroySkybox();
-    void changeSkybox(int Which, const QPixmap& Image);
     void renderSkybox(glm::mat4* VP);
 
+public:
+    void changeSkybox(int Which, const QImage& Image);
+
+protected:
     void Destroy();
 
 protected:

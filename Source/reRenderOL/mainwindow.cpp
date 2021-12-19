@@ -644,6 +644,8 @@ void MainWindow::selectSkybox(const QString& filePath, char Which)
         auto smallImage = selectedImage.scaled(128,128);
         m_BBTabSkyboxImages[ToIndex[Which]]->setPixmap(QPixmap::fromImage(smallImage));
         ECore::Skyboxs[ToIndex[Which]] = selectedImage; // Save the full image
+
+        m_BAScenesEditView->changeSkybox(ToIndex[Which], selectedImage);
     }
 }
 

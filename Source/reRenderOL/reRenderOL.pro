@@ -15,6 +15,7 @@ SOURCES += \
     wa_input.cpp
 
 HEADERS += \
+    camera.h \
     engine_core.h \
     gl_misc.h \
     gl_viewwidget.h \

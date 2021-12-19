@@ -9,6 +9,8 @@
 #include <QVBoxLayout>
 #include <QGridLayout>
 
+#include<QDebug>
+
 #ifdef DEF_TOOL
 
 /*
