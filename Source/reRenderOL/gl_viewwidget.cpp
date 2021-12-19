@@ -93,7 +93,7 @@ void GL_ViewWidget::destroySkybox()
 
     glDeleteVertexArrays(1, &m_SkyboxVAOID);
     glDeleteBuffers(1, &m_SkyboxVBOID);
-}
+} 
 
 void GL_ViewWidget::renderSkybox(glm::mat4* VP)
 {
@@ -176,26 +176,27 @@ void GL_ViewWidget::changeSkybox(int Which, const QImage& Image)
 
 void GL_ViewWidget::Destroy()
 {
-    destroySkybox();
+    // destroySkybox();
 }
 
 void GL_ViewWidget::initializeGL()
 {
     initializeOpenGLFunctions();
     
-    initSkybox();
-}
+    // initSkybox();
+
+    GLRenderable A;
+    A.Init(this);
+    m_RenderObjects.push_back(A);
+} 
 
 void GL_ViewWidget::paintGL()
 {
     glClearColor(0.0f, 0.2f, 0.4f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);
 
-    glm::mat4 VP[2];
-
-    VP[0] = glm::mat4(1.0);
-
-    VP[1] = glm::perspective(glm::radians(100.0), (double)1024 / 768, 0.1, 100.0);
-
-    // renderSkybox(VP);
+    for(auto i=m_RenderObjects.begin();i!=m_RenderObjects.end();++i)
+    {
+        i->Render();
+    }
 }

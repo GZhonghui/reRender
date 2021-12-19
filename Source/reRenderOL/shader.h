@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <QDebug>
+
 #include"math_aio.h"
 #include"tool_aio.h"
 
@@ -47,6 +49,7 @@ protected:
         if (!shaderFile)
         {
             // Out::Log(pType::ERROR, "Cant load shader file: %s", filePath);
+            // qDebug() << "Cant load shader file:" << filePath;
             return false;
         }
 

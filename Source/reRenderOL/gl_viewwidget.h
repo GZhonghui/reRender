@@ -13,6 +13,8 @@
 #include "shader.h"
 #include "gl_misc.h"
 
+#include "gl_renderable.h"
+
 class GL_ViewWidget : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core
 {
     Q_OBJECT
@@ -34,6 +36,9 @@ private: // Tools
 
 public:
     void changeSkybox(int Which, const QImage& Image);
+
+protected:
+    std::vector<GLRenderable> m_RenderObjects;
 
 protected:
     void Destroy();

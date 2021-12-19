@@ -18,6 +18,7 @@ HEADERS += \
     camera.h \
     engine_core.h \
     gl_misc.h \
+    gl_renderable.h \
     gl_viewwidget.h \
     mainwindow.h \
     math_aio.h \
