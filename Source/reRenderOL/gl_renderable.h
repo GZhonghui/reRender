@@ -5,30 +5,21 @@
 #include <QOpenGLFunctions>
 #include <QOpenGLFunctions_3_3_Core>
 
-#include <QOpenGLShaderProgram>
-#include <QOpenGLVertexArrayObject>
-#include <QOpenGLBuffer>
-
 #include "shader.h"
 
 class GLRenderable
 {
 public:
     GLRenderable() = default;
-    ~GLRenderable() { Destroy(); }
+    ~GLRenderable() = default;
 
 private:
     QOpenGLFunctions_3_3_Core* m_F;
 
-public:
+protected:
     uint32_t m_ShaderProgramID;
     uint32_t m_VAOID;
     uint32_t m_VBOID;
-
-public:
-    QOpenGLShaderProgram* m_Shader;
-    QOpenGLVertexArrayObject* m_VAO;
-    QOpenGLBuffer* m_VBO;
 
 public:
     void Init(QOpenGLFunctions_3_3_Core* F)
@@ -65,45 +56,18 @@ public:
 
         m_F->glBindBuffer(GL_ARRAY_BUFFER, 0); 
         m_F->glBindVertexArray(0);
-
-        m_Shader = new QOpenGLShaderProgram();
-        m_Shader->addShaderFromSourceCode(QOpenGLShader::Vertex, Shader("Direct", sType::VERT).m_ShaderCode.data());
-        m_Shader->addShaderFromSourceCode(QOpenGLShader::Fragment, Shader("Direct", sType::FRAG).m_ShaderCode.data());
-        m_Shader->link();
-
-        m_VAO = new QOpenGLVertexArrayObject();
-        m_VBO = new QOpenGLBuffer(QOpenGLBuffer::Type::VertexBuffer);
-
-        m_VAO->create();
-        m_VAO->bind();
-
-        m_VBO->create();
-        m_VBO->bind();
-        m_VBO->allocate(Vertices, 3*3*sizeof(float));
-
-        m_F->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-        m_F->glEnableVertexAttribArray(0);
-
-        m_VBO->release();
-        m_VAO->release();
     }
 
     void Destroy()
     {
-        // m_F->glDeleteProgram(m_ShaderProgramID);
+        m_F->glDeleteProgram(m_ShaderProgramID);
 
-        // m_F->glDeleteVertexArrays(1, &m_VAOID);
-        // m_F->glDeleteBuffers(1, &m_VBOID);
+        m_F->glDeleteVertexArrays(1, &m_VAOID);
+        m_F->glDeleteBuffers(1, &m_VBOID);
     }
 
     void Render()
     {
-        // m_F->glUseProgram(m_ShaderProgramID);
-        // m_F->glBindVertexArray(m_VAOID);
-
-        // m_VAO->bind();
-        // m_Shader->bind();
-
         m_F->glUseProgram(m_ShaderProgramID);
         m_F->glBindVertexArray(m_VAOID);
         m_F->glDrawArrays(GL_TRIANGLES, 0, 3);
