@@ -135,6 +135,36 @@ MainWindow::MainWindow(QWidget *parent)
     auto BBTabCameraLayout = new QVBoxLayout();
     BBTabCamera->setLayout(BBTabCameraLayout);
     BBTabCameraLayout->addWidget(m_BBTabCameraSelectWhich);
+
+    connect(m_BBTabCameraSelectWhich,&QComboBox::currentIndexChanged,this,&MainWindow::cameraChanged);
+
+    m_BBTabCameraResolutionWidth = new QSpinBox(BBTabCamera);
+    m_BBTabCameraResolutionHeight = new QSpinBox(BBTabCamera);
+    m_BBTabCameraResolutionWidth->setMinimum(128);
+    m_BBTabCameraResolutionWidth->setMaximum(2048);
+    m_BBTabCameraResolutionWidth->setEnabled(false);
+    m_BBTabCameraResolutionHeight->setMinimum(128);
+    m_BBTabCameraResolutionHeight->setMaximum(2048);
+    m_BBTabCameraResolutionHeight->setEnabled(false);
+
+    auto BBTabCameraResolutionLayout = new QHBoxLayout();
+    BBTabCameraResolutionLayout->addWidget(new QLabel("Resolution: ",BBTabCamera));
+    BBTabCameraResolutionLayout->addWidget(m_BBTabCameraResolutionWidth);
+    BBTabCameraResolutionLayout->addWidget(new QLabel(" x ",BBTabCamera));
+    BBTabCameraResolutionLayout->addWidget(m_BBTabCameraResolutionHeight);
+    BBTabCameraResolutionLayout->addStretch();
+    BBTabCameraLayout->addLayout(BBTabCameraResolutionLayout);
+
+    m_BBTabCameraFOV = new QDoubleSpinBox(BBTabCamera);
+    m_BBTabCameraFOV->setMinimum(45.0);
+    m_BBTabCameraFOV->setMaximum(120.0);
+    m_BBTabCameraFOV->setEnabled(false);
+    auto BBTabCameraFOVLayout = new QHBoxLayout();
+    BBTabCameraFOVLayout->addWidget(new QLabel("FOV: ",BBTabCamera));
+    BBTabCameraFOVLayout->addWidget(m_BBTabCameraFOV);
+    BBTabCameraFOVLayout->addStretch();
+    BBTabCameraLayout->addLayout(BBTabCameraFOVLayout);
+    
     BBTabCameraLayout->addStretch();
 
     m_BBTabCameraSelectWhich->setEnabled(false);
@@ -646,6 +676,22 @@ void MainWindow::selectSkybox(const QString& filePath, char Which)
         ECore::Skyboxs[ToIndex[Which]] = selectedImage; // Save the full image
 
         m_BAScenesEditView->changeSkybox(ToIndex[Which], selectedImage);
+    }
+}
+
+// Index starts at 0
+void MainWindow::cameraChanged(int Index)
+{
+    if(Index >= 0)
+    {
+        m_BBTabCameraResolutionWidth->setEnabled(true);
+        m_BBTabCameraResolutionHeight->setEnabled(true);
+        m_BBTabCameraFOV->setEnabled(true);
+    }else
+    {
+        m_BBTabCameraResolutionWidth->setEnabled(false);
+        m_BBTabCameraResolutionHeight->setEnabled(false);
+        m_BBTabCameraFOV->setEnabled(false);
     }
 }
 

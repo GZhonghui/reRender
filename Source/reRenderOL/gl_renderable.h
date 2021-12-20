@@ -20,7 +20,7 @@ public:
 private:
     QOpenGLFunctions_3_3_Core* m_F;
 
-protected:
+public:
     uint32_t m_ShaderProgramID;
     uint32_t m_VAOID;
     uint32_t m_VBOID;
@@ -34,8 +34,7 @@ public:
     void Init(QOpenGLFunctions_3_3_Core* F)
     {
         m_F = F;
-
-        /*
+        
         uint32_t VertShaderID = GLMisc::CompileShader(m_F, Shader("Direct", sType::VERT).m_ShaderCode.data(), sType::VERT);
         uint32_t FragShaderID = GLMisc::CompileShader(m_F, Shader("Direct", sType::FRAG).m_ShaderCode.data(), sType::FRAG);
 
@@ -46,7 +45,7 @@ public:
 
         m_F->glDeleteShader(VertShaderID);
         m_F->glDeleteShader(FragShaderID);
-        */
+        
 
         float Vertices[] =
         {
@@ -55,7 +54,6 @@ public:
             -0.5f,  0.5f, 0.0f
         };
 
-        /*
         m_F->glGenVertexArrays(1, &m_VAOID);
         m_F->glGenBuffers(1, &m_VBOID);
 
@@ -67,7 +65,6 @@ public:
 
         m_F->glBindBuffer(GL_ARRAY_BUFFER, 0); 
         m_F->glBindVertexArray(0);
-        */
 
         m_Shader = new QOpenGLShaderProgram();
         m_Shader->addShaderFromSourceCode(QOpenGLShader::Vertex, Shader("Direct", sType::VERT).m_ShaderCode.data());
@@ -104,12 +101,12 @@ public:
         // m_F->glUseProgram(m_ShaderProgramID);
         // m_F->glBindVertexArray(m_VAOID);
 
-        m_VAO->bind();
-        m_Shader->bind();
+        // m_VAO->bind();
+        // m_Shader->bind();
 
+        m_F->glUseProgram(m_ShaderProgramID);
+        m_F->glBindVertexArray(m_VAOID);
         m_F->glDrawArrays(GL_TRIANGLES, 0, 3);
-        m_VAO->release();
-        m_Shader->release();
     }
 };
 

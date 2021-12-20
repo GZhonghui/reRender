@@ -44,7 +44,7 @@ namespace GLMisc
         {
             f->glGetShaderInfoLog(ShaderID, 512, NULL, compileInfo);
             // Out::Log(pType::WARNING, "Shader Compile Failed : %s", compileInfo);
-            qDebug() << "Shader Compile Failed: " << compileInfo;
+            // qDebug() << "Shader Compile Failed: " << compileInfo;
         }
 
         return ShaderID;

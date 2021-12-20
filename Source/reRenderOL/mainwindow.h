@@ -69,6 +69,9 @@ protected: // UI
 
     // Use in Camera Tab
     QComboBox* m_BBTabCameraSelectWhich;
+    QSpinBox* m_BBTabCameraResolutionWidth;
+    QSpinBox* m_BBTabCameraResolutionHeight;
+    QDoubleSpinBox* m_BBTabCameraFOV;
 
     // Use in Material Tab
     QComboBox* m_BBTabMaterialSelectType;
@@ -128,6 +131,9 @@ protected: // Use to connect with signal
     void selectSkyboxL(){ auto File = QFileDialog::getOpenFileName(); selectSkybox(File,'L'); }
     void selectSkyboxR(){ auto File = QFileDialog::getOpenFileName(); selectSkybox(File,'R'); }
     void selectSkybox(const QString& filePath, char Which);
+
+    // Change Camera
+    void cameraChanged(int Index);
 
     // Tab Material, Change Type
     void materialTypeChanged(int Index);
