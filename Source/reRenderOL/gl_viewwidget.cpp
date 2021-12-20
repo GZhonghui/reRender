@@ -195,8 +195,12 @@ void GL_ViewWidget::paintGL()
     glClearColor(0.0f, 0.2f, 0.4f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    
     for(auto i=m_RenderObjects.begin();i!=m_RenderObjects.end();++i)
     {
-        i->Render();
+        // i->Render();
+        i->m_VAO->bind();
+        i->m_Shader->bind();
+        glDrawArrays(GL_TRIANGLES, 0, 3);
     }
 }
