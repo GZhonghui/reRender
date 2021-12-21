@@ -184,6 +184,40 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(m_BBTabMaterialSelectType,&QComboBox::currentIndexChanged,this,&MainWindow::materialTypeChanged);
 
+    m_BBTabMaterialStacked = new QStackedWidget(BBTabMaterial);
+    BBTabMaterialLayout->addWidget(m_BBTabMaterialStacked);
+    BBTabMaterialLayout->addStretch();
+
+    auto BBTabMaterialStackedDiffuse = new QWidget(m_BBTabMaterialStacked);
+    auto BBTabMaterialStackedMetal = new QWidget(m_BBTabMaterialStacked);
+    auto BBTabMaterialStackedGlass = new QWidget(m_BBTabMaterialStacked);
+    auto BBTabMaterialStackedEmit = new QWidget(m_BBTabMaterialStacked);
+
+    m_BBTabMaterialStacked->addWidget(BBTabMaterialStackedDiffuse);
+    m_BBTabMaterialStacked->addWidget(BBTabMaterialStackedMetal);
+    m_BBTabMaterialStacked->addWidget(BBTabMaterialStackedGlass);
+    m_BBTabMaterialStacked->addWidget(BBTabMaterialStackedEmit);
+
+    // Diffuse Page
+    auto BBTabMaterialStackedDiffuseLayout = new QHBoxLayout();
+    BBTabMaterialStackedDiffuse->setLayout(BBTabMaterialStackedDiffuseLayout);
+
+    auto BBTabMaterialStackedDiffuseLeftLayout = new QVBoxLayout();
+    BBTabMaterialStackedDiffuseLeftLayout->addWidget(new QLabel("Diffuse Color:",BBTabMaterialStackedDiffuse));
+    m_BBTabMaterialStackedDiffuseBaseColor = new Color_Button(BBTabMaterialStackedDiffuse);
+    BBTabMaterialStackedDiffuseLeftLayout->addWidget(m_BBTabMaterialStackedDiffuseBaseColor);
+    BBTabMaterialStackedDiffuseLeftLayout->addStretch();
+
+    BBTabMaterialStackedDiffuseLayout->addLayout(BBTabMaterialStackedDiffuseLeftLayout);
+    BBTabMaterialStackedDiffuseLayout->addStretch();
+
+    // Metal Page
+    
+    // Glass Page
+
+    // Emit Page
+
+    /*
     auto BBTabMaterialParameterLayout = new QHBoxLayout();
     auto BBTabMaterialParameterDetailLayout = new QVBoxLayout();
     m_BBTabMaterialBaseColor = new Color_Button(BBTabMaterial);
@@ -228,6 +262,7 @@ MainWindow::MainWindow(QWidget *parent)
     BBTabMaterialParameterLayout->addStretch();
     BBTabMaterialLayout->addLayout(BBTabMaterialParameterLayout);
     BBTabMaterialLayout->addStretch();
+    */
     // Material Tab is End
 
     auto BBTabRenderRenderButton = new QPushButton("Render",BBTabRender);
@@ -267,6 +302,7 @@ MainWindow::MainWindow(QWidget *parent)
     auto HLine = new QFrame(this);
     HLine->setFrameShape(QFrame::HLine);
     HLine->setFrameShadow(QFrame::Plain);
+    BAPropertyLayout->addSpacing(64);
     BAPropertyLayout->addWidget(HLine);
 
     // Input Location
@@ -730,6 +766,8 @@ void MainWindow::materialTypeChanged(int Index)
         break;
         }
         ECore::Objects[Current->text()]->m_MType = newType;
+
+        m_BBTabMaterialStacked->setCurrentIndex(Index);
     }
 }
 

@@ -78,7 +78,10 @@ protected: // UI
 
     // Use in Material Tab
     QComboBox* m_BBTabMaterialSelectType;
-    Color_Button* m_BBTabMaterialBaseColor;
+    // Defferent Widgets for Different Materials
+    QStackedWidget* m_BBTabMaterialStacked;
+    Color_Button* m_BBTabMaterialStackedDiffuseBaseColor;
+    
     // Image and Button
     QLabel* m_BBTabMaterialDiffuseTextureImage;
     QPushButton* m_BBTabMaterialDiffuseTextureSelect;
