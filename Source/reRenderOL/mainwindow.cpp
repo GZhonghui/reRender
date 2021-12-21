@@ -186,6 +186,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto BBTabMaterialParameterLayout = new QHBoxLayout();
     auto BBTabMaterialParameterDetailLayout = new QVBoxLayout();
+    m_BBTabMaterialBaseColor = new Color_Button(BBTabMaterial);
+    BBTabMaterialParameterDetailLayout->addWidget(new QLabel("Base Color: ",BBTabMaterial));
+    BBTabMaterialParameterDetailLayout->addWidget(m_BBTabMaterialBaseColor);
+
     BBTabMaterialParameterLayout->addLayout(BBTabMaterialParameterDetailLayout);
     BBTabMaterialParameterDetailLayout->addStretch();
 

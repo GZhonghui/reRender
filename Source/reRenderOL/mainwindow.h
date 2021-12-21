@@ -8,6 +8,7 @@
 #include <QtCore>
 #include <QtWidgets>
 
+#include <QStackedWidget>
 #include <QDoubleSpinBox>
 #include <QProgressBar>
 #include <QMainWindow>
@@ -36,6 +37,8 @@
 #include "wa_button.h"
 
 #include "gl_viewwidget.h"
+
+#include "color_button.h"
 
 #include "engine_core.h"
 
@@ -75,6 +78,7 @@ protected: // UI
 
     // Use in Material Tab
     QComboBox* m_BBTabMaterialSelectType;
+    Color_Button* m_BBTabMaterialBaseColor;
     // Image and Button
     QLabel* m_BBTabMaterialDiffuseTextureImage;
     QPushButton* m_BBTabMaterialDiffuseTextureSelect;
