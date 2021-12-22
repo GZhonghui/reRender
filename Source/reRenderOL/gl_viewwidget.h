@@ -38,7 +38,7 @@ public:
     void changeSkybox(int Which, const QImage& Image);
 
 protected:
-    std::vector<GLRenderable> m_RenderObjects;
+    std::vector<ECore::GLRenderable> m_RenderObjects;
 
 protected:
     void Destroy();

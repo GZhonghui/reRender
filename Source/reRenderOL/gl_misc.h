@@ -1,8 +1,6 @@
 #ifndef GL_MISC_H
 #define GL_MISC_H
 
-#include <QDebug>
-
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
 #include <QOpenGLFunctions_3_3_Core>

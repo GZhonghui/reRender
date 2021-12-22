@@ -281,6 +281,7 @@ MainWindow::MainWindow(QWidget *parent)
     HLine->setFrameShape(QFrame::HLine);
     HLine->setFrameShadow(QFrame::Plain);
     BAPropertyLayout->addSpacing(64);
+    BAPropertyLayout->addWidget(new QLabel("Input:",BAProperty));
     BAPropertyLayout->addWidget(HLine);
 
     // Input Location

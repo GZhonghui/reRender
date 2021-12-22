@@ -8,7 +8,15 @@ namespace ECore
 {
     class Camera
     {
+    public:
+        Camera() = default;
+        ~Camera() = default;
 
+    public:
+        void UpdateMateix()
+        {
+            
+        }
     };
 }
 
