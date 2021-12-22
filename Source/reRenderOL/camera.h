@@ -4,9 +4,12 @@
 #include "math_aio.h"
 #include "tool_aio.h"
 
-class Camera
+namespace ECore
 {
+    class Camera
+    {
 
-};
+    };
+}
 
 #endif // CAMERA_H

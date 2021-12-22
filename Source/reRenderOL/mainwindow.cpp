@@ -185,6 +185,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_BBTabMaterialSelectType,&QComboBox::currentIndexChanged,this,&MainWindow::materialTypeChanged);
 
     m_BBTabMaterialStacked = new QStackedWidget(BBTabMaterial);
+    m_BBTabMaterialStacked->setEnabled(false);
+
     BBTabMaterialLayout->addWidget(m_BBTabMaterialStacked);
     BBTabMaterialLayout->addStretch();
 
@@ -212,57 +214,33 @@ MainWindow::MainWindow(QWidget *parent)
     BBTabMaterialStackedDiffuseLayout->addStretch();
 
     // Metal Page
+    auto BBTabMaterialStackedMetalLayout = new QHBoxLayout();
+    BBTabMaterialStackedMetal->setLayout(BBTabMaterialStackedMetalLayout);
+
+    auto BBTabMaterialStackedMetalLeftLayout = new QVBoxLayout();
+    BBTabMaterialStackedMetalLeftLayout->addWidget(new QLabel("Metal Color:",BBTabMaterialStackedMetal));
+    m_BBTabMaterialStackedMetalBaseColor = new Color_Button(BBTabMaterialStackedMetal);
+    BBTabMaterialStackedMetalLeftLayout->addWidget(m_BBTabMaterialStackedMetalBaseColor);
+    BBTabMaterialStackedMetalLeftLayout->addStretch();
+
+    BBTabMaterialStackedMetalLayout->addLayout(BBTabMaterialStackedMetalLeftLayout);
+    BBTabMaterialStackedMetalLayout->addStretch();
     
     // Glass Page
 
     // Emit Page
+    auto BBTabMaterialStackedEmitLayout = new QHBoxLayout();
+    BBTabMaterialStackedEmit->setLayout(BBTabMaterialStackedEmitLayout);
 
-    /*
-    auto BBTabMaterialParameterLayout = new QHBoxLayout();
-    auto BBTabMaterialParameterDetailLayout = new QVBoxLayout();
-    m_BBTabMaterialBaseColor = new Color_Button(BBTabMaterial);
-    BBTabMaterialParameterDetailLayout->addWidget(new QLabel("Base Color: ",BBTabMaterial));
-    BBTabMaterialParameterDetailLayout->addWidget(m_BBTabMaterialBaseColor);
+    auto BBTabMaterialStackedEmitLeftLayout = new QVBoxLayout();
+    BBTabMaterialStackedEmitLeftLayout->addWidget(new QLabel("Emit Color:",BBTabMaterialStackedEmit));
+    m_BBTabMaterialStackedEmitBaseColor = new Color_Button(BBTabMaterialStackedEmit);
+    BBTabMaterialStackedEmitLeftLayout->addWidget(m_BBTabMaterialStackedEmitBaseColor);
+    BBTabMaterialStackedEmitLeftLayout->addStretch();
 
-    BBTabMaterialParameterLayout->addLayout(BBTabMaterialParameterDetailLayout);
-    BBTabMaterialParameterDetailLayout->addStretch();
+    BBTabMaterialStackedEmitLayout->addLayout(BBTabMaterialStackedEmitLeftLayout);
+    BBTabMaterialStackedEmitLayout->addStretch();
 
-    BBTabMaterialParameterLayout->addSpacing(128);
-
-    // Add a Line Only for Once
-    auto VLine = new QFrame(this);
-    VLine->setFrameShape(QFrame::VLine);
-    VLine->setFrameShadow(QFrame::Plain);
-    BBTabMaterialParameterLayout->addWidget(VLine);
-
-    // Diffuse Texture in Material Tab
-    auto BBTabMaterialParameterDiffuseTextureLayout = new QVBoxLayout();
-    m_BBTabMaterialDiffuseTextureSelect = new QPushButton("Select",BBTabMaterial);
-    m_BBTabMaterialDiffuseTextureImage = new QLabel(BBTabMaterial);
-    m_BBTabMaterialDiffuseTextureImage->setFixedSize(128,128);
-    m_BBTabMaterialDiffuseTextureImage->setPixmap(QPixmap::fromImage(DefaultImage));
-    BBTabMaterialParameterDiffuseTextureLayout->addWidget(new QLabel("Diffuse:"));
-    BBTabMaterialParameterDiffuseTextureLayout->addWidget(m_BBTabMaterialDiffuseTextureImage);
-    BBTabMaterialParameterDiffuseTextureLayout->addWidget(m_BBTabMaterialDiffuseTextureSelect);
-    BBTabMaterialParameterDiffuseTextureLayout->addStretch();
-    BBTabMaterialParameterLayout->addLayout(BBTabMaterialParameterDiffuseTextureLayout);
-
-    // Normal Texture in Material Tab
-    auto BBTabMaterialParameterNormalTextureLayout = new QVBoxLayout();
-    m_BBTabMaterialNormalTextureSelect = new QPushButton("Select",BBTabMaterial);
-    m_BBTabMaterialNormalTextureImage = new QLabel(BBTabMaterial);
-    m_BBTabMaterialNormalTextureImage->setFixedSize(128,128);
-    m_BBTabMaterialNormalTextureImage->setPixmap(QPixmap::fromImage(DefaultImage));
-    BBTabMaterialParameterNormalTextureLayout->addWidget(new QLabel("Normal:"));
-    BBTabMaterialParameterNormalTextureLayout->addWidget(m_BBTabMaterialNormalTextureImage);
-    BBTabMaterialParameterNormalTextureLayout->addWidget(m_BBTabMaterialNormalTextureSelect);
-    BBTabMaterialParameterNormalTextureLayout->addStretch();
-    BBTabMaterialParameterLayout->addLayout(BBTabMaterialParameterNormalTextureLayout);
-
-    BBTabMaterialParameterLayout->addStretch();
-    BBTabMaterialLayout->addLayout(BBTabMaterialParameterLayout);
-    BBTabMaterialLayout->addStretch();
-    */
     // Material Tab is End
 
     auto BBTabRenderRenderButton = new QPushButton("Render",BBTabRender);
@@ -274,7 +252,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_RenderProgress = new QProgressBar(BBTabRender);
     BBTabRenderLayout->addWidget(m_RenderProgress);
     m_RenderProgress->setRange(0,100);
-    m_RenderProgress->setValue(50);
+    m_RenderProgress->setValue(0);
 
     BBTabRenderLayout->addStretch();
     BBTabRender->setLayout(BBTabRenderLayout);
@@ -526,6 +504,7 @@ void MainWindow::changeListItem(QListWidgetItem* Current)
             EnableSpinBox(false,m_BAPropertyTarget);
 
             m_BBTabMaterialSelectType->setEnabled(true);
+            m_BBTabMaterialStacked->setEnabled(true);
         }
         break;
         case ECore::OType::SPHERE:
@@ -537,6 +516,7 @@ void MainWindow::changeListItem(QListWidgetItem* Current)
             EnableSpinBox(false,m_BAPropertyTarget);
 
             m_BBTabMaterialSelectType->setEnabled(true);
+            m_BBTabMaterialStacked->setEnabled(true);
         }
         break;
         case ECore::OType::CAMERA:
@@ -548,6 +528,7 @@ void MainWindow::changeListItem(QListWidgetItem* Current)
             EnableSpinBox(true,m_BAPropertyTarget);
 
             m_BBTabMaterialSelectType->setEnabled(false);
+            m_BBTabMaterialStacked->setEnabled(false);
         }
         break;
         }
@@ -566,6 +547,7 @@ void MainWindow::changeListItem(QListWidgetItem* Current)
         EnableSpinBox(false,m_BAPropertyTarget);
 
         m_BBTabMaterialSelectType->setEnabled(false);
+        m_BBTabMaterialStacked->setEnabled(false);
     }
 }
 
@@ -774,5 +756,5 @@ void MainWindow::materialTypeChanged(int Index)
 // Important: Push Render Button
 void MainWindow::pushRender()
 {
-    m_RenderProgress->setValue(m_RenderProgress->value()+1);
+    
 }

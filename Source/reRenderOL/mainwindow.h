@@ -80,13 +80,13 @@ protected: // UI
     QComboBox* m_BBTabMaterialSelectType;
     // Defferent Widgets for Different Materials
     QStackedWidget* m_BBTabMaterialStacked;
+    // Material: Diffuse
     Color_Button* m_BBTabMaterialStackedDiffuseBaseColor;
-    
-    // Image and Button
-    QLabel* m_BBTabMaterialDiffuseTextureImage;
-    QPushButton* m_BBTabMaterialDiffuseTextureSelect;
-    QLabel* m_BBTabMaterialNormalTextureImage;
-    QPushButton* m_BBTabMaterialNormalTextureSelect;
+    // Material: Metal
+    Color_Button* m_BBTabMaterialStackedMetalBaseColor;
+    // Material: Glass
+    // Material: Emit
+    Color_Button* m_BBTabMaterialStackedEmitBaseColor;
 
     // Use in Render Tab
     QProgressBar* m_RenderProgress;
