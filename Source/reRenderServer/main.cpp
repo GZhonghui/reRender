@@ -1,15 +1,7 @@
 #include <QCoreApplication>
 
-/*
-#include <QtNetwork>
-
-#include <QTcpServer>
-#include <QHostAddress>
-
-
-#include <iostream>
-#include <string>
-#include <memory>
+#include "ServerCore.h"
+#include "RenderCore.h"
 
 std::string Logo = R"(
          ______               _             _____
@@ -20,30 +12,33 @@ std::string Logo = R"(
 |_|  \___\_| \_\___|_| |_|\__,_|\___|_|    \____/ \___|_|    \_/ \___|_|
 )";
 
-std::unique_ptr<QTcpServer> Server;
+std::unique_ptr<QTcpServer> TCPServer;
+
+std::unique_ptr<ServerCore::ServerInstance> ServerInstance;
+
+const int Port = 2049;
 
 bool initServer()
 {
-    // Server = std::make_unique<QTcpServer>();
+    TCPServer = std::make_unique<QTcpServer>();
 
-    // if(!Server->listen(QHostAddress::Any, Port)) return false;
+    ServerInstance = std::make_unique<ServerCore::ServerInstance>(TCPServer.get());
+
+    if(!TCPServer->listen(QHostAddress::Any, Port)) return false;
+
+    QObject::connect(TCPServer.get(),&QTcpServer::newConnection,
+        ServerInstance.get(),&ServerCore::ServerInstance::newConnection);
 
     return true;
 }
 
-void newConnection()
-{
-
-}
-*/
-
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-/*
+
     std::cout << Logo << std::endl;
 
-    std::cout << "reRender Server, Version: 2.0, Author: GZhonghui." << std::endl;
+    std::cout << "reRender TCPServer, Version: 2.0, Author: GZhonghui." << std::endl;
     std::cout << "Initing..." << std::endl;
 
     if(initServer())
@@ -51,10 +46,9 @@ int main(int argc, char *argv[])
         std::cout << "Init Server Done, Running..." << std::endl;
     }else
     {
-        std::cout << "Exiting..." << std::endl;
+        std::cout << "Init Server Failed, Exiting..." << std::endl;
+        return -1;
     }
-*/
-    // Server->close();
 
     return a.exec();
 }

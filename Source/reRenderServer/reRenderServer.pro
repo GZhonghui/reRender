@@ -16,3 +16,9 @@ SOURCES += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+HEADERS += \
+    MathAIO.h \
+    RenderCore.h \
+    ServerCore.h \
+    ToolAIO.h
