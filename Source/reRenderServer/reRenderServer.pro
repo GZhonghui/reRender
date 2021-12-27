@@ -22,3 +22,5 @@ HEADERS += \
     RenderCore.h \
     ServerCore.h \
     ToolAIO.h
+
+INCLUDEPATH += ../Support/Include/

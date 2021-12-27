@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 
     std::cout << Logo << std::endl;
 
-    std::cout << "reRender TCPServer, Version: 2.0, Author: GZhonghui." << std::endl;
+    std::cout << "reRender Server, Version: 2.0, Author: GZhonghui." << std::endl;
     std::cout << "Initing..." << std::endl;
 
     if(initServer())

@@ -10,6 +10,7 @@
 #include <QHostAddress>
 
 #include <iostream>
+#include <cstring>
 #include <string>
 #include <memory>
 #include <vector>
