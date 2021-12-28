@@ -1,3 +1,6 @@
+#define TOOL_ALL_IN_ONE_OUT_IMPLEMENTATION
+#include "ToolAIO.h"
+
 #include <QCoreApplication>
 
 #include "ServerCore.h"
@@ -38,15 +41,15 @@ int main(int argc, char *argv[])
 
     std::cout << Logo << std::endl;
 
-    std::cout << "reRender Server, Version: 2.0, Author: GZhonghui." << std::endl;
-    std::cout << "Initing..." << std::endl;
+    Out::Log(pType::MESSAGE,"reRender Server, Version: 2.0, Author: GZhonghui.");
+    Out::Log(pType::MESSAGE,"Initing...");
 
     if(initServer())
     {
-        std::cout << "Init Server Done, Running..." << std::endl;
+        Out::Log(pType::MESSAGE, "Init Server Done, Running...");
     }else
     {
-        std::cout << "Init Server Failed, Exiting..." << std::endl;
+        Out::Log(pType::ERROR, "Init Server Failed, Exiting...");
         return -1;
     }
 

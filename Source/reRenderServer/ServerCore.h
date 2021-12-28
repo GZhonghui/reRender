@@ -1,64 +1,15 @@
 #ifndef SERVERCORE_H
 #define SERVERCORE_H
 
-#include <QDataStream>
-#include <QByteArray>
-
 #include "ToolAIO.h"
 #include "MathAIO.h"
+
+#include "Sync.h"
 
 #include "RenderCore.h"
 
 namespace ServerCore
 {
-    // Sync with Client Version
-    struct Header
-    {
-        int64_t dataSize;
-        int64_t meshCnt;
-        int64_t sphereCnt;
-
-        void Clear()
-        {
-            dataSize = meshCnt = sphereCnt = 0;
-        }
-    };
-
-    struct TriangleData
-    {
-        Point A,B,C;
-
-        std::string Str() const
-        {
-            char Buffer[128];
-            std::string Res;
-
-            sprintf(Buffer,"(%.6lf, %.6lf, %.6lf), ",A.x(),A.y(),A.z());
-            Res += std::string(Buffer);
-
-            sprintf(Buffer,"(%.6lf, %.6lf, %.6lf), ",B.x(),B.y(),B.z());
-            Res += std::string(Buffer);
-
-            sprintf(Buffer,"(%.6lf, %.6lf, %.6lf).", C.x(),C.y(),C.z());
-            Res += std::string(Buffer);
-
-            return Res;
-        }
-    };
-
-    struct MeshData
-    {
-        int64_t triangleCnt;
-        std::vector<TriangleData> Data;
-    };
-
-    struct SphereData
-    {
-        Point Center;
-        double Radius;
-    };
-    // Sync with Client Version End
-
     class ServerInstance : public QObject
     {
         Q_OBJECT
@@ -67,17 +18,22 @@ namespace ServerCore
             :QObject(parent), m_TCPServer(TCPServer)
         {
             m_Got.Clear();
+
+            m_RenderEngine = std::make_unique<RenderCore::RenderEngine>();
         }
         virtual ~ServerInstance() {}
 
     protected:
-        QTcpServer* m_TCPServer;
+        QTcpServer* m_TCPServer; // Not managed by this class
         QTcpSocket* m_Client;
 
-        Header m_Recv,m_Got;
+        Sync::Header m_Recv,m_Got;
 
-        std::vector<MeshData> m_Meshs;
-        std::vector<SphereData> m_Spheres;
+        std::vector<Sync::MeshData> m_Meshs;
+        std::vector<Sync::SphereData> m_Spheres;
+
+    private:
+        std::unique_ptr<RenderCore::RenderEngine> m_RenderEngine;
 
     public:
         void newConnection()
@@ -88,12 +44,51 @@ namespace ServerCore
                 m_TCPServer->pauseAccepting();
                 connect(m_Client,&QTcpSocket::readyRead,this,&ServerInstance::readData);
 
-                std::cout << "Connection." << std::endl;
+                Out::Log(pType::MESSAGE, "Connection.");
             }
         }
 
         void readData()
         {
+
+            static int64_t Width = -1;
+            static int64_t Height = -1;
+            static int64_t Index = 0;
+            static char* originData = nullptr;
+
+            if(Width <= 0 || Height <= 0)
+            {
+                if(m_Client->bytesAvailable() < 2 * sizeof(int64_t)) return;
+                QByteArray Data = m_Client->read(2 * sizeof(int64_t));
+                memcpy(&Width, Data.data(), sizeof(int64_t));
+                memcpy(&Height, Data.data() + sizeof(int64_t), sizeof(int64_t));
+
+                originData = new char[Width * Height * 3];
+                Out::Log(pType::MESSAGE, "%lld x %lld.",Width,Height);
+            }
+
+            while(m_Client->bytesAvailable() > 0)
+            {
+                auto thisRead = m_Client->bytesAvailable();
+                QByteArray Data = m_Client->read(thisRead);
+                memcpy(originData + Index, Data.data(), thisRead);
+                Index += thisRead;
+            }
+
+            if(Index == Width * Height * 3)
+            {
+                Out::Log(pType::MESSAGE, "Recv Done.");
+
+                QImage recvedImage((uchar*)originData,Width,Height,QImage::Format_RGB888);
+                recvedImage.save("r.png");
+
+                Out::Log(pType::ERROR,"Save Done");
+
+                delete[] originData;
+            }
+
+            return; // Test End
+
             static bool recvHeader = false;
 
             static bool recvMeshHeader = false;
@@ -101,14 +96,15 @@ namespace ServerCore
             // Recv Header
             if(!recvHeader)
             {
-                if(m_Client->bytesAvailable() < sizeof(Header)) return;
+                if(m_Client->bytesAvailable() < sizeof(Sync::Header)) return;
                 recvHeader = true;
-                QByteArray HeaderData = m_Client->read(sizeof(Header));
-                memcpy((char*)&m_Recv, HeaderData.data(), sizeof(Header));
-                std::cout << "Recved Header." << std::endl;
-                std::cout << "Total Bytes: " << m_Recv.dataSize << std::endl;
-                std::cout << "Total Mesh: " << m_Recv.meshCnt << std::endl;
-                std::cout << "Total Sphere: " << m_Recv.sphereCnt << std::endl;
+                QByteArray HeaderData = m_Client->read(sizeof(Sync::Header));
+                memcpy((char*)&m_Recv, HeaderData.data(), sizeof(Sync::Header));
+
+                Out::Log(pType::MESSAGE, "Recved Header.");
+                Out::Log(pType::MESSAGE, "Total Bytes: %lld", m_Recv.dataSize);
+                Out::Log(pType::MESSAGE, "Total Mesh: %lld", m_Recv.meshCnt);
+                Out::Log(pType::MESSAGE, "Total Sphere: %lld", m_Recv.sphereCnt);
             }
             
             // Recv Mesh
@@ -120,7 +116,7 @@ namespace ServerCore
 
                     recvMeshHeader = true;
 
-                    MeshData newMesh;
+                    Sync::MeshData newMesh;
                     QByteArray Data = m_Client->read(sizeof(int64_t));
                     memcpy((char*)&newMesh.triangleCnt, Data.data(), sizeof(int64_t));
 
@@ -128,13 +124,11 @@ namespace ServerCore
                 }
                 
                 // Empty Mesh is not Allowed
-                while(m_Client->bytesAvailable() >= sizeof(TriangleData))
+                while(m_Client->bytesAvailable() >= sizeof(Sync::TriangleData))
                 {
-                    TriangleData newTriangle;
-                    QByteArray Data = m_Client->read(sizeof(TriangleData));
-                    memcpy((char*)&newTriangle, Data.data(), sizeof(TriangleData));
-
-                    std::cout << "T: " << newTriangle.Str() << std::endl;
+                    Sync::TriangleData newTriangle;
+                    QByteArray Data = m_Client->read(sizeof(Sync::TriangleData));
+                    memcpy((char*)&newTriangle, Data.data(), sizeof(Sync::TriangleData));
 
                     m_Meshs.back().Data.push_back(newTriangle);
                     if(m_Meshs.back().Data.size() >= m_Meshs.back().triangleCnt)
@@ -151,22 +145,23 @@ namespace ServerCore
             // Recv Sphere
             while(m_Got.sphereCnt < m_Recv.sphereCnt)
             {
-                if(m_Client->bytesAvailable() < sizeof(SphereData)) return;
+                if(m_Client->bytesAvailable() < sizeof(Sync::SphereData)) return;
 
-                SphereData newSphere;
-                QByteArray Data = m_Client->read(sizeof(SphereData));
-                memcpy((char*)&newSphere, Data.data(), sizeof(SphereData));
+                Sync::SphereData newSphere;
+                QByteArray Data = m_Client->read(sizeof(Sync::SphereData));
+                memcpy((char*)&newSphere, Data.data(), sizeof(Sync::SphereData));
 
                 m_Spheres.push_back(newSphere);
                 m_Got.sphereCnt += 1;
-
-                std::cout << "S: " << newSphere.Radius << std::endl;
             }
 
-            std::cout << "Recv " << m_Meshs.size() << " Triangle." << std::endl;
-            std::cout << "Recv " << m_Spheres.size() << " Sphere." << std::endl;
+            Out::Log(pType::MESSAGE, "Recved Triangle: %lld",(int64_t)m_Meshs.size());
+            Out::Log(pType::MESSAGE, "Rercved Sphere: %lld",(int64_t)m_Spheres.size());
 
-            std::cout << "Recv Done." << std::endl;
+            Out::Log(pType::MESSAGE, "Recv Done.");
+            Out::Log(pType::MESSAGE, "Render Starting...");
+
+            m_RenderEngine->Render();
         }
     };
 }

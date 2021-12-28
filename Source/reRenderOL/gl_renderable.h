@@ -22,7 +22,7 @@ public:
     Point m_Location;
     Direction m_Normal;
     UVCoord m_UV;
-}
+};
 
 class GLRenderable
 {
