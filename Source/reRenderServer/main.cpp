@@ -53,19 +53,5 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    RenderCore::Diffuse test;
-    test.setBaseColor(Color(0.5,0.8,0.3));
-    test.setDiffuseTexture(QImage("D:\\Poster.png"));
-
-    QByteArray fortrans;
-    test.SaveBytes(fortrans);
-
-    RenderCore::Diffuse test1;
-    test1.LoadBytes(fortrans);
-
-    Out::Log(pType::ERROR,"%lf,%lf,%lf",test1.BaseColor().x(),test1.BaseColor().y(),test1.BaseColor().z());
-    test1.DiffuseTexture().save("02.png");
-
-
     return a.exec();
 }
