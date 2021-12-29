@@ -1,12 +1,9 @@
-#include "gl_viewwidget.h"
+#include "glView.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include <STB/stb_image.h>
-
-GL_ViewWidget::GL_ViewWidget(QWidget *parent):
+glView::glView(QWidget *parent):
     QOpenGLWidget(parent) {}
 
-void GL_ViewWidget::initSkybox()
+void glView::initSkybox()
 {
     // Create Texture of Skybox
     glGenTextures(1, &m_SkyboxTextureID);
@@ -86,7 +83,7 @@ void GL_ViewWidget::initSkybox()
     glEnableVertexAttribArray(0);
 }
 
-void GL_ViewWidget::destroySkybox()
+void glView::destroySkybox()
 {
     glDeleteTextures(1, &m_SkyboxTextureID);
     glDeleteProgram (m_SkyboxShaderProgramID);
@@ -95,7 +92,7 @@ void GL_ViewWidget::destroySkybox()
     glDeleteBuffers(1, &m_SkyboxVBOID);
 } 
 
-void GL_ViewWidget::renderSkybox(glm::mat4* VP)
+void glView::renderSkybox(glm::mat4* VP)
 {
     glDepthMask(GL_FALSE);
 
@@ -118,15 +115,15 @@ void GL_ViewWidget::renderSkybox(glm::mat4* VP)
     glDepthMask(GL_TRUE);
 }
 
-void GL_ViewWidget::changeSkybox(int Which, const QImage& Image)
+void glView::changeSkybox(int Which, const QImage& Image)
 {
-    int texWidth = Image.width(), texHeight = Image.height(), texChannels;
-    unsigned char* texData;//= Image.bits();
+    int texWidth = Image.width(), texHeight = Image.height();//, texChannels;
+    const unsigned char* texData = Image.constBits();
 
     // Don't Need On Cubemap
     // stbi_set_flip_vertically_on_load(false);
 
-    texData = stbi_load("0.png", &texWidth, &texHeight, &texChannels, 3);
+    // texData = stbi_load("0.png", &texWidth, &texHeight, &texChannels, 3);
     if(!texData)
     {
         qDebug() << "Load Failed";
@@ -169,11 +166,11 @@ void GL_ViewWidget::changeSkybox(int Which, const QImage& Image)
     break;
     }
 
-    stbi_image_free(texData);
+    // stbi_image_free(texData);
         
 }
 
-void GL_ViewWidget::Destroy()
+void glView::Destroy()
 {
     for(auto i=m_RenderObjects.begin();i!=m_RenderObjects.end();++i)
     {
@@ -181,7 +178,7 @@ void GL_ViewWidget::Destroy()
     }
 }
 
-void GL_ViewWidget::initializeGL()
+void glView::initializeGL()
 {
     initializeOpenGLFunctions();
 
@@ -189,7 +186,7 @@ void GL_ViewWidget::initializeGL()
     m_RenderObjects.back().Init(this);
 } 
 
-void GL_ViewWidget::paintGL()
+void glView::paintGL()
 {
     glClearColor(0.0f, 0.2f, 0.4f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);

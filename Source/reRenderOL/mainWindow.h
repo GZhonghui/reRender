@@ -1,9 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <unordered_set>
-#include <unordered_map>
-
 #include <QtGui>
 #include <QtCore>
 #include <QtWidgets>
@@ -33,12 +30,12 @@
 #include "MathAIO.h"
 #include "ToolAIO.h"
 
-#include "wa_input.h"
-#include "wa_button.h"
+#include "waInput.h"
+#include "waButton.h"
 
-#include "gl_viewwidget.h"
+#include "colorButton.h"
 
-#include "color_button.h"
+#include "glView.h"
 
 #include "engine_core.h"
 
@@ -55,14 +52,14 @@ private: // Tools
 
 protected: // UI
     // Import Button
-    WA_Input* m_AToolsImportMenuInput;
-    WA_Button* m_AToolsImportMenuSelect;
+    waInput* m_AToolsImportMenuInput;
+    waButton* m_AToolsImportMenuSelect;
 
     // Add Button
-    WA_Input* m_AToolsAddMenuInput;
-    WA_Button* m_AToolsAddMenuCamera;
-    WA_Button* m_AToolsAddMenuCube;
-    WA_Button* m_AToolsAddMenuSphere;
+    waInput* m_AToolsAddMenuInput;
+    waButton* m_AToolsAddMenuCamera;
+    waButton* m_AToolsAddMenuCube;
+    waButton* m_AToolsAddMenuSphere;
 
     // Left List
     QListWidget* m_AList;
@@ -81,12 +78,12 @@ protected: // UI
     // Defferent Widgets for Different Materials
     QStackedWidget* m_BBTabMaterialStacked;
     // Material: Diffuse
-    Color_Button* m_BBTabMaterialStackedDiffuseBaseColor;
+    colorButton* m_BBTabMaterialStackedDiffuseBaseColor;
     // Material: Metal
-    Color_Button* m_BBTabMaterialStackedMetalBaseColor;
+    colorButton* m_BBTabMaterialStackedMetalBaseColor;
     // Material: Glass
     // Material: Emit
-    Color_Button* m_BBTabMaterialStackedEmitBaseColor;
+    colorButton* m_BBTabMaterialStackedEmitBaseColor;
 
     // Use in Render Tab
     QProgressBar* m_RenderProgress;
@@ -103,7 +100,7 @@ protected: // UI
     QDoubleSpinBox* m_BAPropertyTarget[3];
 
     // 3 Views in Scenes
-    GL_ViewWidget* m_BAScenesEditView;
+    glView* m_BAScenesEditView;
     QLabel* m_BAScenesCameraView;
     QLabel* m_BAScenesRenderView;
 

@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "mainWindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -30,8 +30,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Tool: Import
     auto AToolsImportMenu = new QMenu(AToolsImportButton);
-    m_AToolsImportMenuInput = new WA_Input(AToolsImportMenu);
-    m_AToolsImportMenuSelect = new WA_Button("Select", AToolsImportMenu);
+    m_AToolsImportMenuInput = new waInput(AToolsImportMenu);
+    m_AToolsImportMenuSelect = new waButton("Select", AToolsImportMenu);
     AToolsImportMenu->addAction(m_AToolsImportMenuInput);
     AToolsImportMenu->addSeparator();
     AToolsImportMenu->addAction(m_AToolsImportMenuSelect);
@@ -43,10 +43,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Tool: Add
     auto AToolsAddMenu = new QMenu(AToolsAddButton);
-    m_AToolsAddMenuInput = new WA_Input(AToolsAddMenu);
-    m_AToolsAddMenuCamera = new WA_Button("Camera", AToolsAddMenu);
-    m_AToolsAddMenuCube = new WA_Button("Stranded Cube", AToolsAddMenu,10,5);
-    m_AToolsAddMenuSphere = new WA_Button("Prefect Sphere", AToolsAddMenu,5,10);
+    m_AToolsAddMenuInput = new waInput(AToolsAddMenu);
+    m_AToolsAddMenuCamera = new waButton("Camera", AToolsAddMenu);
+    m_AToolsAddMenuCube = new waButton("Stranded Cube", AToolsAddMenu,10,5);
+    m_AToolsAddMenuSphere = new waButton("Prefect Sphere", AToolsAddMenu,5,10);
     AToolsAddMenu->addAction(m_AToolsAddMenuInput);
     AToolsAddMenu->addSeparator();
     AToolsAddMenu->addAction(m_AToolsAddMenuCamera);
@@ -206,7 +206,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto BBTabMaterialStackedDiffuseLeftLayout = new QVBoxLayout();
     BBTabMaterialStackedDiffuseLeftLayout->addWidget(new QLabel("Diffuse Color:",BBTabMaterialStackedDiffuse));
-    m_BBTabMaterialStackedDiffuseBaseColor = new Color_Button(BBTabMaterialStackedDiffuse);
+    m_BBTabMaterialStackedDiffuseBaseColor = new colorButton(BBTabMaterialStackedDiffuse);
     BBTabMaterialStackedDiffuseLeftLayout->addWidget(m_BBTabMaterialStackedDiffuseBaseColor);
     BBTabMaterialStackedDiffuseLeftLayout->addStretch();
 
@@ -219,7 +219,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto BBTabMaterialStackedMetalLeftLayout = new QVBoxLayout();
     BBTabMaterialStackedMetalLeftLayout->addWidget(new QLabel("Metal Color:",BBTabMaterialStackedMetal));
-    m_BBTabMaterialStackedMetalBaseColor = new Color_Button(BBTabMaterialStackedMetal);
+    m_BBTabMaterialStackedMetalBaseColor = new colorButton(BBTabMaterialStackedMetal);
     BBTabMaterialStackedMetalLeftLayout->addWidget(m_BBTabMaterialStackedMetalBaseColor);
     BBTabMaterialStackedMetalLeftLayout->addStretch();
 
@@ -234,7 +234,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto BBTabMaterialStackedEmitLeftLayout = new QVBoxLayout();
     BBTabMaterialStackedEmitLeftLayout->addWidget(new QLabel("Emit Color:",BBTabMaterialStackedEmit));
-    m_BBTabMaterialStackedEmitBaseColor = new Color_Button(BBTabMaterialStackedEmit);
+    m_BBTabMaterialStackedEmitBaseColor = new colorButton(BBTabMaterialStackedEmit);
     BBTabMaterialStackedEmitLeftLayout->addWidget(m_BBTabMaterialStackedEmitBaseColor);
     BBTabMaterialStackedEmitLeftLayout->addStretch();
 
@@ -348,7 +348,7 @@ MainWindow::MainWindow(QWidget *parent)
     BAScenes->addTab(BAScenesRender,"Render");
 
     auto BAScenesEditLayout = new QVBoxLayout();
-    m_BAScenesEditView = new GL_ViewWidget(BAScenes);
+    m_BAScenesEditView = new glView(BAScenes);
     BAScenesEdit->setLayout(BAScenesEditLayout);
     BAScenesEditLayout->addWidget(m_BAScenesEditView);
 

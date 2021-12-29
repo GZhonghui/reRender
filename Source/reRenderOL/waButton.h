@@ -1,16 +1,14 @@
 #ifndef WA_BUTTON_H
 #define WA_BUTTON_H
 
-#include <memory>
-
 #include <QWidgetAction>
 #include <QPushButton>
 #include <QHBoxLayout>
 
-class WA_Button : public QWidgetAction
+class waButton : public QWidgetAction
 {
 public:
-    explicit WA_Button(const QString& Text, QObject *parent = nullptr,
+    explicit waButton(const QString& Text, QObject *parent = nullptr,
         int MarginsA = 10, int MarginsB = 10);
 
 protected:

@@ -5,7 +5,7 @@
 #include <QOpenGLFunctions>
 #include <QOpenGLFunctions_3_3_Core>
 
-#include "shader.h"
+#include "Shader.h"
 
 namespace ECore
 {
@@ -47,8 +47,10 @@ public:
     {
         m_F = F;
         
-        uint32_t VertShaderID = GLMisc::CompileShader(m_F, Shader("Diffuse", sType::VERT).m_ShaderCode.data(), sType::VERT);
-        uint32_t FragShaderID = GLMisc::CompileShader(m_F, Shader("Diffuse", sType::FRAG).m_ShaderCode.data(), sType::FRAG);
+        uint32_t VertShaderID = GLMisc::CompileShader(m_F,
+            Shader("Diffuse", sType::VERT).m_ShaderCode.data(), sType::VERT);
+        uint32_t FragShaderID = GLMisc::CompileShader(m_F,
+            Shader("Diffuse", sType::FRAG).m_ShaderCode.data(), sType::FRAG);
 
         m_ShaderProgramID = m_F->glCreateProgram();
         m_F->glAttachShader(m_ShaderProgramID, VertShaderID);

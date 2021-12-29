@@ -8,7 +8,7 @@
 #include "MathAIO.h"
 #include "ToolAIO.h"
 
-#include "shader.h"
+#include "Shader.h"
 
 namespace GLMisc
 {
@@ -41,8 +41,7 @@ namespace GLMisc
         if (!compileSuccessfully)
         {
             f->glGetShaderInfoLog(ShaderID, 512, NULL, compileInfo);
-            // Out::Log(pType::WARNING, "Shader Compile Failed : %s", compileInfo);
-            // qDebug() << "Shader Compile Failed: " << compileInfo;
+            Out::Log(pType::WARNING, "Shader Compile Failed : %s", compileInfo);
         }
 
         return ShaderID;

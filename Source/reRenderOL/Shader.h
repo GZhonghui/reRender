@@ -44,6 +44,7 @@ protected:
 
         if (!shaderFile)
         {
+            Out::Log(pType::ERROR, "Can't Load Shader File: %s", filePath);
             return false;
         }
 

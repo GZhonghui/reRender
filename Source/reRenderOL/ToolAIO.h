@@ -33,7 +33,7 @@ const char False[] = "False";
 #define DEBUG_MESSAGE
 
 //Enable Output
-const bool G_ENABLE_CON_OUTPUT = true;
+const bool G_ENABLE_CON_OUTPUT = false;
 const bool G_ENABLE_WIN_OUTPUT = false;
 
 enum class pType

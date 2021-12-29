@@ -10,17 +10,16 @@
 #include "MathAIO.h"
 #include "ToolAIO.h"
 
-#include "shader.h"
-#include "gl_misc.h"
+#include "Shader.h"
+#include "glMisc.h"
+#include "glRenderable.h"
 
-#include "gl_renderable.h"
-
-class GL_ViewWidget : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core
+class glView : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core
 {
     Q_OBJECT
 public:
-    GL_ViewWidget(QWidget *parent);
-    ~GL_ViewWidget() { Destroy(); }
+    glView(QWidget *parent);
+    ~glView() { Destroy(); }
 
 protected:
     // Skybox

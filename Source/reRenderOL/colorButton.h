@@ -5,12 +5,13 @@
 #include <QColorDialog>
 #include <QColor>
 
-class Color_Button : public QPushButton
+class colorButton : public QPushButton
 {
     Q_OBJECT
 public:
-    Color_Button(QWidget* parent);
+    colorButton(QWidget* parent);
 
+public:
     void setColor(const QColor& color);
     const QColor& getColor();
 
@@ -19,7 +20,7 @@ public:
     void changeColor();
 
 private:
-    QColor color;
+    QColor m_color;
 };
 
 #endif // COLOR_BUTTON_H

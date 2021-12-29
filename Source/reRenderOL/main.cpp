@@ -1,13 +1,13 @@
 #define TOOL_ALL_IN_ONE_OUT_IMPLEMENTATION
 #include "ToolAIO.h"
 
-#include "mainwindow.h"
-
 #include <QtGui>
 #include <QtCore>
 #include <QtWidgets>
 
 #include <QApplication>
+
+#include "mainWindow.h"
 
 int main(int argc, char *argv[])
 {

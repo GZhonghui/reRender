@@ -6,11 +6,11 @@
 #include <QLineEdit>
 #include <QLabel>
 
-class WA_Input : public QWidgetAction
+class waInput : public QWidgetAction
 {
     Q_OBJECT
 public:
-    explicit WA_Input(QObject *parent = nullptr);
+    explicit waInput(QObject *parent = nullptr);
 
 protected:
     QWidget* createWidget(QWidget *parent) override;

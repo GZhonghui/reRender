@@ -1,9 +1,9 @@
-#include "wa_input.h"
+#include "waInput.h"
 
-WA_Input::WA_Input(QObject *parent)
-    : QWidgetAction{parent}{}
+waInput::waInput(QObject *parent)
+    : QWidgetAction{parent} {}
 
-QWidget* WA_Input::createWidget(QWidget *parent)
+QWidget* waInput::createWidget(QWidget *parent)
 {
     if(parent->inherits("QMenu"))
     {

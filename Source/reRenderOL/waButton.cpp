@@ -1,11 +1,11 @@
-#include "wa_button.h"
+#include "waButton.h"
 
-WA_Button::WA_Button(const QString& Text, QObject *parent,
+waButton::waButton(const QString& Text, QObject *parent,
     int MarginsA, int MarginsB)
     : QWidgetAction{parent},
       m_Text(Text),m_MarginsA(MarginsA),m_MarginsB(MarginsB) {}
 
-QWidget* WA_Button::createWidget(QWidget *parent)
+QWidget* waButton::createWidget(QWidget *parent)
 {
     if(parent->inherits("QMenu"))
     {
