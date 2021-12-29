@@ -5,8 +5,8 @@
 #include <QOpenGLFunctions>
 #include <QOpenGLFunctions_3_3_Core>
 
-#include "tool_aio.h"
-#include "math_aio.h"
+#include "MathAIO.h"
+#include "ToolAIO.h"
 
 #include "shader.h"
 

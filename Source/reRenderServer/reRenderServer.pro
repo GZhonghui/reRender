@@ -1,11 +1,10 @@
-QT += gui
-QT += network
+QT += gui network
 
 CONFIG += c++17 console
 CONFIG -= app_bundle
 
 SOURCES += \
-        main.cpp
+    main.cpp
 
 HEADERS += \
     MathAIO.h \

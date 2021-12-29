@@ -2,7 +2,7 @@
 
 Color_Button::Color_Button(QWidget* parent) : QPushButton(parent)
 {
-    connect(this, &clicked, this, &changeColor);
+    connect(this, &QPushButton::clicked, this, &Color_Button::changeColor);
     updateColor();
 }
 

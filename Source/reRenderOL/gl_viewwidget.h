@@ -7,8 +7,8 @@
 
 #include <QPixmap>
 
-#include "tool_aio.h"
-#include "math_aio.h"
+#include "MathAIO.h"
+#include "ToolAIO.h"
 
 #include "shader.h"
 #include "gl_misc.h"

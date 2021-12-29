@@ -1,8 +1,8 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "math_aio.h"
-#include "tool_aio.h"
+#include "MathAIO.h"
+#include "ToolAIO.h"
 
 namespace ECore
 {

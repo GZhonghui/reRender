@@ -1,12 +1,8 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#pragma once
-
-#include <QDebug>
-
-#include"math_aio.h"
-#include"tool_aio.h"
+#include "MathAIO.h"
+#include "ToolAIO.h"
 
 enum class sType
 {
@@ -48,8 +44,6 @@ protected:
 
         if (!shaderFile)
         {
-            // Out::Log(pType::ERROR, "Cant load shader file: %s", filePath);
-            // qDebug() << "Cant load shader file:" << filePath;
             return false;
         }
 

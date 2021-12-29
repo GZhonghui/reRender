@@ -1,5 +1,5 @@
-#define DEF_TOOL
-#include "tool_aio.h"
+#define TOOL_ALL_IN_ONE_OUT_IMPLEMENTATION
+#include "ToolAIO.h"
 
 #include "mainwindow.h"
 
