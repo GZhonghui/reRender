@@ -16,7 +16,7 @@ public:
     Vertex() = default;
     Vertex(const Point& Location, const Direction& Normal, const UVCoord& UV):
         m_Location(Location),m_Normal(Normal),m_UV(UV) {}
-    ~Vertex() = default;
+    virtual ~Vertex() = default;
 
 public:
     Point m_Location;
@@ -35,6 +35,7 @@ private:
 
 protected:
     std::vector<Vertex> m_VertexData;
+    std::vector<uint32_t> m_IndexData;
 
 protected:
     uint32_t m_ShaderProgramID;
@@ -59,21 +60,121 @@ public:
 
         m_F->glDeleteShader(VertShaderID);
         m_F->glDeleteShader(FragShaderID);
-        
+
+        m_F->glGenVertexArrays(1, &m_VAOID);
+        m_F->glGenBuffers(1, &m_EBOID);
+        m_F->glGenBuffers(1, &m_VBOID);
+
+        Out::Log(pType::MESSAGE, "Init Renderable Object Done");
+    }
+
+    void LoadMesh(const char* meshFilePath)
+    {
+        Out::Log(pType::MESSAGE, "Loading %s", meshFilePath);
+    }
+
+    void LoadCube()
+    {
+        /* With UV, 36 Vertices
+        float Vertices[] =
+        {
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+             0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+             0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+             0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+             0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+            -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+             0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+             0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+             0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+             0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+             0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+             0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+             0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+             0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+             0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+             0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+        };
+        */
 
         float Vertices[] =
         {
-            -0.5f, -0.5f, 0.0f,
-             0.5f, -0.5f, 0.0f,
-            -0.5f,  0.5f, 0.0f
+            -0.5f, -0.5f, -0.5f,
+             0.5f, -0.5f, -0.5f,
+             0.5f,  0.5f, -0.5f,
+             0.5f,  0.5f, -0.5f,
+            -0.5f,  0.5f, -0.5f,
+            -0.5f, -0.5f, -0.5f,
+
+            -0.5f, -0.5f,  0.5f,
+             0.5f, -0.5f,  0.5f,
+             0.5f,  0.5f,  0.5f,
+             0.5f,  0.5f,  0.5f,
+            -0.5f,  0.5f,  0.5f,
+            -0.5f, -0.5f,  0.5f,
+
+            -0.5f,  0.5f,  0.5f,
+            -0.5f,  0.5f, -0.5f,
+            -0.5f, -0.5f, -0.5f,
+            -0.5f, -0.5f, -0.5f,
+            -0.5f, -0.5f,  0.5f,
+            -0.5f,  0.5f,  0.5f,
+
+             0.5f,  0.5f,  0.5f,
+             0.5f,  0.5f, -0.5f,
+             0.5f, -0.5f, -0.5f,
+             0.5f, -0.5f, -0.5f,
+             0.5f, -0.5f,  0.5f,
+             0.5f,  0.5f,  0.5f,
+
+            -0.5f, -0.5f, -0.5f,
+             0.5f, -0.5f, -0.5f,
+             0.5f, -0.5f,  0.5f,
+             0.5f, -0.5f,  0.5f,
+            -0.5f, -0.5f,  0.5f,
+            -0.5f, -0.5f, -0.5f,
+
+            -0.5f,  0.5f, -0.5f,
+             0.5f,  0.5f, -0.5f,
+             0.5f,  0.5f,  0.5f,
+             0.5f,  0.5f,  0.5f,
+            -0.5f,  0.5f,  0.5f,
+            -0.5f,  0.5f, -0.5f
         };
 
-        m_F->glGenVertexArrays(1, &m_VAOID);
-        m_F->glGenBuffers(1, &m_VBOID);
+        m_IndexData.resize(36);
+        for(uint32_t i=0; i<36; ++i) m_IndexData[i]=i;
 
         m_F->glBindVertexArray(m_VAOID);
         m_F->glBindBuffer(GL_ARRAY_BUFFER, m_VBOID);
         m_F->glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
+        m_F->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBOID);
+        m_F->glBufferData(GL_ELEMENT_ARRAY_BUFFER, 4*m_IndexData.size(), m_IndexData.data(), GL_STATIC_DRAW);
         m_F->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
         m_F->glEnableVertexAttribArray(0);
 
@@ -81,7 +182,7 @@ public:
         m_F->glBindVertexArray(0);
     }
 
-    void Load()
+    void LoadSphere()
     {
 
     }
@@ -98,7 +199,7 @@ public:
     {
         m_F->glUseProgram(m_ShaderProgramID);
         m_F->glBindVertexArray(m_VAOID);
-        m_F->glDrawArrays(GL_TRIANGLES, 0, 3);
+        m_F->glDrawElements(GL_TRIANGLES, (int)m_IndexData.size(), GL_UNSIGNED_INT, 0);
     }
 };
 

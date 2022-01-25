@@ -1,4 +1,4 @@
 #define DEF_ENGINE_CORE
-#include "engine_core.h"
+#include "engineCore.h"
 
 namespace ECore {}

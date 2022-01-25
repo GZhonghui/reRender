@@ -184,6 +184,7 @@ void glView::initializeGL()
 
     m_RenderObjects.push_back(ECore::GLRenderable());
     m_RenderObjects.back().Init(this);
+    m_RenderObjects.back().LoadCube();
 } 
 
 void glView::paintGL()

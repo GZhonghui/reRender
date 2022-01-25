@@ -37,7 +37,7 @@
 
 #include "glView.h"
 
-#include "engine_core.h"
+#include "engineCore.h"
 
 class MainWindow : public QMainWindow
 {

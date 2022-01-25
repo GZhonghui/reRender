@@ -9,7 +9,7 @@ SOURCES += \
     waInput.cpp \
     colorButton.cpp \
     glView.cpp \ 
-    engine_core.cpp
+    engineCore.cpp
 
 HEADERS += \
     MathAIO.h \
@@ -24,7 +24,7 @@ HEADERS += \
     waInput.h \
     colorButton.h \
     glView.h \
-    engine_core.h
+    engineCore.h
 
 INCLUDEPATH += ../Support/Include/
 
