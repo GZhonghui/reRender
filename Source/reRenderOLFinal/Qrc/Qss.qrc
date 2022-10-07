@@ -1,0 +1,28 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Qss/psblack.css</file>
+        <file>Qss/psblack/add_bottom.png</file>
+        <file>Qss/psblack/add_left.png</file>
+        <file>Qss/psblack/add_right.png</file>
+        <file>Qss/psblack/add_top.png</file>
+        <file>Qss/psblack/arrow_bottom.png</file>
+        <file>Qss/psblack/arrow_left.png</file>
+        <file>Qss/psblack/arrow_right.png</file>
+        <file>Qss/psblack/arrow_top.png</file>
+        <file>Qss/psblack/branch_close.png</file>
+        <file>Qss/psblack/branch_open.png</file>
+        <file>Qss/psblack/calendar_nextmonth.png</file>
+        <file>Qss/psblack/calendar_prevmonth.png</file>
+        <file>Qss/psblack/checkbox_checked.png</file>
+        <file>Qss/psblack/checkbox_checked_disable.png</file>
+        <file>Qss/psblack/checkbox_parcial.png</file>
+        <file>Qss/psblack/checkbox_parcial_disable.png</file>
+        <file>Qss/psblack/checkbox_unchecked.png</file>
+        <file>Qss/psblack/checkbox_unchecked_disable.png</file>
+        <file>Qss/psblack/menu_checked.png</file>
+        <file>Qss/psblack/radiobutton_checked.png</file>
+        <file>Qss/psblack/radiobutton_checked_disable.png</file>
+        <file>Qss/psblack/radiobutton_unchecked.png</file>
+        <file>Qss/psblack/radiobutton_unchecked_disable.png</file>
+    </qresource>
+</RCC>

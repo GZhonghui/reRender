@@ -1,0 +1,13 @@
+ Volume in drive C has no label.
+ Volume Serial Number is B47F-32C0
+
+ Directory of C:\Users\Zhonghui\Downloads\reRenderOL\Support\Lib
+
+06/03/2022  07:08 PM    <DIR>          .
+05/11/2022  05:47 AM    <DIR>          ..
+05/11/2022  06:58 AM        39,418,122 libassimp.a
+05/02/2022  12:47 AM        28,025,596 libprotobuf.a
+05/11/2022  07:04 AM           152,380 libzlibstatic.a
+11/11/2021  09:05 PM             9,686 OpenImageDenoise.lib
+               4 File(s)     67,605,784 bytes
+               2 Dir(s)  115,175,837,696 bytes free
