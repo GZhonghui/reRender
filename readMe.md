@@ -5,18 +5,22 @@
 > More Projects from the reFamily [**reSimulate**](https://github.com/GZhonghui/reSimulate)/[**reEngine**](https://github.com/GZhonghui/reEngine)
 
 ## About
-**reRender** is an offline Render Engine
+**reRender** is an Offline Renderer based on Path Tracing, and it is my Undergraduate Final Project. It contains a Scene Editor as the client part and a Render Core as the server part. The Scene Editor is based on Qt and OpenGL and it can help users to create scenes visually. The Render Core is mainly based on the Path Tracing algorithm and it also supports Denoise. The client can deliver serialized scene data with instructions to multiple servers synchronously. It is also responsible for collecting and combining the final render result.
 
-| Ray Tracing with Mesh/Texture/Skybox |
-:-:
-| ![3D Model](readMe/Res_01_Model.png) |
-| AI Denoise |
-| ![Denoise](readMe/Res_02_deNoise.png) |
-| Render 2D Scene |
-| ![2D Scene](readMe/Res_03_2D.png) |
+## Media
+![Box](readMe/Box_01.png)
+![Box](readMe/Box_02.png)
+![3D Model](readMe/Res_01_Model.png)
+![Denoise](readMe/Res_02_deNoise.png)
+![2D Scene](readMe/Res_03_2D.png)
 
-## Tutorial
-**reRender** works as a Python Module
+## Usage
+### GUI
+![GUI](readMe/GUI.png)
+[![Video](https://img.youtube.com/vi/oG1NbnHYsMA/0.jpg)](https://www.youtube.com/watch?v=oG1NbnHYsMA)
+
+### Python
+**reRender** can also works as a Python Module.
 ```python
 from Render.Scene import StaticScene
 
