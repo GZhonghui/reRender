@@ -17,7 +17,7 @@
 **Screenshot**  
 ![GUI](readMe/GUI.png)
 
-**Workflow**  
+**Workflow (Video)**  
 [![Video](https://img.youtube.com/vi/oG1NbnHYsMA/0.jpg)](https://www.youtube.com/watch?v=oG1NbnHYsMA)
 
 ### Python
